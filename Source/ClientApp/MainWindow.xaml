@@ -5,18 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="{DynamicResource m_app_Header}" Height="400" Width="700">
     <Grid>
-        <TabControl>
-            <TabItem Height="30" Header="First">First</TabItem>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TabControl Name="TabControl" Grid.Row="0">
+            <TabItem Height="30" Header="{DynamicResource m_tab_LogIn}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="20" TextAlignment="Center" VerticalAlignment="Center" Text="{DynamicResource m_tab_LogIn_LogInText}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" FontSize="20" TextAlignment="Right" VerticalAlignment="Center" Text="{DynamicResource m_tab_LogIn_LogIn}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" FontSize="20" TextAlignment="Right" VerticalAlignment="Center" Text="{DynamicResource m_tab_LogIn_PassWord}"/>
+                    <TextBlock Name="PassWrongText" Visibility="Hidden" Grid.Row="3" Grid.ColumnSpan="2" FontSize="20" TextAlignment="Center" Foreground="OrangeRed" VerticalAlignment="Center" Text="{DynamicResource m_tab_LogIn_PasWrong}"/>
+                    <TextBox Name="LoginBox" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Width="250" Height="30" VerticalContentAlignment="Center" FontSize="20"/>
+                    <PasswordBox Name="PassBox" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Width="250" Height="30" VerticalContentAlignment="Center" FontSize="20"/>
+                    <Button Name="LoginButton" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="OK" FontSize="15" Height="30" Width="90"/>
+                </Grid>
+            </TabItem>
             <TabItem Height="30" Header="Second">Second</TabItem>
         </TabControl>
-        <DockPanel>
-            <StatusBar DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
-                <Menu Background="{x:Null}">
-                    <MenuItem x:Name="menuLanguage" Header="{DynamicResource m_menu_Language}" />
-                </Menu>
-            </StatusBar>
+        <DockPanel Grid.Row="1">
+            <Label HorizontalAlignment="Left" Content="TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST"/>
+            <Menu Background="{x:Null}" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <MenuItem Name="menuLanguage" Header="{DynamicResource m_menu_Language}" />
+                <MenuItem Name="LogOffItem" Header="{DynamicResource m_menu_LogOff}" Visibility="Visible" Click="LogOff"/>
+                <MenuItem Name="About" Header="{DynamicResource m_menu_About}" Visibility="Visible" />
+            </Menu>
         </DockPanel>
     </Grid>
 </Window>

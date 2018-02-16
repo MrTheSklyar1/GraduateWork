@@ -25,9 +25,7 @@ namespace ClientApp
         {
             InitializeComponent();
             App.LanguageChanged += LanguageChanged;
-
             CultureInfo currLang = App.Language;
-
             //Заполняем меню смены языка:
             menuLanguage.Items.Clear();
             foreach (var lang in App.Languages)
@@ -63,6 +61,12 @@ namespace ClientApp
                 CultureInfo ci = i.Tag as CultureInfo;
                 i.IsChecked = ci != null && ci.Equals(currLang);
             }
+        }
+        private void LogOff(object sender, RoutedEventArgs e)
+        {
+            TabControl.SelectedIndex = 0;
+            LogOffItem.Visibility = Visibility.Collapsed;
+            //TODO: Отключать остальные вкладки, все
         }
     }
 }
