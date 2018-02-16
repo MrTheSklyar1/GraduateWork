@@ -7,6 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <TabControl>
+            <TabItem Height="30" Header="First">First</TabItem>
+            <TabItem Height="30" Header="Second">Second</TabItem>
+        </TabControl>
+        <DockPanel>
+            <StatusBar DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
+                <Menu Background="{x:Null}">
+                    <MenuItem x:Name="menuLanguage" Header="{DynamicResource m_menu_Language}" />
+                </Menu>
+            </StatusBar>
+        </DockPanel>
     </Grid>
 </Window>
