@@ -2,4 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:v="clr-namespace:System;assembly=mscorlib">
     <v:String x:Key="m_menu_Language">Language</v:String>
+    <v:String x:Key="m_tab_LogIn">Log In</v:String>
+    <v:String x:Key="m_tab_LogIn_LogInText">Use your Login and Password to access the system</v:String>
+    <v:String x:Key="m_tab_LogIn_LogIn">Login</v:String>
+    <v:String x:Key="m_tab_LogIn_PassWord">Password</v:String>
+    <v:String x:Key="m_tab_LogIn_PasWrong">Login or Password is incorrect</v:String>
+    <v:String x:Key="m_menu_LogOff">Log Off</v:String>
+    <v:String x:Key="m_app_Header">Admin App</v:String>
+    <v:String x:Key="m_menu_About">About</v:String>
 </ResourceDictionary>

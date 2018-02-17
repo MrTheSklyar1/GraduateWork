@@ -64,5 +64,11 @@ namespace AdminApp
                 i.IsChecked = ci != null && ci.Equals(currLang);
             }
         }
+        private void LogOff(object sender, RoutedEventArgs e)
+        {
+            TabControl.SelectedIndex = 0;
+            LogOffItem.Visibility = Visibility.Collapsed;
+            //TODO: Отключать остальные вкладки, все
+        }
     }
 }
