@@ -15,6 +15,10 @@ using System.Windows.Shapes;
 using System.Globalization;
 using System.IO;
 using ClientApp.SupportClasses;
+using System.Data.SqlClient;
+using System.ComponentModel;
+using System.Threading;
+using System.Security.Cryptography;
 
 namespace ClientApp
 {
@@ -23,6 +27,7 @@ namespace ClientApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly BackgroundWorker worker = new BackgroundWorker();
         public MainWindow()
         {
             InitializeComponent();
@@ -38,19 +43,73 @@ namespace ClientApp
                 menuLang.Click += ChangeLanguageClick;
                 menuLanguage.Items.Add(menuLang);
             }
-            ConnectToDatabase();
-        }
-
-        private void ConnectToDatabase()
-        {
-            Configuration config = PersistableObject.Load<Configuration>("settings.xml");
-            if (config == null)
+            if (!XMLConfiguration.Load("settings.xml"))
             {
-                BottomBarLabel.Content = (String)FindResource("m_tab_LogIn_BrokenSettingsFile");
+                SendAttentionToBottomBar("m_tab_LogIn_BrokenSettingsFile");
                 EnvironmentHelper.SendLog("Broken Settings File");
-                config = new Configuration();
-                config.ConnectionString = "Type connection string here";
-                config.Save<Configuration>("settings.xml");
+                TabControl.IsEnabled = false;
+                return;
+            }
+            worker.DoWork += worker_CheckConnection;
+            SendInfoToBottomBar("m_tab_LogIn_CheckConnection");
+            TabControl.IsEnabled = false;
+            worker.RunWorkerAsync();
+        }
+        
+        public void SendAttentionToBottomBar(string placeholder)
+        {
+            Configuration.CurrentBottomBarLabelContent = placeholder;
+            Configuration.CurrentBottomBarLabelBrush = Brushes.Red;
+            Dispatcher.BeginInvoke(new ThreadStart(delegate
+            {
+                BottomBarLabel.Content = (String)FindResource(placeholder);
+                BottomBarLabel.Foreground = Brushes.Red;
+            }));
+        }
+        public void SendInfoToBottomBar(string placeholder)
+        {
+            Configuration.CurrentBottomBarLabelContent = placeholder;
+            Configuration.CurrentBottomBarLabelBrush = Brushes.Black;
+            Dispatcher.BeginInvoke(new ThreadStart(delegate
+            {
+                BottomBarLabel.Content = (String)FindResource(placeholder);
+                BottomBarLabel.Foreground = Brushes.Black;
+            }));
+        }
+        public void ClearBottomBar()
+        {
+            Configuration.CurrentBottomBarLabelContent = "";
+            Configuration.CurrentBottomBarLabelBrush = Brushes.Black;
+            Dispatcher.BeginInvoke(new ThreadStart(delegate
+            {
+                BottomBarLabel.Content = "";
+                BottomBarLabel.Foreground = Brushes.Black;
+            }));
+        }
+        private void worker_CheckConnection(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                using (var con = new SqlConnection(Configuration.ConnectionString))
+                {
+                    con.Open();
+                    con.Close();
+                }
+                ClearBottomBar();
+                Dispatcher.BeginInvoke(new ThreadStart(delegate
+                {
+                    TabControl.IsEnabled = true;
+                }));
+            }
+            catch (ArgumentException ex)
+            {
+                EnvironmentHelper.SendLog(ex.Message);
+                SendAttentionToBottomBar("m_tab_LogIn_BrokenSettingsFile");
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendLog(ex.Message);
+                SendAttentionToBottomBar("m_tab_LogIn_NoConnection");
             }
         }
 
@@ -77,16 +136,78 @@ namespace ClientApp
                 CultureInfo ci = i.Tag as CultureInfo;
                 i.IsChecked = ci != null && ci.Equals(currLang);
             }
+            BottomBarLabel.Content = Configuration.CurrentBottomBarLabelContent=="" ? "" : (String)FindResource(Configuration.CurrentBottomBarLabelContent);
+            BottomBarLabel.Foreground = Configuration.CurrentBottomBarLabelBrush;
         }
         private void LogOff(object sender, RoutedEventArgs e)
         {
-            TabControl.SelectedIndex = 0;
-            LogOffItem.Visibility = Visibility.Collapsed;
-            BottomBarLabel.Content = (String)FindResource("m_tab_LogIn_LogOffCompleted");
-            EnvironmentHelper.SendLog("Log Off - " + MainDataHolder.CurrentSessionLogin);
-            MainDataHolder.CurrentSessionLogin = "";
-            BottomBarLabel.Foreground = Brushes.Black;
-            //TODO: Отключать остальные вкладки, все
+            if (CurrentSession.Login != "")
+            {
+                LoginTab.Visibility = Visibility.Visible;
+                TabControl.SelectedIndex = 0;
+                SendInfoToBottomBar("m_tab_LogIn_LogOffCompleted");
+                EnvironmentHelper.SendLog("Log Off - " + CurrentSession.Login);
+                CurrentSession.CloseSession();
+                //TODO: Отключать остальные вкладки, все
+                LogOffItem.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(LoginBox.Text != "" && PassBox.Password != "")
+            {
+                string hash = "";
+                string hashfromsql = "";
+                using (MD5 md5Hash = MD5.Create())
+                {
+                    byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(PassBox.Password));
+                    StringBuilder sBuilder = new StringBuilder();
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        sBuilder.Append(data[i].ToString("x2"));
+                    }
+                    hash = sBuilder.ToString();
+                }
+                using (var con = new SqlConnection(Configuration.ConnectionString))
+                {
+                    using (var command = new SqlCommand("select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName from PersonalRoles where Login='"+LoginBox.Text+"';", con))
+                    {
+                        con.Open();
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                CurrentSession.ID = reader.GetGuid(0);
+                                hashfromsql = reader.GetString(1);
+                                CurrentSession.TelegramID = reader.GetInt32(2);
+                                CurrentSession.FirstName = reader.GetString(3);
+                                CurrentSession.LastName = reader.GetString(4);
+                            }
+                        }
+                        con.Close();
+                    }
+                }
+                if (CurrentSession.ID == Guid.Empty || hash != hashfromsql)
+                {
+                    SendAttentionToBottomBar("m_tab_LogIn_PasWrong");
+                    CurrentSession.CloseSession();
+                }
+                else
+                {
+                    CurrentSession.Login = LoginBox.Text;
+                    PassBox.Clear();
+                    ClearBottomBar();
+                    LogOffItem.Visibility = Visibility.Visible;
+                    TabControl.SelectedIndex = 1;
+                    LoginTab.Visibility = Visibility.Collapsed;
+                    EnvironmentHelper.SendLog("Log In - " + CurrentSession.Login);
+                }
+            }
+            else
+            {
+                SendAttentionToBottomBar("m_tab_LogIn_LogOrPassNotTyped");
+            }
         }
     }
 }

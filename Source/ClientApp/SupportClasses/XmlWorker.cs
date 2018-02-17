@@ -5,36 +5,39 @@ using System.Xml.Serialization;
 namespace ClientApp.SupportClasses
 {
     [Serializable]
-    public class Configuration : PersistableObject
+    public class XMLConfiguration : XMLConfigurationBase
     {
         public string ConnectionString { get; set; }
     }
 
-    public class PersistableObject
+    public class XMLConfigurationBase
     {
-        public static T Load<T>(string fileName) where T : PersistableObject, new()
+        public static bool Load(string fileName)
         {
-            T result = default(T);
+            XMLConfiguration result = default(XMLConfiguration);
             try
             {
                 using (FileStream stream = File.OpenRead(fileName))
                 {
-                    result = new XmlSerializer(typeof(T)).Deserialize(stream) as T;
+                    result = new XmlSerializer(typeof(XMLConfiguration)).Deserialize(stream) as XMLConfiguration;
                 }
             }
             catch
             {
-                return null;
+                var config = new XMLConfiguration();
+                config.ConnectionString = "Type connection string here";
+                config.Save("settings.xml");
+                return false;
             }
-            
-            return result;
+            Configuration.ConnectionString = result.ConnectionString;
+            return true;
         }
 
-        public void Save<T>(string fileName) where T : PersistableObject
+        public void Save(string fileName)
         {
-            using (FileStream stream = new FileStream(fileName, FileMode.CreateNew))
+            using (FileStream stream = new FileStream(fileName, FileMode.Create))
             {
-                new XmlSerializer(typeof(T)).Serialize(stream, this);
+                new XmlSerializer(typeof(XMLConfiguration)).Serialize(stream, this);
             }
         }
     }

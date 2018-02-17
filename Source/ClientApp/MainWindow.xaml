@@ -12,7 +12,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TabControl Name="TabControl" Grid.Row="0">
-            <TabItem Height="30" Header="{DynamicResource m_tab_LogIn}">
+            <TabItem Name="LoginTab" Height="30" Header="{DynamicResource m_tab_LogIn}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -29,7 +29,7 @@
                     <TextBlock Grid.Row="2" Grid.Column="0" FontSize="20" TextAlignment="Right" VerticalAlignment="Center" Text="{DynamicResource m_tab_LogIn_PassWord}"/>
                     <TextBox Name="LoginBox" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Width="250" Height="30" VerticalContentAlignment="Center" FontSize="20"/>
                     <PasswordBox Name="PassBox" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Width="250" Height="30" VerticalContentAlignment="Center" FontSize="20"/>
-                    <Button Name="LoginButton" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="OK" FontSize="15" Height="30" Width="90"/>
+                    <Button Name="LoginButton" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="OK" FontSize="15" Height="30" Width="90" Click="LoginButton_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Height="30" Header="Second">Second</TabItem>
@@ -38,7 +38,7 @@
             <Label Name="BottomBarLabel" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="15" Height="30"/>
             <Menu Background="{x:Null}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="15">
                 <MenuItem Name="menuLanguage" Header="{DynamicResource m_menu_Language}" />
-                <MenuItem Name="LogOffItem" Header="{DynamicResource m_menu_LogOff}" Visibility="Visible" Click="LogOff"/>
+                <MenuItem Name="LogOffItem" Header="{DynamicResource m_menu_LogOff}" Visibility="Collapsed" Click="LogOff"/>
                 <MenuItem Name="About" Header="{DynamicResource m_menu_About}" Visibility="Visible" />
             </Menu>
         </DockPanel>
