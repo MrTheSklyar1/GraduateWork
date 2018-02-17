@@ -9,5 +9,6 @@ namespace ClientApp.SupportClasses
     public static class MainDataHolder
     {
         public static string CurrentSessionLogin { get; set; }
+        public static string ConnectionString { get; set; }
     }
 }
