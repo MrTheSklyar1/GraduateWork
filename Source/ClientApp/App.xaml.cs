@@ -16,7 +16,6 @@ namespace ClientApp
     {
         private static List<CultureInfo> m_Languages = new List<CultureInfo>();
         public static event EventHandler LanguageChanged;
-
         public static List<CultureInfo> Languages
         {
             get
@@ -24,7 +23,6 @@ namespace ClientApp
                 return m_Languages;
             }
         }
-
         public App()
         {
             InitializeComponent();
@@ -36,7 +34,6 @@ namespace ClientApp
 
             Language = ClientApp.Properties.Settings.Default.DefaultLanguage;
         }
-
         public static CultureInfo Language
         {
             get
@@ -47,11 +44,7 @@ namespace ClientApp
             {
                 if (value == null) throw new ArgumentNullException("value");
                 if (value == System.Threading.Thread.CurrentThread.CurrentUICulture) return;
-
-                //1. Меняем язык приложения:
                 System.Threading.Thread.CurrentThread.CurrentUICulture = value;
-
-                //2. Создаём ResourceDictionary для новой культуры
                 ResourceDictionary dict = new ResourceDictionary();
                 switch (value.Name)
                 {
@@ -62,8 +55,6 @@ namespace ClientApp
                         dict.Source = new Uri("Resources/lang.xaml", UriKind.Relative);
                         break;
                 }
-
-                //3. Находим старую ResourceDictionary и удаляем его и добавляем новую ResourceDictionary
                 ResourceDictionary oldDict = (from d in Application.Current.Resources.MergedDictionaries
                                               where d.Source != null && d.Source.OriginalString.StartsWith("Resources/lang.")
                                               select d).First();
@@ -77,12 +68,9 @@ namespace ClientApp
                 {
                     Application.Current.Resources.MergedDictionaries.Add(dict);
                 }
-
-                //4. Вызываем евент для оповещения всех окон.
                 LanguageChanged(Application.Current, new EventArgs());
             }
         }
-
         private void App_LanguageChanged(Object sender, EventArgs e)
         {
             ClientApp.Properties.Settings.Default.DefaultLanguage = Language;

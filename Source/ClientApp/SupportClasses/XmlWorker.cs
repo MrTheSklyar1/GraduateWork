@@ -25,7 +25,7 @@ namespace ClientApp.SupportClasses
             catch
             {
                 var config = new XMLConfiguration();
-                config.ConnectionString = "Type connection string here";
+                config.ConnectionString = "Server=.\\SQLEXPRESS;Database=Base;Integrated Security=True;User Id=userid;Password=password;";
                 config.Save("settings.xml");
                 return false;
             }

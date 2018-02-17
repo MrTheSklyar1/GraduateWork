@@ -12,7 +12,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TabControl Name="TabControl" Grid.Row="0">
-            <TabItem Name="LoginTab" Height="30" Header="{DynamicResource m_tab_LogIn}">
+            <TabItem Name="LoginTab" FontSize="15" Height="30" Header="{DynamicResource m_tab_LogIn}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -28,11 +28,16 @@
                     <TextBlock Grid.Row="1" Grid.Column="0" FontSize="20" TextAlignment="Right" VerticalAlignment="Center" Text="{DynamicResource m_tab_LogIn_LogIn}"/>
                     <TextBlock Grid.Row="2" Grid.Column="0" FontSize="20" TextAlignment="Right" VerticalAlignment="Center" Text="{DynamicResource m_tab_LogIn_PassWord}"/>
                     <TextBox Name="LoginBox" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Width="250" Height="30" VerticalContentAlignment="Center" FontSize="20"/>
-                    <PasswordBox Name="PassBox" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Width="250" Height="30" VerticalContentAlignment="Center" FontSize="20"/>
+                    <PasswordBox Name="PassBox" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Width="250" Height="30" VerticalContentAlignment="Center" FontSize="20" KeyDown="PassBox_EnterPressed"/>
                     <Button Name="LoginButton" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="OK" FontSize="15" Height="30" Width="90" Click="LoginButton_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem Height="30" Header="Second">Second</TabItem>
+            <TabItem Name="WorkingTab" FontSize="15" Height="30" Header="{DynamicResource m_tab_WorkingTab}">
+                <TabControl TabStripPlacement="Left" Name="TabWorkControl">
+                    <TabItem Name="CurrentWorkTab" Header="{DynamicResource m_tab_WorkingTab_CurrentWork}" FontSize="15" Height="40" />
+                    <TabItem Name="CompletedWorkTab" Header="{DynamicResource m_tab_WorkingTab_CompletedWork}" FontSize="15" Height="40" />
+                </TabControl>
+            </TabItem>
         </TabControl>
         <DockPanel Grid.Row="1">
             <Label Name="BottomBarLabel" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="15" Height="30"/>

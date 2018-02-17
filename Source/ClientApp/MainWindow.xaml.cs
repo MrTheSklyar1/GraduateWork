@@ -51,12 +51,14 @@ namespace ClientApp
                 return;
             }
             worker.DoWork += worker_CheckConnection;
+            WorkingTab.Visibility = Visibility.Collapsed;
             SendInfoToBottomBar("m_tab_LogIn_CheckConnection");
             TabControl.IsEnabled = false;
             worker.RunWorkerAsync();
         }
-        
-        public void SendAttentionToBottomBar(string placeholder)
+
+        #region Основные минорные функции LogIn
+        private void SendAttentionToBottomBar(string placeholder)
         {
             Configuration.CurrentBottomBarLabelContent = placeholder;
             Configuration.CurrentBottomBarLabelBrush = Brushes.Red;
@@ -66,7 +68,7 @@ namespace ClientApp
                 BottomBarLabel.Foreground = Brushes.Red;
             }));
         }
-        public void SendInfoToBottomBar(string placeholder)
+        private void SendInfoToBottomBar(string placeholder)
         {
             Configuration.CurrentBottomBarLabelContent = placeholder;
             Configuration.CurrentBottomBarLabelBrush = Brushes.Black;
@@ -76,7 +78,7 @@ namespace ClientApp
                 BottomBarLabel.Foreground = Brushes.Black;
             }));
         }
-        public void ClearBottomBar()
+        private void ClearBottomBar()
         {
             Configuration.CurrentBottomBarLabelContent = "";
             Configuration.CurrentBottomBarLabelBrush = Brushes.Black;
@@ -112,7 +114,6 @@ namespace ClientApp
                 SendAttentionToBottomBar("m_tab_LogIn_NoConnection");
             }
         }
-
         private void ChangeLanguageClick(Object sender, EventArgs e)
         {
             MenuItem mi = sender as MenuItem;
@@ -150,12 +151,12 @@ namespace ClientApp
                 CurrentSession.CloseSession();
                 //TODO: Отключать остальные вкладки, все
                 LogOffItem.Visibility = Visibility.Collapsed;
+                WorkingTab.Visibility = Visibility.Collapsed;
             }
         }
-
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            if(LoginBox.Text != "" && PassBox.Password != "")
+            if (LoginBox.Text != "" && PassBox.Password != "")
             {
                 string hash = "";
                 string hashfromsql = "";
@@ -171,7 +172,7 @@ namespace ClientApp
                 }
                 using (var con = new SqlConnection(Configuration.ConnectionString))
                 {
-                    using (var command = new SqlCommand("select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName from PersonalRoles where Login='"+LoginBox.Text+"';", con))
+                    using (var command = new SqlCommand("select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName from PersonalRoles where Login='" + LoginBox.Text + "';", con))
                     {
                         con.Open();
                         using (var reader = command.ExecuteReader())
@@ -199,9 +200,11 @@ namespace ClientApp
                     PassBox.Clear();
                     ClearBottomBar();
                     LogOffItem.Visibility = Visibility.Visible;
+                    WorkingTab.Visibility = Visibility.Visible;
                     TabControl.SelectedIndex = 1;
                     LoginTab.Visibility = Visibility.Collapsed;
                     EnvironmentHelper.SendLog("Log In - " + CurrentSession.Login);
+                    OnLogin();
                 }
             }
             else
@@ -209,5 +212,20 @@ namespace ClientApp
                 SendAttentionToBottomBar("m_tab_LogIn_LogOrPassNotTyped");
             }
         }
+        private void PassBox_EnterPressed(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                LoginButton_Click(sender, e);
+            }
+        }
+        #endregion
+
+        private void OnLogin()
+        {
+            EnvironmentHelper.FindAllRoles();
+            EnvironmentHelper.SetWorkingPlace(TabWorkControl);
+        }
+
     }
 }
