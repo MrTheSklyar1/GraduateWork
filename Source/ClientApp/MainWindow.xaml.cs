@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Globalization;
+using System.IO;
+using ClientApp.SupportClasses;
 
 namespace ClientApp
 {
@@ -26,7 +28,6 @@ namespace ClientApp
             InitializeComponent();
             App.LanguageChanged += LanguageChanged;
             CultureInfo currLang = App.Language;
-            //Заполняем меню смены языка:
             menuLanguage.Items.Clear();
             foreach (var lang in App.Languages)
             {
@@ -37,7 +38,22 @@ namespace ClientApp
                 menuLang.Click += ChangeLanguageClick;
                 menuLanguage.Items.Add(menuLang);
             }
+            ConnectToDatabase();
         }
+
+        private void ConnectToDatabase()
+        {
+            Configuration config = PersistableObject.Load<Configuration>("settings.xml");
+            if (config == null)
+            {
+                BottomBarLabel.Content = (String)FindResource("m_tab_LogIn_BrokenSettingsFile");
+                EnvironmentHelper.SendLog("Broken Settings File");
+                config = new Configuration();
+                config.ConnectionString = "Type connection string here";
+                config.Save<Configuration>("settings.xml");
+            }
+        }
+
         private void ChangeLanguageClick(Object sender, EventArgs e)
         {
             MenuItem mi = sender as MenuItem;
@@ -66,6 +82,10 @@ namespace ClientApp
         {
             TabControl.SelectedIndex = 0;
             LogOffItem.Visibility = Visibility.Collapsed;
+            BottomBarLabel.Content = (String)FindResource("m_tab_LogIn_LogOffCompleted");
+            EnvironmentHelper.SendLog("Log Off - " + MainDataHolder.CurrentSessionLogin);
+            MainDataHolder.CurrentSessionLogin = "";
+            BottomBarLabel.Foreground = Brushes.Black;
             //TODO: Отключать остальные вкладки, все
         }
     }

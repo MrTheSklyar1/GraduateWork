@@ -72,6 +72,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SupportClasses\EnvironmentHelper.cs" />
+    <Compile Include="SupportClasses\MainDataHolder.cs" />
+    <Compile Include="SupportClasses\XmlWorker.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

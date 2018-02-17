@@ -68,6 +68,7 @@ namespace AdminApp
         {
             TabControl.SelectedIndex = 0;
             LogOffItem.Visibility = Visibility.Collapsed;
+            BottomBarLabel.Content = "Status: " + (String)FindResource("m_tab_LogIn_LogIn");
             //TODO: Отключать остальные вкладки, все
         }
     }

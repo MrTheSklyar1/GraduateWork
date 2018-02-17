@@ -7,6 +7,9 @@
     <v:String x:Key="m_tab_LogIn_LogIn">Логин</v:String>
     <v:String x:Key="m_tab_LogIn_PassWord">Пароль</v:String>
     <v:String x:Key="m_tab_LogIn_PasWrong">Логин или пароль неверны</v:String>
+    <v:String x:Key="m_tab_LogIn_LogOffCompleted">Выход выполнен</v:String>
+    <v:String x:Key="m_tab_LogIn_NoConnectionToDatabase">Нет соединения с базой данных</v:String>
+    <v:String x:Key="m_tab_LogIn_BrokenSettingsFile">Файл настроек поврежден</v:String>
     <v:String x:Key="m_menu_LogOff">Выйти</v:String>
     <v:String x:Key="m_app_Header">Клиентское приложение</v:String>
     <v:String x:Key="m_menu_About">О программе</v:String>
