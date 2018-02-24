@@ -19,6 +19,7 @@ using System.Data.SqlClient;
 using System.ComponentModel;
 using System.Threading;
 using System.Security.Cryptography;
+using System.Data;
 
 namespace ClientApp.View
 {
@@ -154,6 +155,7 @@ namespace ClientApp.View
                 WorkingTab.Visibility = Visibility.Collapsed;
                 menuLanguage.Visibility = Visibility.Visible;
                 Update.Visibility = Visibility.Collapsed;
+                Open.Visibility = Visibility.Collapsed;
                 TabWorkControl.Items.Clear();
             }
         }
@@ -208,6 +210,7 @@ namespace ClientApp.View
                     TabControl.SelectedIndex = 1;
                     LoginTab.Visibility = Visibility.Collapsed;
                     menuLanguage.Visibility = Visibility.Collapsed;
+                    Open.Visibility = Visibility.Visible;
                     EnvironmentHelper.SendLog("Log In - " + CurrentSession.Login);
                     OnLogin();
                 }
@@ -233,14 +236,38 @@ namespace ClientApp.View
         #region Контекстные клавиши
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (TabControl.SelectedIndex == 1)
+            {
+                EnvironmentHelper.UpdateView(TabControl);
+            }
+            else
+            {
+                EnvironmentHelper.UpdateSelected((TabItem)TabControl.Items.GetItemAt(TabControl.SelectedIndex));
+            }
+        }
+        private void Open_Click(object sender, RoutedEventArgs e)
+        {
+            if (TabControl.SelectedIndex == 1)
+            {
+                TabItem item = (TabItem)TabWorkControl.Items.GetItemAt(TabWorkControl.SelectedIndex);
+                DataGrid grid = (DataGrid)item.Content;
+                try
+                {
+                    DataRowView drv = (DataRowView)grid.SelectedItem;
+                    String result = (drv["Data"]).ToString();
+                    MessageBox.Show(result);
+                }
+                catch
+                {
+                    //TODO: error
+                }
+            }
         }
         #endregion
-
 
 
     }

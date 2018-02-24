@@ -5,13 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="{DynamicResource m_app_Header}" Height="400" Width="700">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="MainResources.xaml" />-->
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
     <Window.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -40,9 +33,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem Name="WorkingTab" FontSize="15" Height="30" Header="{DynamicResource m_tab_WorkingTab}">
-                    <TabControl TabStripPlacement="Left" Name="TabWorkControl">
-
-                    </TabControl>
+                    <TabControl TabStripPlacement="Left" Name="TabWorkControl"/>
                 </TabItem>
             </TabControl>
             <DockPanel Grid.Row="1">
@@ -50,6 +41,7 @@
                 <Menu Background="{x:Null}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="15">
                     <MenuItem Name="menuLanguage" Header="{DynamicResource m_menu_Language}" />
                     <MenuItem Name="LogOffItem" Header="{DynamicResource m_menu_LogOff}" Visibility="Collapsed" Click="LogOff"/>
+                    <MenuItem Name="Open" Header="{DynamicResource m_menu_Open}" Visibility="Collapsed" Click="Open_Click" />
                     <MenuItem Name="Save" Header="{DynamicResource m_menu_Save}" Visibility="Collapsed" Click="SaveButton_Click"/>
                     <MenuItem Name="Update" Header="{DynamicResource m_menu_Update}" Visibility="Collapsed" Click="UpdateButton_Click"/>
                     <MenuItem Name="About" Header="{DynamicResource m_menu_About}" Visibility="Visible" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace ClientApp.SupportClasses
                     {
                         while (reader.Read())
                         {
-                            var temp = new IDandName();
+                            var temp = new Role();
                             temp.ID = reader.GetGuid(0);
                             temp.Name = reader.GetString(1);
                             temp.Caption = reader.GetString(2);
@@ -80,20 +81,77 @@ namespace ClientApp.SupportClasses
                 {
                     var newGrid = new DataGrid
                     {
-                        Name = "CurrentWorkGrid"
+                        Name = "CurrentWorkGrid",
+                        SelectionMode = DataGridSelectionMode.Single,
+                        CanUserAddRows = false,
+                        CanUserDeleteRows = false
                     };
-                    //TODO: Сделать контент
+                    SetInfoToGridWork(newGrid);
+                    temp.Content = newGrid;
                 }
                 else if (temp.Name == "CompletedWorkTab")
                 {
-
+                    var newGrid = new DataGrid
+                    {
+                        Name = "CompletedWorkGrid",
+                        SelectionMode = DataGridSelectionMode.Single,
+                        CanUserAddRows = false,
+                        CanUserDeleteRows = false
+                        
+                    };
+                    SetInfoToGridEndWork(newGrid);
+                    temp.Content = newGrid;
                 }
                 else
                 {
+                    var newGrid = new DataGrid
+                    {
+                        Name = temp.Name,
+                        SelectionMode = DataGridSelectionMode.Single,
+                        CanUserAddRows = false,
+                        CanUserDeleteRows = false
 
+                    };
+                    SetInfoToGridOther(newGrid);
+                    temp.Content = newGrid;
                 }
             }
         }
-        
+        public static void SetInfoToGridWork(DataGrid dataGrid)
+        {
+            SqlConnection con = new SqlConnection(Configuration.ConnectionString);
+            SqlCommand cmd = new SqlCommand("select ID, Date, DocType, FromPersonal, ToRole from Tasks where isCompleted=0;", con);
+            SqlDataAdapter sda = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable("Tasks");
+            sda.Fill(dt);
+            dataGrid.ItemsSource = dt.DefaultView;
+        }
+        public static void SetInfoToGridEndWork(DataGrid dataGrid)
+        {
+            SqlConnection con = new SqlConnection(Configuration.ConnectionString);
+            SqlCommand cmd = new SqlCommand("select ID, Date, DocType, FromPersonal, ToRole from Tasks where isCompleted=1;", con);
+            SqlDataAdapter sda = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable("Tasks");
+            sda.Fill(dt);
+            dataGrid.ItemsSource = dt.DefaultView;
+        }
+        public static void SetInfoToGridOther(DataGrid dataGrid)
+        {
+            SqlConnection con = new SqlConnection(Configuration.ConnectionString);
+            SqlCommand cmd = new SqlCommand("select ID, Date, DocType, FromPersonal, ToRole from Tasks where isCompleted=0 and ToRole='"+CurrentSession.ID+"';", con);
+            SqlDataAdapter sda = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable("Tasks");
+            sda.Fill(dt);
+            dataGrid.ItemsSource = dt.DefaultView;
+            //Todo: переделать выборку
+        }
+        public static void UpdateView(TabControl tabControl)
+        {
+            
+        }
+        public static void UpdateSelected(TabItem tabItem)
+        {
+
+        }
     }
 }

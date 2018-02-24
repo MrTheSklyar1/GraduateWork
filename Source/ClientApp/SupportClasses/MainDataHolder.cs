@@ -17,16 +17,16 @@ namespace ClientApp.SupportClasses
             TelegramID = 0;
             FirstName = "";
             LastName = "";
-            UserRoles = new List<IDandName>();
+            UserRoles = new List<Role>();
         }
         public static string Login;
         public static Guid ID;
         public static int TelegramID;
         public static string FirstName;
         public static string LastName;
-        public static List<IDandName> UserRoles = new List<IDandName>();
+        public static List<Role> UserRoles = new List<Role>();
     }
-    public struct IDandName
+    public struct Role
     {
         public Guid ID;
         public string Name;
@@ -38,5 +38,4 @@ namespace ClientApp.SupportClasses
         public static string CurrentBottomBarLabelContent { get; set; }
         public static Brush CurrentBottomBarLabelBrush { get; set; }
     }
-
 }
