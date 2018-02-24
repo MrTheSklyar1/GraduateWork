@@ -152,6 +152,9 @@ namespace ClientApp
                 //TODO: Отключать остальные вкладки, все
                 LogOffItem.Visibility = Visibility.Collapsed;
                 WorkingTab.Visibility = Visibility.Collapsed;
+                menuLanguage.Visibility = Visibility.Visible;
+                Update.Visibility = Visibility.Collapsed;
+                TabWorkControl.Items.Clear();
             }
         }
         private void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -201,8 +204,10 @@ namespace ClientApp
                     ClearBottomBar();
                     LogOffItem.Visibility = Visibility.Visible;
                     WorkingTab.Visibility = Visibility.Visible;
+                    Update.Visibility = Visibility.Visible;
                     TabControl.SelectedIndex = 1;
                     LoginTab.Visibility = Visibility.Collapsed;
+                    menuLanguage.Visibility = Visibility.Collapsed;
                     EnvironmentHelper.SendLog("Log In - " + CurrentSession.Login);
                     OnLogin();
                 }
@@ -219,13 +224,24 @@ namespace ClientApp
                 LoginButton_Click(sender, e);
             }
         }
-        #endregion
-
         private void OnLogin()
         {
             EnvironmentHelper.FindAllRoles();
-            EnvironmentHelper.SetWorkingPlace(TabWorkControl);
+            EnvironmentHelper.SetWorkingPlace(TabWorkControl, this);
         }
+        #endregion
+        #region Контекстные клавиши
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
+
 
     }
 }

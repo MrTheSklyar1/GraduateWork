@@ -6,6 +6,8 @@
     <v:String x:Key="m_menu_LogOff">Выйти</v:String>
     <v:String x:Key="m_app_Header">Клиентское приложение</v:String>
     <v:String x:Key="m_menu_About">О программе</v:String>
+    <v:String x:Key="m_menu_Update">Обновить</v:String>
+    <v:String x:Key="m_menu_Save">Сохранить</v:String>
     <!--Вкладка Логин основные элементы-->
     <v:String x:Key="m_tab_LogIn">Вход</v:String>
     <v:String x:Key="m_tab_LogIn_LogInText">Используйте свой логин и пароль для доступа к системе</v:String>
@@ -23,4 +25,6 @@
     <v:String x:Key="m_tab_LogIn_BrokenSettingsFile">Файл настроек поврежден</v:String>
     <v:String x:Key="m_tab_LogIn_CheckConnection">Проверка соединения</v:String>
     <v:String x:Key="m_tab_LogIn_NoConnection">Нет соединения</v:String>
+    <!--Вкладки задач-->
+    <v:String x:Key="m_tab_PersonalRole">Персональные задачи</v:String>
 </ResourceDictionary>

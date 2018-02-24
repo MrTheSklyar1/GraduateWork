@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
@@ -21,6 +22,7 @@ namespace ClientApp.SupportClasses
         }
         public static void FindAllRoles()
         {
+            CurrentSession.UserRoles.Clear();
             using (var con = new SqlConnection(Configuration.ConnectionString))
             {
                 using (var command = new SqlCommand("select ru.RoleID, r.Name, r.Caption from RoleUsers ru join Roles r on ru.RoleID=r.ID where ru.ID='" + CurrentSession.ID + "';", con))
@@ -41,13 +43,30 @@ namespace ClientApp.SupportClasses
                 }
             }
         }
-        public static void SetWorkingPlace(TabControl tabControl)
+        public static void SetWorkingPlace(TabControl tabControl, Window window)
         {
+            var CurrentWorkTab = new TabItem
+            {
+                Header = (String)window.FindResource("m_tab_WorkingTab_CurrentWork"),
+                Name = "CurrentWorkTab",
+                Height = 40,
+                FontSize = 14
+            };
+            tabControl.Items.Add(CurrentWorkTab);
+            var CompletedWorkTab = new TabItem
+            {
+                Header = (String)window.FindResource("m_tab_WorkingTab_CompletedWork"),
+                Name = "CompletedWorkTab",
+                Height = 40,
+                FontSize = 14
+            };
+            tabControl.Items.Add(CompletedWorkTab);
             foreach (var item in CurrentSession.UserRoles)
             {
+                string locName = (String)window.FindResource("m_tab_"+item.Name);
                 var newTabItem = new TabItem
                 {
-                    Header = item.Caption,
+                    Header = locName,
                     Name = item.Name,
                     Height = 40,
                     FontSize = 14
@@ -57,9 +76,12 @@ namespace ClientApp.SupportClasses
             foreach (var item in tabControl.Items)
             {
                 var temp = (TabItem)item;
-                var table = new DataGrid();
                 if (temp.Name == "CurrentWorkTab")
                 {
+                    var newGrid = new DataGrid
+                    {
+                        Name = "CurrentWorkGrid"
+                    };
                     //TODO: Сделать контент
                 }
                 else if (temp.Name == "CompletedWorkTab")
@@ -72,5 +94,6 @@ namespace ClientApp.SupportClasses
                 }
             }
         }
+        
     }
 }

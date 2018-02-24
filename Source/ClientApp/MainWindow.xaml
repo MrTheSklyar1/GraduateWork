@@ -34,8 +34,7 @@
             </TabItem>
             <TabItem Name="WorkingTab" FontSize="15" Height="30" Header="{DynamicResource m_tab_WorkingTab}">
                 <TabControl TabStripPlacement="Left" Name="TabWorkControl">
-                    <TabItem Name="CurrentWorkTab" Header="{DynamicResource m_tab_WorkingTab_CurrentWork}" FontSize="15" Height="40" />
-                    <TabItem Name="CompletedWorkTab" Header="{DynamicResource m_tab_WorkingTab_CompletedWork}" FontSize="15" Height="40" />
+
                 </TabControl>
             </TabItem>
         </TabControl>
@@ -44,6 +43,8 @@
             <Menu Background="{x:Null}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="15">
                 <MenuItem Name="menuLanguage" Header="{DynamicResource m_menu_Language}" />
                 <MenuItem Name="LogOffItem" Header="{DynamicResource m_menu_LogOff}" Visibility="Collapsed" Click="LogOff"/>
+                <MenuItem Name="Save" Header="{DynamicResource m_menu_Save}" Visibility="Collapsed" Click="SaveButton_Click"/>
+                <MenuItem Name="Update" Header="{DynamicResource m_menu_Update}" Visibility="Collapsed" Click="UpdateButton_Click"/>
                 <MenuItem Name="About" Header="{DynamicResource m_menu_About}" Visibility="Visible" />
             </Menu>
         </DockPanel>

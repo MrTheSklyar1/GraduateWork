@@ -6,6 +6,8 @@
     <v:String x:Key="m_menu_LogOff">Log Off</v:String>
     <v:String x:Key="m_app_Header">Client App</v:String>
     <v:String x:Key="m_menu_About">About</v:String>
+    <v:String x:Key="m_menu_Update">Update</v:String>
+    <v:String x:Key="m_menu_Save">Save</v:String>
     <!--Вкладка Логин основные элементы-->
     <v:String x:Key="m_tab_LogIn">Log In</v:String>
     <v:String x:Key="m_tab_LogIn_LogInText">Use your Login and Password to access the system</v:String>
@@ -23,4 +25,6 @@
     <v:String x:Key="m_tab_LogIn_BrokenSettingsFile">Broken Settings File</v:String>
     <v:String x:Key="m_tab_LogIn_CheckConnection">Checking connection</v:String>
     <v:String x:Key="m_tab_LogIn_NoConnection">No connection</v:String>
+    <!--Вкладки задач-->
+    <v:String x:Key="m_tab_PersonalRole">Personal tasks</v:String>
 </ResourceDictionary>
