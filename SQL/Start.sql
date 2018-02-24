@@ -16,14 +16,16 @@ create table PersonalRoles
 	isAdmin bit NOT NULL
 );
 
-insert into PersonalRoles values (@AdminID, 'Admin', 'e3afed0047b08059d0fada10f400c1e5', NULL, 'Admin', 'Admin', 1);
+ALTER TABLE PersonalRoles ADD PRIMARY KEY (ID);
 
 create table Roles
 (
 	ID	uniqueidentifier NOT NULL,
 	Name nvarchar(50) NOT NULL,
-  Caption nvarchar(50) NOT NULL
+    Caption nvarchar(50) NOT NULL
 );
+
+ALTER TABLE Roles ADD PRIMARY KEY (ID);
 
 insert into Roles values (@PersonalRoleID, 'PersonalRole', 'Personal Role');
 
@@ -33,5 +35,9 @@ create table RoleUsers
 	RoleID uniqueidentifier NOT NULL
 );
 
+ALTER TABLE RoleUsers ADD FOREIGN KEY(ID) REFERENCES PersonalRoles(ID);
+ALTER TABLE RoleUsers ADD FOREIGN KEY(RoleID) REFERENCES Roles(ID);
+
+insert into PersonalRoles values (@AdminID, 'Admin', 'e3afed0047b08059d0fada10f400c1e5', NULL, 'Admin', 'Admin', 1);
 insert into RoleUsers values (@AdminID, @PersonalRoleID);
 
