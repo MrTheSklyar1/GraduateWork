@@ -20,7 +20,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Security.Cryptography;
 
-namespace ClientApp
+namespace ClientApp.View
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml

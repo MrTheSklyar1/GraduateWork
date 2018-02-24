@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ClientApp.Helpers;
+using ClientApp.View;
+using ClientApp.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -75,6 +78,14 @@ namespace ClientApp
         {
             ClientApp.Properties.Settings.Default.DefaultLanguage = Language;
             ClientApp.Properties.Settings.Default.Save();
+        }
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            var mainWindow = new MainWindow();
+
+            mainWindow.DataContext = new MainViewModel(new RelayCommandFactory());
+
+            mainWindow.Show();
         }
     }
 }
