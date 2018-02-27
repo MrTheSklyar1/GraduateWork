@@ -8,38 +8,25 @@ using System.Windows.Media;
 
 namespace ClientApp.SupportClasses
 {
-    public static class CurrentSession
-    {
-        public static void CloseSession()
-        {
-            Login = "";
-            ID = Guid.Empty;
-            TelegramID = 0;
-            FirstName = "";
-            LastName = "";
-            FullName = "";
-            UserRoles = new List<Role>();
-        }
-        public static string Login;
-        public static Guid ID;
-        public static int TelegramID;
-        public static string FirstName;
-        public static string LastName;
-        public static string FullName;
-        public static List<Role> UserRoles = new List<Role>();
-
-    }
     public struct Role
     {
         public Guid ID;
         public string Name;
         public string Caption;
     }
-    public static class Configuration
+
+    public struct STabItem
     {
-        public static string ConnectionString { get; set; }
-        public static string CurrentBottomBarLabelContent { get; set; }
-        public static Brush CurrentBottomBarLabelBrush { get; set; }
-        public static bool SQLLog { get; set; }
+        public TabItem TabItem;
+        public DataGrid DataGrid;
+    }
+
+    public static class StaticTypes
+    {
+        public const string CurrentWorkTab = "CurrentWorkTab";
+        public const string CompletedWorkTab = "CompletedWorkTab";
+        public const string CurrentWorkGrid = "CurrentWorkGrid";
+        public const string CompletedWorkGrid = "CompletedWorkGrid";
+        public const string PersonalRole = "PersonalRole";
     }
 }

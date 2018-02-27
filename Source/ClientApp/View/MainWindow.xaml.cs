@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Security.Cryptography;
 using System.Data;
+using ClientApp.MainClasses;
 
 namespace ClientApp.View
 {
@@ -61,8 +62,8 @@ namespace ClientApp.View
         #region Основные минорные функции LogIn
         private void SendAttentionToBottomBar(string placeholder)
         {
-            Configuration.CurrentBottomBarLabelContent = placeholder;
-            Configuration.CurrentBottomBarLabelBrush = Brushes.Red;
+            SystemSingleton.BotomTab.CurrentBottomBarLabelContent = placeholder;
+            SystemSingleton.BotomTab.CurrentBottomBarLabelBrush = Brushes.Red;
             Dispatcher.BeginInvoke(new ThreadStart(delegate
             {
                 BottomBarLabel.Content = (String)FindResource(placeholder);
@@ -71,8 +72,8 @@ namespace ClientApp.View
         }
         private void SendInfoToBottomBar(string placeholder)
         {
-            Configuration.CurrentBottomBarLabelContent = placeholder;
-            Configuration.CurrentBottomBarLabelBrush = Brushes.Black;
+            SystemSingleton.BotomTab.CurrentBottomBarLabelContent = placeholder;
+            SystemSingleton.BotomTab.CurrentBottomBarLabelBrush = Brushes.Black;
             Dispatcher.BeginInvoke(new ThreadStart(delegate
             {
                 BottomBarLabel.Content = (String)FindResource(placeholder);
@@ -81,8 +82,8 @@ namespace ClientApp.View
         }
         private void ClearBottomBar()
         {
-            Configuration.CurrentBottomBarLabelContent = "";
-            Configuration.CurrentBottomBarLabelBrush = Brushes.Black;
+            SystemSingleton.BotomTab.CurrentBottomBarLabelContent = "";
+            SystemSingleton.BotomTab.CurrentBottomBarLabelBrush = Brushes.Black;
             Dispatcher.BeginInvoke(new ThreadStart(delegate
             {
                 BottomBarLabel.Content = "";
@@ -93,7 +94,7 @@ namespace ClientApp.View
         {
             try
             {
-                using (var con = new SqlConnection(Configuration.ConnectionString))
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
                     con.Open();
                     con.Close();
@@ -138,18 +139,18 @@ namespace ClientApp.View
                 CultureInfo ci = i.Tag as CultureInfo;
                 i.IsChecked = ci != null && ci.Equals(currLang);
             }
-            BottomBarLabel.Content = Configuration.CurrentBottomBarLabelContent=="" ? "" : (String)FindResource(Configuration.CurrentBottomBarLabelContent);
-            BottomBarLabel.Foreground = Configuration.CurrentBottomBarLabelBrush;
+            BottomBarLabel.Content = SystemSingleton.BotomTab.CurrentBottomBarLabelContent=="" ? "" : (String)FindResource(SystemSingleton.BotomTab.CurrentBottomBarLabelContent);
+            BottomBarLabel.Foreground = SystemSingleton.BotomTab.CurrentBottomBarLabelBrush;
         }
         private void LogOff(object sender, RoutedEventArgs e)
         {
-            if (CurrentSession.Login != "")
+            if (SystemSingleton.CurrentSession.Login != "")
             {
                 LoginTab.Visibility = Visibility.Visible;
                 TabControl.SelectedIndex = 0;
                 SendInfoToBottomBar("m_tab_LogIn_LogOffCompleted");
-                EnvironmentHelper.SendLog("Log Off - " + CurrentSession.Login);
-                CurrentSession.CloseSession();
+                EnvironmentHelper.SendLog("Log Off - " + SystemSingleton.CurrentSession.Login);
+                SystemSingleton.CurrentSession.CloseSession();
                 //TODO: Отключать остальные вкладки, все
                 LogOffItem.Visibility = Visibility.Collapsed;
                 WorkingTab.Visibility = Visibility.Collapsed;
@@ -175,7 +176,7 @@ namespace ClientApp.View
                     }
                     hash = sBuilder.ToString();
                 }
-                using (var con = new SqlConnection(Configuration.ConnectionString))
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
                     using (var command = new SqlCommand("select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName, FullName from PersonalRoles where Login='" + LoginBox.Text + "';", con))
                     {
@@ -185,25 +186,25 @@ namespace ClientApp.View
                         {
                             if (reader.Read())
                             {
-                                CurrentSession.ID = reader.GetGuid(0);
+                                SystemSingleton.CurrentSession.ID = reader.GetGuid(0);
                                 hashfromsql = reader.GetString(1);
-                                CurrentSession.TelegramID = reader.GetInt32(2);
-                                CurrentSession.FirstName = reader.GetString(3);
-                                CurrentSession.LastName = reader.GetString(4);
-                                CurrentSession.FullName = reader.GetString(5);
+                                SystemSingleton.CurrentSession.TelegramID = reader.GetInt32(2);
+                                SystemSingleton.CurrentSession.FirstName = reader.GetString(3);
+                                SystemSingleton.CurrentSession.LastName = reader.GetString(4);
+                                SystemSingleton.CurrentSession.FullName = reader.GetString(5);
                             }
                         }
                         con.Close();
                     }
                 }
-                if (CurrentSession.ID == Guid.Empty || hash != hashfromsql)
+                if (SystemSingleton.CurrentSession.ID == Guid.Empty || hash != hashfromsql)
                 {
                     SendAttentionToBottomBar("m_tab_LogIn_PasWrong");
-                    CurrentSession.CloseSession();
+                    SystemSingleton.CurrentSession.CloseSession();
                 }
                 else
                 {
-                    CurrentSession.Login = LoginBox.Text;
+                    SystemSingleton.CurrentSession.Login = LoginBox.Text;
                     PassBox.Clear();
                     ClearBottomBar();
                     LogOffItem.Visibility = Visibility.Visible;
@@ -213,7 +214,7 @@ namespace ClientApp.View
                     LoginTab.Visibility = Visibility.Collapsed;
                     menuLanguage.Visibility = Visibility.Collapsed;
                     Open.Visibility = Visibility.Visible;
-                    EnvironmentHelper.SendLog("Log In - " + CurrentSession.Login);
+                    EnvironmentHelper.SendLog("Log In - " + SystemSingleton.CurrentSession.Login);
                     OnLogin();
                 }
             }

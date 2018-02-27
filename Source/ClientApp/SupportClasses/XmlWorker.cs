@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Serialization;
+using ClientApp.MainClasses;
 
 namespace ClientApp.SupportClasses
 {
@@ -31,8 +32,8 @@ namespace ClientApp.SupportClasses
                 config.Save("settings.xml");
                 return false;
             }
-            Configuration.ConnectionString = result.ConnectionString;
-            Configuration.SQLLog = result.SQLLog;
+            SystemSingleton.Configuration.ConnectionString = result.ConnectionString;
+            SystemSingleton.Configuration.SQLLog = result.SQLLog;
             return true;
         }
 
