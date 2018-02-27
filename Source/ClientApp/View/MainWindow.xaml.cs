@@ -177,8 +177,9 @@ namespace ClientApp.View
                 }
                 using (var con = new SqlConnection(Configuration.ConnectionString))
                 {
-                    using (var command = new SqlCommand("select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName from PersonalRoles where Login='" + LoginBox.Text + "';", con))
+                    using (var command = new SqlCommand("select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName, FullName from PersonalRoles where Login='" + LoginBox.Text + "';", con))
                     {
+                        EnvironmentHelper.SendLogSQL(command.CommandText);
                         con.Open();
                         using (var reader = command.ExecuteReader())
                         {
@@ -189,6 +190,7 @@ namespace ClientApp.View
                                 CurrentSession.TelegramID = reader.GetInt32(2);
                                 CurrentSession.FirstName = reader.GetString(3);
                                 CurrentSession.LastName = reader.GetString(4);
+                                CurrentSession.FullName = reader.GetString(5);
                             }
                         }
                         con.Close();

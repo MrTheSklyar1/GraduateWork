@@ -8,6 +8,7 @@ namespace ClientApp.SupportClasses
     public class XMLConfiguration : XMLConfigurationBase
     {
         public string ConnectionString { get; set; }
+        public bool SQLLog { get; set; }
     }
 
     public class XMLConfigurationBase
@@ -26,10 +27,12 @@ namespace ClientApp.SupportClasses
             {
                 var config = new XMLConfiguration();
                 config.ConnectionString = "Server=.\\SQLEXPRESS;Database=Base;Integrated Security=True;User Id=userid;Password=password;";
+                config.SQLLog = false;
                 config.Save("settings.xml");
                 return false;
             }
             Configuration.ConnectionString = result.ConnectionString;
+            Configuration.SQLLog = result.SQLLog;
             return true;
         }
 

@@ -17,6 +17,7 @@ namespace ClientApp.SupportClasses
             TelegramID = 0;
             FirstName = "";
             LastName = "";
+            FullName = "";
             UserRoles = new List<Role>();
         }
         public static string Login;
@@ -24,7 +25,9 @@ namespace ClientApp.SupportClasses
         public static int TelegramID;
         public static string FirstName;
         public static string LastName;
+        public static string FullName;
         public static List<Role> UserRoles = new List<Role>();
+
     }
     public struct Role
     {
@@ -37,5 +40,6 @@ namespace ClientApp.SupportClasses
         public static string ConnectionString { get; set; }
         public static string CurrentBottomBarLabelContent { get; set; }
         public static Brush CurrentBottomBarLabelBrush { get; set; }
+        public static bool SQLLog { get; set; }
     }
 }
