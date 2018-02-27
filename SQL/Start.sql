@@ -1,7 +1,18 @@
 create database Base;
 
-DECLARE @AdminID uniqueidentifier = NEWID();
-DECLARE @PersonalRoleID uniqueidentifier = NEWID();
+DECLARE @AdminID uniqueidentifier = 'f111d495-1aa4-468c-9885-30e4ad13ecd8';
+DECLARE @PersonalRoleID uniqueidentifier = 'fffee627-a5a6-4345-bc55-8fba3709dc48';
+
+create table Roles
+(
+	ID	uniqueidentifier NOT NULL,
+	Name nvarchar(100) NOT NULL
+);
+
+ALTER TABLE Roles ADD PRIMARY KEY (ID);
+
+insert into Roles values (@AdminID, 'Admin A.');
+insert into Roles values (@PersonalRoleID, 'Personal Role');
 
 create table PersonalRoles
 (
@@ -15,30 +26,31 @@ create table PersonalRoles
 	isAdmin bit NOT NULL
 );
 
-ALTER TABLE PersonalRoles ADD PRIMARY KEY (ID);
+ALTER TABLE PersonalRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 
-create table Roles
+insert into PersonalRoles values (@AdminID, 'Admin', 'e3afed0047b08059d0fada10f400c1e5', NULL, 'Admin A.', 'Admin', 'Admin', 1);
+
+create table StaticRoles
 (
 	ID	uniqueidentifier NOT NULL,
 	Name nvarchar(50) NOT NULL,
     Caption nvarchar(50) NOT NULL
 );
 
-ALTER TABLE Roles ADD PRIMARY KEY (ID);
+ALTER TABLE StaticRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 
-insert into Roles values (@PersonalRoleID, 'PersonalRole', 'Personal Role');
+insert into StaticRoles values (@PersonalRoleID, 'PersonalRole', 'Personal Role');
 
 create table RoleUsers
 (
-	ID	uniqueidentifier NOT NULL,
-	RoleID uniqueidentifier NOT NULL
+	RoleID	uniqueidentifier NOT NULL,
+	PersonID uniqueidentifier NOT NULL
 );
 
-ALTER TABLE RoleUsers ADD FOREIGN KEY(ID) REFERENCES PersonalRoles(ID);
 ALTER TABLE RoleUsers ADD FOREIGN KEY(RoleID) REFERENCES Roles(ID);
+ALTER TABLE RoleUsers ADD FOREIGN KEY(PersonID) REFERENCES Roles(ID);
 
-insert into PersonalRoles values (@AdminID, 'Admin', 'e3afed0047b08059d0fada10f400c1e5', NULL, 'Admin A.', 'Admin', 'Admin', 1);
-insert into RoleUsers values (@AdminID, @PersonalRoleID);
+insert into RoleUsers values (@PersonalRoleID, @AdminID);
 
 create table DocTypes
 (
@@ -62,7 +74,7 @@ create table Tasks
 	FromPersonalID uniqueidentifier NOT NULL,
 	FromPersonalName nvarchar(100) NOT NULL,
 	ToRoleID uniqueidentifier NOT NULL,
-	ToRoleName nvarchar(50) NOT NULL,
+	ToRoleName nvarchar(100) NOT NULL,
 	Date datetime NOT NULL,
 	DocType uniqueidentifier NOT NULL,
 	isCompleted bit NOT NULL,
@@ -70,15 +82,21 @@ create table Tasks
 	FileID uniqueidentifier NULL
 );
 
-
 ALTER TABLE Tasks ADD PRIMARY KEY(ID);
-ALTER TABLE Tasks ADD FOREIGN KEY(FromPersonalID) REFERENCES PersonalRoles(ID);
+ALTER TABLE Tasks ADD FOREIGN KEY(FromPersonalID) REFERENCES  Roles(ID);
 ALTER TABLE Tasks ADD FOREIGN KEY(ToRoleID) REFERENCES Roles(ID);
 ALTER TABLE Tasks ADD FOREIGN KEY(DocType) REFERENCES DocTypes(ID);
 ALTER TABLE Tasks ADD FOREIGN KEY(FileID) REFERENCES Files(ID);
 
-
-
 --Test Var
-
-
+DECLARE @DocID uniqueidentifier = '4e54d2e9-20e6-4f58-905f-89d8b4084b2c';
+DECLARE @TaskID uniqueidentifier = 'a234793a-6028-414d-8cbe-049b3e890209';
+DECLARE @RoleID uniqueidentifier = 'c12239f2-d6ee-46ea-b6fa-cc63f1dce800';
+DECLARE @AdminID uniqueidentifier = 'f111d495-1aa4-468c-9885-30e4ad13ecd8';
+DECLARE @PersonalRoleID uniqueidentifier = 'fffee627-a5a6-4345-bc55-8fba3709dc48';
+DECLARE @BuhUchet uniqueidentifier = 'ff5ee627-a5a6-4345-bc55-8fba3709dc48';
+insert into Roles values (@BuhUchet, 'Бухгалтерский учет');
+insert into StaticRoles values (@BuhUchet, 'BuhUchet', 'Бухгалтерский учет');
+insert into RoleUsers values (@BuhUchet, @AdminID);
+insert into DocTypes values (@DocID, '2NDFL', '2 НДФЛ');
+insert into Tasks values (@TaskID, @AdminID, 'Admin A.', @AdminID, 'Admin A.',SYSDATETIME(), @DocID, 0, 'Test doc', NULL);

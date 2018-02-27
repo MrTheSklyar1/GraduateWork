@@ -139,7 +139,7 @@ namespace ClientApp.View
                 CultureInfo ci = i.Tag as CultureInfo;
                 i.IsChecked = ci != null && ci.Equals(currLang);
             }
-            BottomBarLabel.Content = SystemSingleton.BotomTab.CurrentBottomBarLabelContent=="" ? "" : (String)FindResource(SystemSingleton.BotomTab.CurrentBottomBarLabelContent);
+            BottomBarLabel.Content = SystemSingleton.BotomTab.CurrentBottomBarLabelContent == "" ? "" : (String)FindResource(SystemSingleton.BotomTab.CurrentBottomBarLabelContent);
             BottomBarLabel.Foreground = SystemSingleton.BotomTab.CurrentBottomBarLabelBrush;
         }
         private void LogOff(object sender, RoutedEventArgs e)
@@ -176,26 +176,35 @@ namespace ClientApp.View
                     }
                     hash = sBuilder.ToString();
                 }
-                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                try
                 {
-                    using (var command = new SqlCommand("select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName, FullName from PersonalRoles where Login='" + LoginBox.Text + "';", con))
+                    using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                     {
-                        EnvironmentHelper.SendLogSQL(command.CommandText);
-                        con.Open();
-                        using (var reader = command.ExecuteReader())
+                        using (var command = new SqlCommand("select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName, FullName from PersonalRoles where Login='" + LoginBox.Text + "';", con))
                         {
-                            if (reader.Read())
+
+                            EnvironmentHelper.SendLogSQL(command.CommandText);
+                            con.Open();
+                            using (var reader = command.ExecuteReader())
                             {
-                                SystemSingleton.CurrentSession.ID = reader.GetGuid(0);
-                                hashfromsql = reader.GetString(1);
-                                SystemSingleton.CurrentSession.TelegramID = reader.GetInt32(2);
-                                SystemSingleton.CurrentSession.FirstName = reader.GetString(3);
-                                SystemSingleton.CurrentSession.LastName = reader.GetString(4);
-                                SystemSingleton.CurrentSession.FullName = reader.GetString(5);
+                                if (reader.Read())
+                                {
+                                    SystemSingleton.CurrentSession.ID = reader.GetGuid(0);
+                                    hashfromsql = reader.GetString(1);
+                                    SystemSingleton.CurrentSession.TelegramID = reader.GetInt32(2);
+                                    SystemSingleton.CurrentSession.FirstName = reader.GetString(3);
+                                    SystemSingleton.CurrentSession.LastName = reader.GetString(4);
+                                    SystemSingleton.CurrentSession.FullName = reader.GetString(5);
+                                }
                             }
+                            con.Close();
+
                         }
-                        con.Close();
                     }
+                }
+                catch (Exception ex)
+                {
+                    EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
                 }
                 if (SystemSingleton.CurrentSession.ID == Guid.Empty || hash != hashfromsql)
                 {
@@ -239,7 +248,7 @@ namespace ClientApp.View
         #region Контекстные клавиши
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
