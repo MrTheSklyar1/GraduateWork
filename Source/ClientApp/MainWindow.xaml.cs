@@ -22,7 +22,7 @@ using System.Security.Cryptography;
 using System.Data;
 using ClientApp.MainClasses;
 
-namespace ClientApp.View
+namespace ClientApp
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
@@ -76,7 +76,7 @@ namespace ClientApp.View
             SystemSingleton.BotomTab.CurrentBottomBarLabelBrush = Brushes.Black;
             Dispatcher.BeginInvoke(new ThreadStart(delegate
             {
-                BottomBarLabel.Content = (String)FindResource(placeholder);
+                BottomBarLabel.Content = (string)FindResource(placeholder);
                 BottomBarLabel.Foreground = Brushes.Black;
             }));
         }
@@ -116,28 +116,25 @@ namespace ClientApp.View
                 SendAttentionToBottomBar("m_tab_LogIn_NoConnection");
             }
         }
-        private void ChangeLanguageClick(Object sender, EventArgs e)
+        private void ChangeLanguageClick(object sender, EventArgs e)
         {
-            MenuItem mi = sender as MenuItem;
-            if (mi != null)
+            if (sender is MenuItem mi)
             {
-                CultureInfo lang = mi.Tag as CultureInfo;
-                if (lang != null)
+                if (mi.Tag is CultureInfo lang)
                 {
                     App.Language = lang;
                 }
             }
 
         }
-        private void LanguageChanged(Object sender, EventArgs e)
+        private void LanguageChanged(object sender, EventArgs e)
         {
             CultureInfo currLang = App.Language;
 
             //Отмечаем нужный пункт смены языка как выбранный язык
             foreach (MenuItem i in menuLanguage.Items)
             {
-                CultureInfo ci = i.Tag as CultureInfo;
-                i.IsChecked = ci != null && ci.Equals(currLang);
+                i.IsChecked = i.Tag is CultureInfo ci && ci.Equals(currLang);
             }
             BottomBarLabel.Content = SystemSingleton.BotomTab.CurrentBottomBarLabelContent == "" ? "" : (String)FindResource(SystemSingleton.BotomTab.CurrentBottomBarLabelContent);
             BottomBarLabel.Foreground = SystemSingleton.BotomTab.CurrentBottomBarLabelBrush;
@@ -156,7 +153,7 @@ namespace ClientApp.View
                 WorkingTab.Visibility = Visibility.Collapsed;
                 menuLanguage.Visibility = Visibility.Visible;
                 Update.Visibility = Visibility.Collapsed;
-                Open.Visibility = Visibility.Collapsed;
+                Save.Visibility = Visibility.Collapsed;
                 TabWorkControl.Items.Clear();
             }
         }
@@ -164,15 +161,15 @@ namespace ClientApp.View
         {
             if (LoginBox.Text != "" && PassBox.Password != "")
             {
-                string hash = "";
-                string hashfromsql = "";
-                using (MD5 md5Hash = MD5.Create())
+                var hash = "";
+                var hashfromsql = "";
+                using (var md5Hash = MD5.Create())
                 {
-                    byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(PassBox.Password));
-                    StringBuilder sBuilder = new StringBuilder();
-                    for (int i = 0; i < data.Length; i++)
+                    var data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(PassBox.Password));
+                    var sBuilder = new StringBuilder();
+                    foreach (var item in data)
                     {
-                        sBuilder.Append(data[i].ToString("x2"));
+                        sBuilder.Append(item.ToString("x2"));
                     }
                     hash = sBuilder.ToString();
                 }
@@ -199,7 +196,6 @@ namespace ClientApp.View
                                 }
                             }
                             con.Close();
-
                         }
                     }
                 }
@@ -223,7 +219,6 @@ namespace ClientApp.View
                     TabControl.SelectedIndex = 1;
                     LoginTab.Visibility = Visibility.Collapsed;
                     menuLanguage.Visibility = Visibility.Collapsed;
-                    Open.Visibility = Visibility.Visible;
                     EnvironmentHelper.SendLog("Log In - " + SystemSingleton.CurrentSession.Login);
                     OnLogin();
                 }
@@ -249,35 +244,17 @@ namespace ClientApp.View
         #region Контекстные клавиши
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-
+            //TODO: сделать клавишу
         }
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
             if (TabControl.SelectedIndex == 1)
             {
-                EnvironmentHelper.UpdateView(TabControl);
+                EnvironmentHelper.UpdateView();
             }
             else
             {
                 EnvironmentHelper.UpdateSelected((TabItem)TabControl.Items.GetItemAt(TabControl.SelectedIndex));
-            }
-        }
-        private void Open_Click(object sender, RoutedEventArgs e)
-        {
-            if (TabControl.SelectedIndex == 1)
-            {
-                TabItem item = (TabItem)TabWorkControl.Items.GetItemAt(TabWorkControl.SelectedIndex);
-                DataGrid grid = (DataGrid)item.Content;
-                try
-                {
-                    DataRowView drv = (DataRowView)grid.SelectedItem;
-                    String result = (drv["Data"]).ToString();
-                    MessageBox.Show(result);
-                }
-                catch
-                {
-                    //TODO: error
-                }
             }
         }
         #endregion

@@ -8,17 +8,18 @@ using System.Windows.Media;
 
 namespace ClientApp.SupportClasses
 {
-    public struct Role
+    public class Role
     {
         public Guid ID;
         public string Name;
         public string Caption;
     }
 
-    public struct STabItem
+    public class STabItem
     {
         public TabItem TabItem;
         public DataGrid DataGrid;
+        public Guid ToRole;
     }
 
     public static class StaticTypes
