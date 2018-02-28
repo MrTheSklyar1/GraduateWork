@@ -33,4 +33,9 @@
     <v:String x:Key="m_column_DocType">Document Type</v:String>
     <v:String x:Key="m_column_FromPersonalName">From</v:String>
     <v:String x:Key="m_column_ToRoleName">To Role</v:String>
+    <v:String x:Key="m_column_State">State</v:String>
+    <!--Состояния-->
+    <v:String x:Key="Completed">Completed</v:String>
+    <v:String x:Key="Cancelled">Cancelled</v:String>
+    <v:String x:Key="Work">Work</v:String>
 </ResourceDictionary>

@@ -33,6 +33,7 @@ namespace ClientApp
         public MainWindow()
         {
             InitializeComponent();
+            SystemSingleton.Configuration.mainWindow = this;
             App.LanguageChanged += LanguageChanged;
             CultureInfo currLang = App.Language;
             menuLanguage.Items.Clear();

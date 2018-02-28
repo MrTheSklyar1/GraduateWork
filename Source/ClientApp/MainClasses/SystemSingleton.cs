@@ -48,6 +48,11 @@ namespace ClientApp.MainClasses
                         item.Value.DataGrid.Columns[4].Header =
                             (String) window.FindResource("m_column_ToRoleName");
                     }
+                    if (item.Key == StaticTypes.CompletedWorkTab)
+                    {
+                        item.Value.DataGrid.Columns[5].Header =
+                            (String)window.FindResource("m_column_State");
+                    }
                     return true;
                 }
                 catch
@@ -60,6 +65,7 @@ namespace ClientApp.MainClasses
         {
             public static string ConnectionString { get; set; }
             public static bool SQLLog { get; set; }
+            public static MainWindow mainWindow { get; set; }
         }
 
         public static class BotomTab

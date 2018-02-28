@@ -33,4 +33,9 @@
     <v:String x:Key="m_column_DocType">Тип документа</v:String>
     <v:String x:Key="m_column_FromPersonalName">От</v:String>
     <v:String x:Key="m_column_ToRoleName">Назначен для</v:String>
+    <v:String x:Key="m_column_State">Состояние</v:String>
+    <!--Состояния-->
+    <v:String x:Key="Completed">Выполнено</v:String>
+    <v:String x:Key="Cancelled">Отменено</v:String>
+    <v:String x:Key="Work">В работе</v:String>
 </ResourceDictionary>

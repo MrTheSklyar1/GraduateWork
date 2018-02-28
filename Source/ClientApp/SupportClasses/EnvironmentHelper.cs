@@ -208,6 +208,10 @@ namespace ClientApp.SupportClasses
                 SqlDataAdapter sda = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable("Tasks");
                 sda.Fill(dt);
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    dt.Rows[i][5] = (string)SystemSingleton.Configuration.mainWindow.FindResource((string)dt.Rows[i][5]);
+                }
                 dataGrid.ItemsSource = dt.DefaultView;
             }
             catch (Exception ex)
