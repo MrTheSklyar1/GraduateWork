@@ -49,8 +49,10 @@ namespace ClientApp.SupportClasses
             {
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
-                    using (var command = new SqlCommand("select ru.RoleID, r.Name, r.Caption from RoleUsers ru join StaticRoles r on ru.RoleID=r.ID where ru.PersonID='" + SystemSingleton.CurrentSession.ID + "';", con))
+                    using (var command = new SqlCommand(SqlCommands.FindAllRolesCommand, con))
                     {
+                        command.Parameters.Add("@UserID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@UserID"].Value = SystemSingleton.CurrentSession.ID;
                         EnvironmentHelper.SendLogSQL(command.CommandText);
                         con.Open();
                         using (var reader = command.ExecuteReader())
@@ -148,7 +150,14 @@ namespace ClientApp.SupportClasses
                     CanUserDeleteRows = false,
                     IsReadOnly = true
                 };
-                SetInfoToGridOther(ref tempItem.DataGrid, item.ID);
+                if (item.Name == StaticTypes.PersonalRole)
+                {
+                    SetInfoToGridPersonal(ref tempItem.DataGrid);
+                }
+                else
+                {
+                    SetInfoToGridOther(ref tempItem.DataGrid, item.ID);
+                }
                 tempItem.TabItem.Content = tempItem.DataGrid;
                 SystemSingleton.CurrentSession.TabItems.Add(item.Name, tempItem);
                 tabControl.Items.Add(tempItem.TabItem);
@@ -177,9 +186,10 @@ namespace ClientApp.SupportClasses
         {
             try
             {
-
                 SqlConnection con = new SqlConnection(SystemSingleton.Configuration.ConnectionString);
-                SqlCommand cmd = new SqlCommand("select t.ID, t.Date, d.Caption, t.FromPersonalName, t.ToRoleName from Tasks t join DocTypes d on t.DocType=d.ID where isCompleted=0;", con);
+                SqlCommand cmd = new SqlCommand(SqlCommands.SetInfoToGridWorkCommand, con);
+                cmd.Parameters.Add("@UserID", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["@UserID"].Value = SystemSingleton.CurrentSession.ID;
                 EnvironmentHelper.SendLogSQL(cmd.CommandText);
                 SqlDataAdapter sda = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable("Tasks");
@@ -195,9 +205,29 @@ namespace ClientApp.SupportClasses
         {
             try
             {
-
                 SqlConnection con = new SqlConnection(SystemSingleton.Configuration.ConnectionString);
-                SqlCommand cmd = new SqlCommand("select ID, Date, DocType, FromPersonalName, ToRoleName from Tasks where isCompleted=1;", con);
+                SqlCommand cmd = new SqlCommand(SqlCommands.SetInfoToGridEndWorkCommand, con);
+                cmd.Parameters.Add("@UserID", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["@UserID"].Value = SystemSingleton.CurrentSession.ID;
+                EnvironmentHelper.SendLogSQL(cmd.CommandText);
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable("Tasks");
+                sda.Fill(dt);
+                dataGrid.ItemsSource = dt.DefaultView;
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+            }
+        }
+        public static void SetInfoToGridPersonal(ref DataGrid dataGrid)
+        {
+            try
+            {
+                SqlConnection con = new SqlConnection(SystemSingleton.Configuration.ConnectionString);
+                SqlCommand cmd = new SqlCommand(SqlCommands.SetInfoToGridPersonalCommand, con);
+                cmd.Parameters.Add("@UserID", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["@UserID"].Value = SystemSingleton.CurrentSession.ID;
                 EnvironmentHelper.SendLogSQL(cmd.CommandText);
                 SqlDataAdapter sda = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable("Tasks");
@@ -213,9 +243,10 @@ namespace ClientApp.SupportClasses
         {
             try
             {
-
                 SqlConnection con = new SqlConnection(SystemSingleton.Configuration.ConnectionString);
-                SqlCommand cmd = new SqlCommand("select ID, Date, DocType, FromPersonalName from Tasks where isCompleted=0 and ToRoleID='" + roleID + "';", con);
+                SqlCommand cmd = new SqlCommand(SqlCommands.SetInfoToGridOtherCommand, con);
+                cmd.Parameters.Add("@RoleID", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["@RoleID"].Value = roleID;
                 EnvironmentHelper.SendLogSQL(cmd.CommandText);
                 SqlDataAdapter sda = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable("Tasks");

@@ -180,9 +180,10 @@ namespace ClientApp.View
                 {
                     using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                     {
-                        using (var command = new SqlCommand("select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName, FullName from PersonalRoles where Login='" + LoginBox.Text + "';", con))
+                        using (var command = new SqlCommand(SqlCommands.LoginCommand, con))
                         {
-
+                            command.Parameters.Add("@LoginText", SqlDbType.NVarChar);
+                            command.Parameters["@LoginText"].Value = LoginBox.Text;
                             EnvironmentHelper.SendLogSQL(command.CommandText);
                             con.Open();
                             using (var reader = command.ExecuteReader())
