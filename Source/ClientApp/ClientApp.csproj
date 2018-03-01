@@ -72,6 +72,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MainClasses\CardFactory.cs" />
     <Compile Include="SupportClasses\EnvironmentHelper.cs" />
     <Compile Include="SupportClasses\Handlers.cs" />
     <Compile Include="SupportClasses\MainDataHolder.cs" />

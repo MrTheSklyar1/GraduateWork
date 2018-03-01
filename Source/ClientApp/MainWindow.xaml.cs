@@ -34,6 +34,7 @@ namespace ClientApp
         {
             InitializeComponent();
             SystemSingleton.Configuration.mainWindow = this;
+            SystemSingleton.Configuration.tabControl = TabControl;
             App.LanguageChanged += LanguageChanged;
             CultureInfo currLang = App.Language;
             menuLanguage.Items.Clear();
@@ -58,6 +59,7 @@ namespace ClientApp
             SendInfoToBottomBar("m_tab_LogIn_CheckConnection");
             TabControl.IsEnabled = false;
             worker.RunWorkerAsync();
+            TabControl.SelectionChanged += Handlers.TabControl_SelectionChanged;
         }
 
         #region Основные минорные функции LogIn
@@ -153,8 +155,6 @@ namespace ClientApp
                 LogOffItem.Visibility = Visibility.Collapsed;
                 WorkingTab.Visibility = Visibility.Collapsed;
                 menuLanguage.Visibility = Visibility.Visible;
-                Update.Visibility = Visibility.Collapsed;
-                Save.Visibility = Visibility.Collapsed;
                 TabWorkControl.Items.Clear();
             }
         }
@@ -216,7 +216,6 @@ namespace ClientApp
                     ClearBottomBar();
                     LogOffItem.Visibility = Visibility.Visible;
                     WorkingTab.Visibility = Visibility.Visible;
-                    Update.Visibility = Visibility.Visible;
                     TabControl.SelectedIndex = 1;
                     LoginTab.Visibility = Visibility.Collapsed;
                     menuLanguage.Visibility = Visibility.Collapsed;
@@ -243,20 +242,9 @@ namespace ClientApp
         }
         #endregion
         #region Контекстные клавиши
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO: сделать клавишу
-        }
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            if (TabControl.SelectedIndex == 1)
-            {
-                EnvironmentHelper.UpdateView();
-            }
-            else
-            {
-                EnvironmentHelper.UpdateSelected((TabItem)TabControl.Items.GetItemAt(TabControl.SelectedIndex));
-            }
+            EnvironmentHelper.UpdateView();
         }
         #endregion
 

@@ -18,7 +18,7 @@ namespace ClientApp.SupportClasses
             inner join DocTypes d on t.DocType=d.ID where StateID='6a52791d-7e42-42d6-a521-4252f276bb6c'";
 
         public const string SetInfoToGridEndWorkCommand =
-            @"select t.ID, t.Date, d.Caption, t.FromPersonalName, t.ToRoleName, ts.Caption from Tasks t 
+            @"select t.ID, t.Date, d.Caption, t.FromPersonalName, t.ToRoleName, ts.Caption, r.Name from Tasks t 
                 inner join (
                     select RoleID as ID from RoleUsers ru where ru.PersonID=@UserID
                     union
@@ -26,6 +26,7 @@ namespace ClientApp.SupportClasses
                 ) temp on t.ToRoleID=temp.ID
             inner join DocTypes d on t.DocType=d.ID 
             inner join TaskState ts on t.StateID=ts.ID
+            inner join Roles r on r.ID=t.CompletedByID
             where StateID='530e4d08-9ef0-48ce-8bb7-f0a989ae53ae' or StateID='3e65b0c5-f533-4e31-956d-c2073df3e58a'";
 
         public const string SetInfoToGridPersonalCommand =

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using ClientApp.SupportClasses;
 
@@ -52,6 +53,8 @@ namespace ClientApp.MainClasses
                     {
                         item.Value.DataGrid.Columns[5].Header =
                             (String)window.FindResource("m_column_State");
+                        item.Value.DataGrid.Columns[6].Header =
+                            (String)window.FindResource("m_column_CompletedBy");
                     }
                     return true;
                 }
@@ -66,6 +69,7 @@ namespace ClientApp.MainClasses
             public static string ConnectionString { get; set; }
             public static bool SQLLog { get; set; }
             public static MainWindow mainWindow { get; set; }
+            public static TabControl tabControl { get; set; }
         }
 
         public static class BotomTab
