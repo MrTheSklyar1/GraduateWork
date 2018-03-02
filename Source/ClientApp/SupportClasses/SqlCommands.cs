@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace ClientApp.SupportClasses
 {
     public static class SqlCommands
@@ -18,7 +13,7 @@ namespace ClientApp.SupportClasses
             inner join DocTypes d on t.DocType=d.ID where StateID='6a52791d-7e42-42d6-a521-4252f276bb6c'";
 
         public const string SetInfoToGridEndWorkCommand =
-            @"select t.ID, t.Date, d.Caption, t.FromPersonalName, t.ToRoleName, ts.Caption, r.Name from Tasks t 
+            @"select t.ID, t.Date, d.Caption, t.FromPersonalName, t.ToRoleName, ts.Caption, r.Name, t.CompleteDate from Tasks t 
                 inner join (
                     select RoleID as ID from RoleUsers ru where ru.PersonID=@UserID
                     union
@@ -46,6 +41,19 @@ namespace ClientApp.SupportClasses
             @"select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName, FullName from PersonalRoles where Login=@LoginText";
 
         public const string LoadTaskCommand =
-            @"select ID, Date";
+            @"select ID, FromPersonalID, FromPersonalName, ToRoleID, ToRoleName, Date, DocType, StateID, Commentary, Respond, CompletedByID, CompletedDate
+                from Tasks where ID=@TaskID";
+
+        public const string LoadPersonalRoleCommand =
+            @"select ID, Login, PassWord, TelegramID, FullName, FirstName, LastName, isAdmin, WorkingTypeID from PersonalRoles where ID=@RoleID";
+
+        public const string LoadStaticRoleCommand =
+            @"select ID, Name, Caption from StaticRoles where ID=@RoleID";
+
+        public const string LoadDocTypeCommand =
+            @"select ID, Name, Caption from DocTypes where ID=@TypeID";
+
+        public const string LoadFilesCommand =
+            @"select FileID, Name from Files where ID=@TaskID";
     }
 }

@@ -10,7 +10,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using ClientApp.MainClasses;
+using ClientApp.Elements;
+using ClientApp.SystemClasses;
 
 namespace ClientApp.SupportClasses
 {
@@ -130,7 +131,7 @@ namespace ClientApp.SupportClasses
             foreach (var item in SystemSingleton.CurrentSession.UserRoles)
             {
                 tempItem = new STabItem();
-                tempItem.ToRole = item.ID;
+                tempItem.ToRole = item.ID.Value;
                 if (item.Name == StaticTypes.PersonalRole)
                 {
                     tempItem.TabItem = new TabItem

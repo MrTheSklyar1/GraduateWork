@@ -72,12 +72,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="MainClasses\Card.cs" />
-    <Compile Include="MainClasses\CardFactory.cs" />
+    <Compile Include="BaseClasses\BaseElement.cs" />
+    <Compile Include="Elements\Card.cs" />
+    <Compile Include="Elements\Files.cs" />
+    <Compile Include="Elements\STabCard.cs" />
+    <Compile Include="Elements\STabItem.cs" />
+    <Compile Include="SupportClasses\StaticTypes.cs" />
+    <Compile Include="SystemClasses\CardFactory.cs" />
+    <Compile Include="Elements\DocType.cs" />
+    <Compile Include="Elements\PersonalRole.cs" />
+    <Compile Include="Elements\Role.cs" />
+    <Compile Include="Elements\Task.cs" />
     <Compile Include="SupportClasses\EnvironmentHelper.cs" />
     <Compile Include="SupportClasses\Handlers.cs" />
-    <Compile Include="SupportClasses\MainDataHolder.cs" />
-    <Compile Include="MainClasses\SystemSingleton.cs" />
+    <Compile Include="SystemClasses\SystemSingleton.cs" />
     <Compile Include="SupportClasses\SqlCommands.cs" />
     <Compile Include="SupportClasses\XmlWorker.cs" />
     <Page Include="MainWindow.xaml">

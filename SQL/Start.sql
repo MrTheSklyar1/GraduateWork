@@ -109,7 +109,8 @@ create table Tasks
 	StateID uniqueidentifier NOT NULL,
 	Commentary nvarchar(2048) NULL,
 	Respond nvarchar(2048) NULL,
-	CompletedByID uniqueidentifier NULL
+	CompletedByID uniqueidentifier NULL,
+	CompleteDate datetime NULL
 );
 
 ALTER TABLE Tasks ADD PRIMARY KEY(ID);

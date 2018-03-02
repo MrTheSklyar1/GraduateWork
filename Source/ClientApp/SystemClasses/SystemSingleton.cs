@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ClientApp.Elements;
 using ClientApp.SupportClasses;
 
-namespace ClientApp.MainClasses
+namespace ClientApp.SystemClasses
 {
     public static class SystemSingleton
     {
@@ -55,6 +56,8 @@ namespace ClientApp.MainClasses
                             (String)window.FindResource("m_column_State");
                         item.Value.DataGrid.Columns[6].Header =
                             (String)window.FindResource("m_column_CompletedBy");
+                        item.Value.DataGrid.Columns[7].Header =
+                            (String)window.FindResource("m_column_CompleteDate");
                     }
                     return true;
                 }
