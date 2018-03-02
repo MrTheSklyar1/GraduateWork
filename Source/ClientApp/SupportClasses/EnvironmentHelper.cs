@@ -219,7 +219,7 @@ namespace ClientApp.SupportClasses
                 sda.Fill(dt);
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    dt.Rows[i][5] = (string)SystemSingleton.Configuration.mainWindow.FindResource((string)dt.Rows[i][5]);
+                    dt.Rows[i][6] = (string)SystemSingleton.Configuration.mainWindow.FindResource((string)dt.Rows[i][6]);
                 }
                 dataGrid.ItemsSource = dt.DefaultView;
             }
@@ -281,10 +281,6 @@ namespace ClientApp.SupportClasses
                     SetInfoToGridOther(ref temp);
                 }
             }   
-        }
-        public static void UpdateSelected(TabItem tabItem)
-        {
-
         }
     }
 }

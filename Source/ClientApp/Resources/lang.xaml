@@ -30,6 +30,7 @@
     <v:String x:Key="m_tab_PersonalRole">Personal tasks</v:String>
     <!--Столбцы-->
     <v:String x:Key="m_column_Date">Date</v:String>
+    <v:String x:Key="m_column_Number">Number</v:String>
     <v:String x:Key="m_column_DocType">Document Type</v:String>
     <v:String x:Key="m_column_FromPersonalName">From</v:String>
     <v:String x:Key="m_column_ToRoleName">To Role</v:String>
@@ -41,10 +42,16 @@
     <v:String x:Key="Cancelled">Cancelled</v:String>
     <v:String x:Key="Work">Work</v:String>
     <!--Контролы карточки-->
+    <v:String x:Key="c_CreationDate">Creation date</v:String>
+    <v:String x:Key="c_DocType">Document type</v:String>
+    <v:String x:Key="c_State">State</v:String>
     <!--Сообщения об ошибках-->
     <v:String x:Key="m_CardNotFound">Card not found</v:String>
     <v:String x:Key="m_UserNotFound">Personal role not found</v:String>
     <v:String x:Key="m_RoleNotFound">Role not found</v:String>
     <v:String x:Key="m_TypeNotFound">Document type not found</v:String>
     <v:String x:Key="m_CardNotCreated">Card not created</v:String>
+    <v:String x:Key="m_CardViewNotCreated">Card view not created</v:String>
+    <v:String x:Key="m_StateNotFound">State not found</v:String>
+    <v:String x:Key="m_AlreadyOpened">Card is already opened</v:String>
 </ResourceDictionary>

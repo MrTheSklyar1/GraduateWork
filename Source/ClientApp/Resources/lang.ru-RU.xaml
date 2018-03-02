@@ -30,6 +30,7 @@
     <v:String x:Key="m_tab_PersonalRole">Персональные задачи</v:String>
     <!--Столбцы-->
     <v:String x:Key="m_column_Date">Дата</v:String>
+    <v:String x:Key="m_column_Number">Номер</v:String>
     <v:String x:Key="m_column_DocType">Тип документа</v:String>
     <v:String x:Key="m_column_FromPersonalName">От</v:String>
     <v:String x:Key="m_column_ToRoleName">Назначен для</v:String>
@@ -41,10 +42,16 @@
     <v:String x:Key="Cancelled">Отменено</v:String>
     <v:String x:Key="Work">В работе</v:String>
     <!--Контролы карточки-->
+    <v:String x:Key="c_CreationDate">Дата создания</v:String>
+    <v:String x:Key="c_DocType">Тип документа</v:String>
+    <v:String x:Key="c_State">Состояние</v:String>
     <!--Сообщения об ошибках-->
     <v:String x:Key="m_CardNotFound">Карточка не найдена</v:String>
     <v:String x:Key="m_UserNotFound">Пользователь не найден</v:String>
     <v:String x:Key="m_RoleNotFound">Роль не найдена</v:String>
     <v:String x:Key="m_TypeNotFound">Тип документа не найден</v:String>
     <v:String x:Key="m_CardNotCreated">Не удалось создать карточку</v:String>
+    <v:String x:Key="m_CardViewNotCreated">Не удалось открыть карточку</v:String>
+    <v:String x:Key="m_StateNotFound">Состояние не найдено</v:String>
+    <v:String x:Key="m_AlreadyOpened">Карточка уже открыта</v:String>
 </ResourceDictionary>

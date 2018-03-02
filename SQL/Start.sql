@@ -100,6 +100,7 @@ insert into TaskState values (@WorkID, 'Work', 'Work');
 create table Tasks
 (
 	ID	uniqueidentifier NOT NULL,
+	Number nvarchar(20) NOT NULL,
 	FromPersonalID uniqueidentifier NOT NULL,
 	FromPersonalName nvarchar(100) NOT NULL,
 	ToRoleID uniqueidentifier NOT NULL,
@@ -123,7 +124,8 @@ ALTER TABLE Tasks ADD FOREIGN KEY(CompletedByID) REFERENCES Roles(ID);
 create table Files
 (
 	ID uniqueidentifier NOT NULL,
-	FileID uniqueidentifier NOT NULL
+	FileID uniqueidentifier NOT NULL,
+	Name nvarchar(MAX) NOT NULL
 );
 
 ALTER TABLE Files ADD FOREIGN KEY(ID) REFERENCES Tasks(ID);

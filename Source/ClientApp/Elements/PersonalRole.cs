@@ -19,8 +19,8 @@ namespace ClientApp.Elements
         public string FullName;
         public string FirstName;
         public string LastName;
-        public bool? isAdmin;
-        public Guid? WorkingTypeID;
+        public bool isAdmin;
+        public Guid WorkingTypeID;
         public PersonalRole() { }
         public PersonalRole(Guid RoleID)
         {
@@ -41,7 +41,7 @@ namespace ClientApp.Elements
                                 ID = RoleID;
                                 Login = reader.GetString(1);
                                 PassWord = reader.GetString(2);
-                                TelegramID = reader.GetInt32(3);
+                                TelegramID = (reader.GetInt32(3)==0) ? (int?) null : reader.GetInt32(3);
                                 FullName = reader.GetString(4);
                                 FirstName = reader.GetString(5);
                                 LastName = reader.GetString(6);

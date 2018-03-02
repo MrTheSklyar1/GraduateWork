@@ -13,13 +13,14 @@ namespace ClientApp.Elements
 {
     public class Task : BaseElement
     {
-        public Guid? FromPersonalID;
+        public string Number;
+        public Guid FromPersonalID;
         public string FromPersonalName;
-        public Guid? ToRoleID;
+        public Guid ToRoleID;
         public string ToRoleName;
-        public DateTime? Date;
-        public Guid? DocType;
-        public Guid? StateID;
+        public DateTime Date;
+        public Guid DocType;
+        public Guid StateID;
         public string Commentary;
         public string Respond;
         public Guid? CompletedByID;
@@ -42,17 +43,18 @@ namespace ClientApp.Elements
                             if (reader.Read())
                             {
                                 ID = TaskID;
-                                FromPersonalID = reader.GetGuid(1);
-                                FromPersonalName = reader.GetString(2);
-                                ToRoleID = reader.GetGuid(3);
-                                ToRoleName = reader.GetString(4);
-                                Date = reader.GetDateTime(5);
-                                DocType = reader.GetGuid(6);
-                                StateID = reader.GetGuid(7);
-                                Commentary = reader.GetString(8);
-                                Respond = reader.GetString(9);
-                                CompletedByID = reader.GetGuid(10);
-                                CompletedDate = reader.GetDateTime(11);
+                                Number = reader.GetString(1);
+                                FromPersonalID = reader.GetGuid(2);
+                                FromPersonalName = reader.GetString(3);
+                                ToRoleID = reader.GetGuid(4);
+                                ToRoleName = reader.GetString(5);
+                                Date = reader.GetDateTime(6);
+                                DocType = reader.GetGuid(7);
+                                StateID = reader.GetGuid(8);
+                                Commentary = reader.GetString(9);
+                                Respond = reader.GetString(10);
+                                CompletedByID = (reader.GetGuid(11)==Guid.Empty) ? (Guid?) null : reader.GetGuid(11);
+                                CompletedDate = (reader.GetDateTime(12).Year==2000) ? (DateTime?) null : reader.GetDateTime(12);
                                 HasValue = true;
                             }
                             else

@@ -77,6 +77,8 @@
     <Compile Include="Elements\Files.cs" />
     <Compile Include="Elements\STabCard.cs" />
     <Compile Include="Elements\STabItem.cs" />
+    <Compile Include="Elements\State.cs" />
+    <Compile Include="SupportClasses\CardViewStruct.cs" />
     <Compile Include="SupportClasses\StaticTypes.cs" />
     <Compile Include="SystemClasses\CardFactory.cs" />
     <Compile Include="Elements\DocType.cs" />

@@ -156,6 +156,10 @@ namespace ClientApp
                 WorkingTab.Visibility = Visibility.Collapsed;
                 menuLanguage.Visibility = Visibility.Visible;
                 TabWorkControl.Items.Clear();
+                while (TabControl.Items.Count > 2)
+                {
+                    TabControl.Items.RemoveAt(TabControl.Items.Count-1);
+                }
             }
         }
         private void LoginButton_Click(object sender, RoutedEventArgs e)

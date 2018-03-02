@@ -18,18 +18,20 @@ namespace ClientApp.Elements
         public Role To;
         public DocType DocType;
         public Files Files;
+        public State State;
         public Card(Guid ID)
         {
             Task = new Task(ID);
             if (Task.HasValue)
             {
-                From = new PersonalRole(Task.FromPersonalID.Value);
-                To = new Role(Task.ToRoleID.Value);
-                DocType = new DocType(Task.DocType.Value);
+                From = new PersonalRole(Task.FromPersonalID);
+                To = new Role(Task.ToRoleID);
+                DocType = new DocType(Task.DocType);
                 Files = new Files(ID);
-                if (From.HasValue && To.HasValue && DocType.HasValue)
+                State = new State(Task.StateID);
+                if (From.HasValue && To.HasValue && DocType.HasValue && State.HasValue)
                 {
-                    HasValue = false;
+                    HasValue = true;
                     return;
                 }
             }
