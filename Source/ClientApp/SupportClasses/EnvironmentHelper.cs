@@ -25,6 +25,14 @@ namespace ClientApp.SupportClasses
             }
             Application.Current.Shutdown(1);
         }
+        public static void SendDialogBox(string message, string header)
+        {
+            MessageBox.Show(message, header, MessageBoxButton.OK, MessageBoxImage.Information);
+            using (StreamWriter sw = File.AppendText("log.txt"))
+            {
+                sw.WriteLine(DateTime.UtcNow + " -- " + message);
+            }
+        }
         public static void SendLog(string log)
         {
             using (StreamWriter sw = File.AppendText("log.txt"))

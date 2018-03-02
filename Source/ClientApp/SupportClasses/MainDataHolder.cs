@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClientApp.MainClasses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,20 +26,15 @@ namespace ClientApp.SupportClasses
     public class STabCard
     {
         public Card Card; //Информация из бд
+        public Dictionary<string, TextBlock> TextBlocks; //Не изменяемые блоки текста
+        public Dictionary<string, TextBox> TextBoxes; //Текст боксы
+        public Dictionary<string, DockPanel> DocPanels; //Панели
+        public Dictionary<string, Border> Borders; //Границы
+        public Dictionary<string, ComboBox> ComboBoxes; //Комбобоксы, правда он один
+        public Dictionary<string, StackPanel> StackPanels; //Панели строк и другие
+        public Dictionary<string, ListView> ListViews;//Опять один
+        public Dictionary<string, Button> Buttons; //Кнопки
         public TabItem TabItem; //Вкладка для основной панели
-
-    }
-
-    public class Card
-    {
-        public Guid ID;
-        public DateTime Date;
-        public Guid DocType;
-        public Guid StateID;
-        public string Commentary;
-        public string Respond;
-        public PersonalRole FromPersonalRole;
-        public Role ToRole;
     }
 
     public class PersonalRole

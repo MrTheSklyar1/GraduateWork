@@ -45,5 +45,7 @@ namespace ClientApp.SupportClasses
         public const string LoginCommand =
             @"select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName, FullName from PersonalRoles where Login=@LoginText";
 
+        public const string LoadTaskCommand =
+            @"select ID, Date";
     }
 }

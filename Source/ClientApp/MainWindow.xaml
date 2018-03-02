@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="{DynamicResource m_app_Header}" MinHeight="670" MinWidth="1190" Height="720" Width="1280">
+        Title="{DynamicResource m_app_Header}" MinHeight="670" MinWidth="1190" Height="675" Width="1200">
     <Window.Content>
         <Grid>
             <Grid.RowDefinitions>
