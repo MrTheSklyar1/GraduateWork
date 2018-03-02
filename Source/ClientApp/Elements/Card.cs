@@ -19,6 +19,7 @@ namespace ClientApp.Elements
         public DocType DocType;
         public Files Files;
         public State State;
+        public AllStates AllStates;
         public Card(Guid ID)
         {
             Task = new Task(ID);
@@ -29,7 +30,8 @@ namespace ClientApp.Elements
                 DocType = new DocType(Task.DocType);
                 Files = new Files(ID);
                 State = new State(Task.StateID);
-                if (From.HasValue && To.HasValue && DocType.HasValue && State.HasValue)
+                AllStates = new AllStates();
+                if (From.HasValue && To.HasValue && DocType.HasValue && State.HasValue && AllStates.HasValue)
                 {
                     HasValue = true;
                     return;

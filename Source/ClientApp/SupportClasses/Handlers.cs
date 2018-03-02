@@ -31,6 +31,7 @@ namespace ClientApp.SupportClasses
                     else
                     {
                         SystemSingleton.CurrentSession.TabCards.Add(temp.Card.Task.Number, temp);
+                        SystemSingleton.Configuration.tabControl.Items.Add(temp.TabItem);
                         //TODO: переход на вкладку
                     }
                 }

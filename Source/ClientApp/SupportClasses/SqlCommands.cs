@@ -59,5 +59,8 @@ namespace ClientApp.SupportClasses
 
         public const string LoadStateCommand =
             @"select ID, Name, Caption from TaskState where ID=@StateID";
+
+        public const string LoadAllStatesCommand =
+            @"select ID, Name, Caption from TaskState";
     }
 }

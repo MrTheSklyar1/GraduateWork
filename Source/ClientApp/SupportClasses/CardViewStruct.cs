@@ -24,6 +24,19 @@ namespace ClientApp.SupportClasses
                     public const string StateDockPanel = "StateDockPanel";
                         public const string StateTextBlock = "StateTextBlock";
                         public const string StateTextBox = "StateTextBox";
+            public const string SecondLineDockPanel = "SecondLineDockPanel";
+                    public const string LastNameBorder = "LastNameBorder";
+                        public const string LastNameDockPanel = "LastNameDockPanel";
+                            public const string LastNameTextBlock = "LastNameTextBlock";
+                            public const string LastNameTextBox = "LastNameTextBox";
+                    public const string FirstNameBorder = "FirstNameBorder";
+                        public const string FirstNameDockPanel = "FirstNameDockPanel";
+                            public const string FirstNameTextBlock = "FirstNameTextBlock";
+                            public const string FirstNameTextBox = "FirstNameTextBox";
+                    public const string NewStateBorder = "NewStateBorder";
+                        public const string NewStateDockPanel = "NewStateDockPanel";
+                            public const string NewStateTextBlock = "NewStateTextBlock";
+                            public const string NewStateComboBox = "NewStateComboBox";
 
 
     }

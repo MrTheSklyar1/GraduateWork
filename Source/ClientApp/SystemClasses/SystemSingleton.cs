@@ -25,6 +25,7 @@ namespace ClientApp.SystemClasses
                 FullName = "";
                 UserRoles = new List<Role>();
                 TabItems = new Dictionary<string,STabItem>();
+                TabCards = new Dictionary<string, STabCard>();
             }
             public static string Login;
             public static Guid ID;
