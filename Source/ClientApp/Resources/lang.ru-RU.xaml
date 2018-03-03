@@ -73,5 +73,12 @@
     <v:String x:Key="m_FileInBaseNotFound">Файл не найден в базе данных</v:String>
     <v:String x:Key="m_AttentionHeader">Внимание</v:String>
     <v:String x:Key="m_MakeSureDeletingFile">Вы уверены, что хотите удалить файл?</v:String>
+    <v:String x:Key="m_CantSetStateToTask">Ошибка при изменении состояния задачи в базе данных</v:String>
+    <v:String x:Key="m_CantSetRespondeToTask">Ошибка при изменении ответа на задачу</v:String>
+    <v:String x:Key="m_CantCompleteTaskFound">Ошибка при выполнении задачи</v:String>
+    <v:String x:Key="m_CantPermanentlyDeleteFiles">Ошибка при окончательном удалении файлов</v:String>
+    <v:String x:Key="m_CantSaveFile">Ошибка при сохранении файла, уточните права доступа</v:String>
+    <v:String x:Key="m_MakeSureSavingCard">Вы уверены, что хотите сохранить карточку?</v:String>
+    <v:String x:Key="m_MakeSureClosingCard">Вы уверены, что хотите закрыть карточку без сохранения?</v:String>
     
 </ResourceDictionary>

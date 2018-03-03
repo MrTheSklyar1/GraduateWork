@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Data.SqlClient;
 using System.Data;
+using Microsoft.Win32;
 
 namespace ClientApp.SystemClasses
 {
@@ -369,6 +370,17 @@ namespace ClientApp.SystemClasses
                     FontSize = 14,
                     Height = 40
                 };
+                NewStateComboBox.SelectionChanged += (sender, args) =>
+                {
+                    foreach (var st in sTabCard.Card.AllStates.States)
+                    {
+                        if (("States" + st.Name) == ((TextBlock)NewStateComboBox.SelectedItem).Name)
+                        {
+                            sTabCard.StateChanged(st);
+                            break;
+                        }
+                    }
+                };
                 sTabCard.ComboBoxes.Add(CardViewStruct.NewStateComboBox, NewStateComboBox);
                 sTabCard.DocPanels[CardViewStruct.NewStateDockPanel].Children.Add(NewStateComboBox);
                 //Вкладки для комбобокса
@@ -497,6 +509,10 @@ namespace ClientApp.SystemClasses
                 Margin = new Thickness(5),
                 IsReadOnly = sTabCard.Card.Task.StateID != new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c")
             };
+            FourthLineTextBox.TextChanged += (sender, args) =>
+            {
+                sTabCard.RespondChanged(FourthLineTextBox.Text);
+            };
             sTabCard.TextBoxes.Add(CardViewStruct.FourthLineTextBox, FourthLineTextBox);
             sTabCard.StackPanels[CardViewStruct.FourthLineStackPanel].Children.Add(FourthLineTextBox);
 
@@ -586,22 +602,8 @@ namespace ClientApp.SystemClasses
                             MessageBoxButton.YesNo);
                         if (dialogResult == MessageBoxResult.Yes)
                         {
-                            bool deleteOK = false;
-                            try
-                            {
-                                Directory.Delete(SystemSingleton.Configuration.FilesPath + item.Key + "\\", true);
-                                deleteOK = true;
-                            }
-                            catch (Exception ex)
-                            {
-                                EnvironmentHelper.SendDialogBox((string)SystemSingleton.Configuration.mainWindow.FindResource("m_DirectoryToDeleteNotFound"), "Directory Error");
-                            }
-                            if (deleteOK)
-                            {
-                                sTabCard.ListViews[CardViewStruct.FileListView].Items.Remove(sTabCard.Card.FilesControls[item.Key]);
-                                
-                                RemoveFileFromCard(item.Key);
-                            }
+                            sTabCard.ListViews[CardViewStruct.FileListView].Items.Remove(sTabCard.Card.FilesControls[item.Key].DockPanel);
+                            sTabCard.FileDelete(item.Key);
                         }
                     };
                     temp.TextBlock.MouseLeftButtonDown += (sender, args) =>
@@ -621,22 +623,81 @@ namespace ClientApp.SystemClasses
                     sTabCard.ListViews[CardViewStruct.FileListView].Items.Add(temp.DockPanel);
                 }
             }
-            //Кнопка добавить
-            var FileButton = new Button
+
+            if (sTabCard.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c"))
             {
-                Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_AddFile"),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Width = 145,
-                Height = 25,
-                FontSize = 14,
-                Margin = new Thickness(5)
-            };
-            FileButton.Click += (sender, args) =>
-            {
-                //TODO: клик3
-            };
-            sTabCard.Buttons.Add(CardViewStruct.FileButton, FileButton);
-            sTabCard.StackPanels[CardViewStruct.FileStackPanel].Children.Add(FileButton);
+                //Кнопка добавить
+                var FileButton = new Button
+                {
+                    Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_AddFile"),
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Width = 145,
+                    Height = 25,
+                    FontSize = 14,
+                    Margin = new Thickness(5)
+                };
+                FileButton.Click += (senderadd, argsadd) =>
+                {
+                    var dlg = new OpenFileDialog();
+                    dlg.FileName = "Document";
+                    dlg.DefaultExt = ".pdf";
+                    dlg.Filter = "PDF documents (.pdf)|*.pdf";
+                    dlg.Multiselect = false;
+                    var result = dlg.ShowDialog();
+                    if (result != null && result.Value)
+                    {
+                        FileBase newFile = new FileBase(dlg.SafeFileName, dlg.FileName, Guid.NewGuid());
+                        var filename = newFile.Name;
+                        var temp = new FileControl
+                        {
+                            ID = newFile.FileID,
+                            DockPanel = new DockPanel(),
+                            Button = new Button
+                            {
+                                FontSize = 14,
+                                Margin = new Thickness(0, 0, 5, 0),
+                                Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_Delete"),
+                                IsEnabled = true
+                            },
+                            TextBlock = new TextBlock
+                            {
+                                FontSize = 14,
+                                VerticalAlignment = VerticalAlignment.Center,
+                                Text = filename
+                            }
+                        };
+                        temp.Button.Click += (sender, args) =>
+                        {
+                            MessageBoxResult dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureDeletingFile"),
+                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
+                                MessageBoxButton.YesNo);
+                            if (dialogResult == MessageBoxResult.Yes)
+                            {
+                                sTabCard.ListViews[CardViewStruct.FileListView].Items.Remove(sTabCard.NewFileControls[newFile.FileID].DockPanel);
+                                sTabCard.FileDelete(newFile.FileID);
+                            }
+                        };
+                        temp.TextBlock.MouseLeftButtonDown += (sender, args) =>
+                        {
+                            try
+                            {
+                                Process.Start(SystemSingleton.Configuration.FilesPath + temp.ID.Value + "\\" + filename);
+                            }
+                            catch (Exception ex)
+                            {
+                                EnvironmentHelper.SendDialogBox((string)SystemSingleton.Configuration.mainWindow.FindResource("m_FileNotFoundInDirectory"), "Directory Error");
+                            }
+                        };
+                        sTabCard.FileAdded(newFile);
+                        sTabCard.NewFileControls.Add(temp.ID.Value, temp);
+                        temp.DockPanel.Children.Add(temp.Button);
+                        temp.DockPanel.Children.Add(temp.TextBlock);
+                        sTabCard.ListViews[CardViewStruct.FileListView].Items.Add(temp.DockPanel);
+                    }
+                };
+                sTabCard.Buttons.Add(CardViewStruct.FileButton, FileButton);
+                sTabCard.StackPanels[CardViewStruct.FileStackPanel].Children.Add(FileButton);
+            }
 
             #endregion
 
@@ -779,7 +840,7 @@ namespace ClientApp.SystemClasses
                         };
                         ButtonsDeleteButton.Click += (sender, args) =>
                         {
-                            //TODO: клик5
+                            //TODO: кнопка удалить
                         };
                         sTabCard.Buttons.Add(CardViewStruct.ButtonsDeleteButton, ButtonsDeleteButton);
                         sTabCard.StackPanels[CardViewStruct.ButtonsStackPanel].Children.Add(ButtonsDeleteButton);
@@ -798,7 +859,18 @@ namespace ClientApp.SystemClasses
             };
             ButtonsCloseButton.Click += (sender, args) =>
             {
-                //TODO: клик6
+                MessageBoxResult dialogResult = MessageBoxResult.No;
+                if (sTabCard.ChangesFile || sTabCard.ChangesRespond || sTabCard.ChangesState)
+                {
+                    dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureClosingCard"),
+                        (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
+                        MessageBoxButton.YesNo);
+                }
+                if (dialogResult == MessageBoxResult.Yes || (!sTabCard.ChangesFile && !sTabCard.ChangesRespond && !sTabCard.ChangesState))
+                {
+                    SystemSingleton.Configuration.tabControl.Items.Remove(sTabCard.TabItem);
+                    SystemSingleton.CurrentSession.TabCards.Remove(sTabCard.Card.Task.Number);
+                }
             };
             sTabCard.Buttons.Add(CardViewStruct.ButtonsCloseButton, ButtonsCloseButton);
             sTabCard.StackPanels[CardViewStruct.ButtonsStackPanel].Children.Add(ButtonsCloseButton);

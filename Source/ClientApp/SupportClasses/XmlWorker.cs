@@ -34,18 +34,27 @@ namespace ClientApp.SupportClasses
                 config.Save("settings.xml");
                 return false;
             }
-            SystemSingleton.Configuration.ConnectionString = result.ConnectionString;
-            SystemSingleton.Configuration.SQLLog = result.SQLLog;
-            if (result.FilesPath[result.FilesPath.Length - 1] != '\\')
+
+            if (result != null && (result.ConnectionString != "" || result.FilesPath != ""))
             {
-                SystemSingleton.Configuration.FilesPath = result.FilesPath+"\\"+"AppTaskFiles\\";
+                SystemSingleton.Configuration.ConnectionString = result.ConnectionString;
+                SystemSingleton.Configuration.SQLLog = result.SQLLog;
+                if (result.FilesPath[result.FilesPath.Length - 1] != '\\')
+                {
+                    SystemSingleton.Configuration.FilesPath = result.FilesPath + "\\" + "AppTaskFiles\\";
+                }
+                else
+                {
+                    SystemSingleton.Configuration.FilesPath = result.FilesPath + "AppTaskFiles\\";
+                }
+
+                return true;
             }
             else
             {
-                SystemSingleton.Configuration.FilesPath = result.FilesPath + "AppTaskFiles\\";
+                return false;
             }
             
-            return true;
         }
 
         public void Save(string fileName)

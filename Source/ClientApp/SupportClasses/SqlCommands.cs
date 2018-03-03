@@ -65,5 +65,17 @@ namespace ClientApp.SupportClasses
 
         public const string DeleteFileCommand =
             @"delete from Files where FileID=@FileID";
+
+        public const string SetNewStateCommand =
+            @"update Tasks set StateID=@StateID where ID=@TaskID";
+
+        public const string SetNewRespondCommand =
+            @"update Tasks set Respond=@Respond where ID=@TaskID";
+
+        public const string SetCompleteInfoCommand =
+            @"update Tasks set CompletedByID=@UserID, CompleteDate=SYSDATETIME() where ID=@TaskID";
+
+        public const string AddFileToDataBaseCommand =
+            @"insert into Files values (@TaskID, @FileID, @FileName);";
     }
 }
