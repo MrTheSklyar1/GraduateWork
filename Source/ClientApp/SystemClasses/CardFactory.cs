@@ -30,6 +30,8 @@ namespace ClientApp.SystemClasses
                     FillMainStackPanelToTab(ref result);
                     FillFirstLine(ref result);
                     FillSecondLine(ref result);
+                    FillThirdLine(ref result);
+                    FillFourthLine(ref result);
                 }
                 catch (Exception ex)
                 {
@@ -381,6 +383,116 @@ namespace ClientApp.SystemClasses
                     }
                 }
             }
+
+            #endregion
+        }
+
+        private static void FillThirdLine(ref STabCard sTabCard)
+        {
+            #region Основной Border
+
+            var ThirdLineBorder = new Border
+            {
+                CornerRadius = new CornerRadius(6),
+                BorderBrush = new SolidColorBrush(Colors.LightGray),
+                BorderThickness = new Thickness(2),
+                Margin = new Thickness(5, 0, 5, 10)
+            };
+            sTabCard.Borders.Add(CardViewStruct.ThirdLineBorder, ThirdLineBorder);
+            sTabCard.StackPanels[CardViewStruct.MainStackPanel].Children.Add(ThirdLineBorder);
+
+            #endregion
+
+            #region Контрол текста
+
+            //Вспомогательная панель
+            var ThirdLineStackPanel = new StackPanel();
+            sTabCard.StackPanels.Add(CardViewStruct.ThirdLineStackPanel, ThirdLineStackPanel);
+            sTabCard.Borders[CardViewStruct.ThirdLineBorder].Child = ThirdLineStackPanel;
+            //Текстовый блок
+            var ThirdLineTextBlock = new TextBlock
+            {
+                Text = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_Comment"),
+                VerticalAlignment = VerticalAlignment.Center,
+                TextAlignment = TextAlignment.Left,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Width = 100,
+                FontSize = 14,
+                Margin = new Thickness(5, 0, 0, 0)
+            };
+            sTabCard.TextBlocks.Add(CardViewStruct.ThirdLineTextBlock, ThirdLineTextBlock);
+            sTabCard.StackPanels[CardViewStruct.ThirdLineStackPanel].Children.Add(ThirdLineTextBlock);
+            //Контрол блока
+            var ThirdLineTextBox = new TextBox
+            {
+                Text = sTabCard.Card.Task.Commentary,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Visible,
+                TextAlignment = TextAlignment.Left,
+                AcceptsReturn = true,
+                MinWidth = 725,
+                FontSize = 14,
+                MinHeight = 40,
+                MaxHeight = 100,
+                Margin = new Thickness(5),
+                IsReadOnly = true
+            };
+            sTabCard.TextBoxes.Add(CardViewStruct.ThirdLineTextBox, ThirdLineTextBox);
+            sTabCard.StackPanels[CardViewStruct.ThirdLineStackPanel].Children.Add(ThirdLineTextBox);
+
+            #endregion
+        }
+
+        private static void FillFourthLine(ref STabCard sTabCard)
+        {
+            #region Основной Border
+
+            var FourthLineBorder = new Border
+            {
+                CornerRadius = new CornerRadius(6),
+                BorderBrush = new SolidColorBrush(Colors.LightGray),
+                BorderThickness = new Thickness(2),
+                Margin = new Thickness(5, 0, 5, 10)
+            };
+            sTabCard.Borders.Add(CardViewStruct.FourthLineBorder, FourthLineBorder);
+            sTabCard.StackPanels[CardViewStruct.MainStackPanel].Children.Add(FourthLineBorder);
+
+            #endregion
+
+            #region Контрол текста
+
+            //Вспомогательная панель
+            var FourthLineStackPanel = new StackPanel();
+            sTabCard.StackPanels.Add(CardViewStruct.FourthLineStackPanel, FourthLineStackPanel);
+            sTabCard.Borders[CardViewStruct.FourthLineBorder].Child = FourthLineStackPanel;
+            //Текстовый блок
+            var FourthLineTextBlock = new TextBlock
+            {
+                Text = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_Respond"),
+                VerticalAlignment = VerticalAlignment.Center,
+                TextAlignment = TextAlignment.Left,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Width = 100,
+                FontSize = 14,
+                Margin = new Thickness(5, 0, 0, 0)
+            };
+            sTabCard.TextBlocks.Add(CardViewStruct.FourthLineTextBlock, FourthLineTextBlock);
+            sTabCard.StackPanels[CardViewStruct.FourthLineStackPanel].Children.Add(FourthLineTextBlock);
+            //Контрол блока
+            var FourthLineTextBox = new TextBox
+            {
+                Text = sTabCard.Card.Task.Respond,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Visible,
+                TextAlignment = TextAlignment.Left,
+                AcceptsReturn = true,
+                MinWidth = 725,
+                FontSize = 14,
+                MinHeight = 40,
+                MaxHeight = 100,
+                Margin = new Thickness(5),
+                IsReadOnly = sTabCard.Card.Task.StateID != new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c")
+            };
+            sTabCard.TextBoxes.Add(CardViewStruct.FourthLineTextBox, FourthLineTextBox);
+            sTabCard.StackPanels[CardViewStruct.FourthLineStackPanel].Children.Add(FourthLineTextBox);
 
             #endregion
         }

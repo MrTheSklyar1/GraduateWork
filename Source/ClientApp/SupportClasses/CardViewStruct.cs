@@ -25,18 +25,46 @@ namespace ClientApp.SupportClasses
                         public const string StateTextBlock = "StateTextBlock";
                         public const string StateTextBox = "StateTextBox";
             public const string SecondLineDockPanel = "SecondLineDockPanel";
-                    public const string LastNameBorder = "LastNameBorder";
-                        public const string LastNameDockPanel = "LastNameDockPanel";
-                            public const string LastNameTextBlock = "LastNameTextBlock";
-                            public const string LastNameTextBox = "LastNameTextBox";
-                    public const string FirstNameBorder = "FirstNameBorder";
-                        public const string FirstNameDockPanel = "FirstNameDockPanel";
-                            public const string FirstNameTextBlock = "FirstNameTextBlock";
-                            public const string FirstNameTextBox = "FirstNameTextBox";
-                    public const string NewStateBorder = "NewStateBorder";
-                        public const string NewStateDockPanel = "NewStateDockPanel";
-                            public const string NewStateTextBlock = "NewStateTextBlock";
-                            public const string NewStateComboBox = "NewStateComboBox";
+                public const string LastNameBorder = "LastNameBorder";
+                    public const string LastNameDockPanel = "LastNameDockPanel";
+                        public const string LastNameTextBlock = "LastNameTextBlock";
+                        public const string LastNameTextBox = "LastNameTextBox";
+                public const string FirstNameBorder = "FirstNameBorder";
+                    public const string FirstNameDockPanel = "FirstNameDockPanel";
+                        public const string FirstNameTextBlock = "FirstNameTextBlock";
+                        public const string FirstNameTextBox = "FirstNameTextBox";
+                public const string NewStateBorder = "NewStateBorder";
+                    public const string NewStateDockPanel = "NewStateDockPanel";
+                        public const string NewStateTextBlock = "NewStateTextBlock";
+                        public const string NewStateComboBox = "NewStateComboBox";
+            public const string ThirdLineBorder = "ThirdLineBorder";
+                public const string ThirdLineStackPanel = "ThirdLineStackPanel";
+                    public const string ThirdLineTextBlock = "ThirdLineTextBlock";
+                    public const string ThirdLineTextBox = "ThirdLineTextBox";
+            public const string FourthLineBorder = "FourthLineBorder";
+                public const string FourthLineStackPanel = "FourthLineStackPanel";
+                    public const string FourthLineTextBlock = "FourthLineTextBlock";
+                    public const string FourthLineTextBox = "FourthLineTextBox";
+            public const string FifthDockPanel = "FourthLineBorder";
+                public const string FilesBorder = "FilesBorder";
+                    public const string FileStackPanel = "FileStackPanel";
+                        public const string FileTextBlock = "FileTextBlock";
+                        public const string FileListView = "FileListView";
+                        public const string FileButton = "FileButton";
+                public const string CompletedBorder = "CompletedBorder";
+                    public const string CompletedDateStackPanel = "CompletedDateStackPanel";
+                        public const string CompletedDateTextBlock = "CompletedDateTextBlock";
+                        public const string CompletedDateTextBox = "CompletedDateTextBox";
+                    public const string CompletedByDockPanel = "CompletedByDockPanel";
+                        public const string CompletedByTextBlock = "CompletedByTextBlock";
+                        public const string CompletedByTextBox = "CompletedByTextBox";
+                public const string ButtonsBorder = "ButtonsBorder";
+                    public const string ButtonsStackPanel = "ButtonsStackPanel";
+                        public const string ButtonsSaveButton = "ButtonsSaveButton";
+                        public const string ButtonsUpdateButton = "ButtonsUpdateButton";
+                        public const string ButtonsCloseButton = "ButtonsCloseButton";
+
+
 
 
     }

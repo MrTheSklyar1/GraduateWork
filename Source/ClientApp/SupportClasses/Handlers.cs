@@ -40,19 +40,9 @@ namespace ClientApp.SupportClasses
 
         public static void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MainWindow wnd = SystemSingleton.Configuration.mainWindow;
-            if (wnd.TabControl.SelectedIndex > 1)
-            {
-                wnd.Update.Visibility = Visibility.Collapsed;
-            }
-            else if(wnd.TabControl.SelectedIndex == 1)
-            {
-                wnd.Update.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                wnd.Update.Visibility = Visibility.Collapsed;
-            }
+            SystemSingleton.Configuration.mainWindow.Update.Visibility = 
+                SystemSingleton.Configuration.tabControl.SelectedIndex == 1 ? 
+                    Visibility.Visible : Visibility.Collapsed;
         }
     }
 }
