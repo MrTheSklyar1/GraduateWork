@@ -16,10 +16,12 @@ namespace ClientApp.Elements
         public Task Task;
         public PersonalRole From;
         public Role To;
+        public PersonalRole CompletedBy;
         public DocType DocType;
         public Files Files;
         public State State;
         public AllStates AllStates;
+        public Dictionary<Guid, FileControl> FilesControls = new Dictionary<Guid, FileControl>();
         public Card(Guid ID)
         {
             Task = new Task(ID);
@@ -34,6 +36,7 @@ namespace ClientApp.Elements
                 if (From.HasValue && To.HasValue && DocType.HasValue && State.HasValue && AllStates.HasValue)
                 {
                     HasValue = true;
+                    CompletedBy = Task.CompletedByID.HasValue ? new PersonalRole(Task.CompletedByID.Value) : null;
                     return;
                 }
             }

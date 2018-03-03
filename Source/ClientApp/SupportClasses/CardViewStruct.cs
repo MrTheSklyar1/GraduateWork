@@ -52,20 +52,18 @@ namespace ClientApp.SupportClasses
                         public const string FileListView = "FileListView";
                         public const string FileButton = "FileButton";
                 public const string CompletedBorder = "CompletedBorder";
-                    public const string CompletedDateStackPanel = "CompletedDateStackPanel";
-                        public const string CompletedDateTextBlock = "CompletedDateTextBlock";
-                        public const string CompletedDateTextBox = "CompletedDateTextBox";
-                    public const string CompletedByDockPanel = "CompletedByDockPanel";
-                        public const string CompletedByTextBlock = "CompletedByTextBlock";
-                        public const string CompletedByTextBox = "CompletedByTextBox";
+                    public const string CompletedStackPanel = "CompletedStackPanel";
+                        public const string CompleteDateDockPanel = "CompleteDateDockPanel";
+                            public const string CompletedDateTextBlock = "CompletedDateTextBlock";
+                            public const string CompletedDateTextBox = "CompletedDateTextBox";
+                        public const string CompleteByDockPanel = "CompleteByDockPanel";
+                            public const string CompletedByTextBlock = "CompletedByTextBlock";
+                            public const string CompletedByTextBox = "CompletedByTextBox";
                 public const string ButtonsBorder = "ButtonsBorder";
                     public const string ButtonsStackPanel = "ButtonsStackPanel";
                         public const string ButtonsSaveButton = "ButtonsSaveButton";
                         public const string ButtonsUpdateButton = "ButtonsUpdateButton";
                         public const string ButtonsCloseButton = "ButtonsCloseButton";
-
-
-
 
     }
 }

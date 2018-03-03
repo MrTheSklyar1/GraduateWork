@@ -50,6 +50,11 @@
     <v:String x:Key="c_NewState">Новое состояние</v:String>
     <v:String x:Key="c_Comment">Комментарий</v:String>
     <v:String x:Key="c_Respond">Ответ</v:String>
+    <v:String x:Key="c_Files">Файлы</v:String>
+    <v:String x:Key="c_Delete">Удалить</v:String>
+    <v:String x:Key="c_AddFile">Добавить файл</v:String>
+    <v:String x:Key="c_CompletedDate">Дата выполнения</v:String>
+    <v:String x:Key="c_CompletedBy">Выполнил</v:String>
     <!--Сообщения об ошибках-->
     <v:String x:Key="m_CardNotFound">Карточка не найдена</v:String>
     <v:String x:Key="m_UserNotFound">Пользователь не найден</v:String>

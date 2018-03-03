@@ -32,6 +32,7 @@ namespace ClientApp.SystemClasses
                     FillSecondLine(ref result);
                     FillThirdLine(ref result);
                     FillFourthLine(ref result);
+                    FillFifthLine(ref result);
                 }
                 catch (Exception ex)
                 {
@@ -495,6 +496,203 @@ namespace ClientApp.SystemClasses
             sTabCard.StackPanels[CardViewStruct.FourthLineStackPanel].Children.Add(FourthLineTextBox);
 
             #endregion
+        }
+
+        private static void FillFifthLine(ref STabCard sTabCard)
+        {
+
+            #region Основная панель
+
+            var FifthDockPanel = new DockPanel
+            {
+                Margin = new Thickness(5, 0, 5, 10)
+            };
+            sTabCard.DocPanels.Add(CardViewStruct.FifthDockPanel, FifthDockPanel);
+            sTabCard.StackPanels[CardViewStruct.MainStackPanel].Children.Add(FifthDockPanel);
+
+            #endregion
+
+            #region Контрол Файлы
+
+            //Border файл
+            var FilesBorder = new Border
+            {
+                CornerRadius = new CornerRadius(6),
+                BorderBrush = new SolidColorBrush(Colors.LightGray),
+                BorderThickness = new Thickness(2),
+                HorizontalAlignment = HorizontalAlignment.Left
+            };
+            sTabCard.Borders.Add(CardViewStruct.FilesBorder, FilesBorder);
+            sTabCard.DocPanels[CardViewStruct.FifthDockPanel].Children.Add(FilesBorder);
+            //Вспомогательная панель даты
+            var FileStackPanel = new StackPanel();
+            sTabCard.StackPanels.Add(CardViewStruct.FileStackPanel, FileStackPanel);
+            sTabCard.Borders[CardViewStruct.FilesBorder].Child = FileStackPanel;
+            //Текстовый блок
+            var FileTextBlock = new TextBlock
+            {
+                Text = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_Files"),
+                VerticalAlignment = VerticalAlignment.Center,
+                TextAlignment = TextAlignment.Left,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Width = 75,
+                FontSize = 14,
+                Margin = new Thickness(5, 0, 0, 0)
+            };
+            sTabCard.TextBlocks.Add(CardViewStruct.FileTextBlock, FileTextBlock);
+            sTabCard.StackPanels[CardViewStruct.FileStackPanel].Children.Add(FileTextBlock);
+            //Лист view 
+            var FileListView = new ListView()
+            {
+                Height = 120,
+                MinWidth = 300,
+                MaxWidth = 400,
+                Margin = new Thickness(5)
+            };
+            sTabCard.ListViews.Add(CardViewStruct.FileListView, FileListView);
+            sTabCard.StackPanels[CardViewStruct.FileStackPanel].Children.Add(FileListView);
+            //Файлы
+            if (sTabCard.Card.Files.HasValue)
+            {
+                foreach (var item in sTabCard.Card.Files.FileDic)
+                {
+                    var temp = new FileControl
+                    {
+                        ID = item.Key,
+                        DockPanel = new DockPanel(),
+                        Button = new Button
+                        {
+                            FontSize = 14,
+                            Margin = new Thickness(0,0,5,0),
+                            Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_Delete"),
+                            IsEnabled = sTabCard.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c")
+                        },
+                        TextBlock = new TextBlock
+                        {
+                            FontSize = 14,
+                            VerticalAlignment = VerticalAlignment.Center,
+                            Text = item.Value
+                        }
+                    };
+                    temp.Button.Click += (sender, args) =>
+                    {
+                        //TODO: клик
+                    };
+                    temp.TextBlock.MouseLeftButtonDown += (sender, args) =>
+                    {
+                        //TODO: клик2
+                    };
+                    sTabCard.Card.FilesControls.Add(item.Key, temp);
+                    temp.DockPanel.Children.Add(temp.Button);
+                    temp.DockPanel.Children.Add(temp.TextBlock);
+                    sTabCard.ListViews[CardViewStruct.FileListView].Items.Add(temp.DockPanel);
+                }
+            }
+            //Кнопка добавить
+            var FileButton = new Button
+            {
+                Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_AddFile"),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Width = 145,
+                Height = 25,
+                FontSize = 14,
+                Margin = new Thickness(5)
+            };
+            FileButton.Click += (sender, args) =>
+            {
+                //TODO: клик3
+            };
+            sTabCard.Buttons.Add(CardViewStruct.FileButton, FileButton);
+            sTabCard.StackPanels[CardViewStruct.FileStackPanel].Children.Add(FileButton);
+
+            #endregion
+
+            #region Контрол информации о выполнении
+
+
+            if (sTabCard.Card.Task.CompletedByID.HasValue)
+            {
+                //Border инфо
+                var CompletedBorder = new Border
+                {
+                    CornerRadius = new CornerRadius(6),
+                    BorderBrush = new SolidColorBrush(Colors.LightGray),
+                    BorderThickness = new Thickness(2),
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    Margin = new Thickness(10,0,10,0),
+                    VerticalAlignment = VerticalAlignment.Bottom
+                };
+                sTabCard.Borders.Add(CardViewStruct.CompletedBorder, CompletedBorder);
+                sTabCard.DocPanels[CardViewStruct.FifthDockPanel].Children.Add(CompletedBorder);
+                //Вспомогательная панель
+                var CompletedStackPanel = new StackPanel();
+                sTabCard.StackPanels.Add(CardViewStruct.CompletedStackPanel, CompletedStackPanel);
+                sTabCard.Borders[CardViewStruct.CompletedBorder].Child = CompletedStackPanel;
+                //Вспомогательная панель
+                var CompleteDateDockPanel = new DockPanel();
+                sTabCard.DocPanels.Add(CardViewStruct.CompleteDateDockPanel, CompleteDateDockPanel);
+                sTabCard.StackPanels[CardViewStruct.CompletedStackPanel].Children.Add(CompleteDateDockPanel);
+                //Текстовый блок Дата выполнения
+                var CompletedDateTextBlock = new TextBlock
+                {
+                    Text = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_CompletedDate"),
+                    VerticalAlignment = VerticalAlignment.Center,
+                    TextAlignment = TextAlignment.Left,
+                    Width = 125,
+                    FontSize = 14,
+                    Margin = new Thickness(5, 0, 0, 0)
+                };
+                sTabCard.TextBlocks.Add(CardViewStruct.CompletedDateTextBlock, CompletedDateTextBlock);
+                sTabCard.DocPanels[CardViewStruct.CompleteDateDockPanel].Children.Add(CompletedDateTextBlock);
+                //Контрол блока даты выполнения
+                var CompletedDateTextBox = new TextBox
+                {
+                    Text = sTabCard.Card.Task.CompletedDate.Value.ToString("G"),
+                    VerticalContentAlignment = VerticalAlignment.Center,
+                    TextAlignment = TextAlignment.Left,
+                    MinWidth = 100,
+                    MaxWidth = 200,
+                    FontSize = 14,
+                    Height = 40,
+                    IsReadOnly = true
+                };
+                sTabCard.TextBoxes.Add(CardViewStruct.CompletedDateTextBox, CompletedDateTextBox);
+                sTabCard.DocPanels[CardViewStruct.CompleteDateDockPanel].Children.Add(CompletedDateTextBox);
+                //Вспомогательная панель
+                var CompleteByDockPanel = new DockPanel();
+                sTabCard.DocPanels.Add(CardViewStruct.CompleteByDockPanel, CompleteByDockPanel);
+                sTabCard.StackPanels[CardViewStruct.CompletedStackPanel].Children.Add(CompleteByDockPanel);
+                //Текстовый блок Дата выполнения
+                var CompletedByTextBlock = new TextBlock
+                {
+                    Text = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_CompletedBy"),
+                    VerticalAlignment = VerticalAlignment.Center,
+                    TextAlignment = TextAlignment.Left,
+                    Width = 125,
+                    FontSize = 14,
+                    Margin = new Thickness(5, 0, 0, 0)
+                };
+                sTabCard.TextBlocks.Add(CardViewStruct.CompletedByTextBlock, CompletedByTextBlock);
+                sTabCard.DocPanels[CardViewStruct.CompleteByDockPanel].Children.Add(CompletedByTextBlock);
+                //Контрол блока даты выполнения
+                var CompletedByTextBox = new TextBox
+                {
+                    Text = sTabCard.Card.CompletedBy.FullName,
+                    VerticalContentAlignment = VerticalAlignment.Center,
+                    TextAlignment = TextAlignment.Left,
+                    MinWidth = 100,
+                    MaxWidth = 200,
+                    FontSize = 14,
+                    Height = 40,
+                    IsReadOnly = true
+                };
+                sTabCard.TextBoxes.Add(CardViewStruct.CompletedByTextBox, CompletedByTextBox);
+                sTabCard.DocPanels[CardViewStruct.CompleteByDockPanel].Children.Add(CompletedByTextBox);
+            }
+            
+
+            #endregion
+
         }
     }
 }

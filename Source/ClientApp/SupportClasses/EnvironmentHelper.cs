@@ -199,6 +199,7 @@ namespace ClientApp.SupportClasses
                 DataTable dt = new DataTable("Tasks");
                 sda.Fill(dt);
                 dataGrid.ItemsSource = dt.DefaultView;
+                //TODO: datetime.ToString("G")
             }
             catch (Exception ex)
             {

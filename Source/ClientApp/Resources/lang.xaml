@@ -50,6 +50,11 @@
     <v:String x:Key="c_NewState">New State</v:String>
     <v:String x:Key="c_Comment">Commentary</v:String>
     <v:String x:Key="c_Respond">Respond</v:String>
+    <v:String x:Key="c_Files">Files</v:String>
+    <v:String x:Key="c_Delete">Delete</v:String>
+    <v:String x:Key="c_AddFile">Add file</v:String>
+    <v:String x:Key="c_CompletedDate">Completed date</v:String>
+    <v:String x:Key="c_CompletedBy">Completed by</v:String>
     <!--Сообщения об ошибках-->
     <v:String x:Key="m_CardNotFound">Card not found</v:String>
     <v:String x:Key="m_UserNotFound">Personal role not found</v:String>

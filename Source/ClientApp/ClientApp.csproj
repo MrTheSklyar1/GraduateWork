@@ -73,6 +73,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BaseClasses\BaseElement.cs" />
+    <Compile Include="Elements\FileControl.cs" />
     <Compile Include="Elements\AllStates.cs" />
     <Compile Include="Elements\Card.cs" />
     <Compile Include="Elements\Files.cs" />
