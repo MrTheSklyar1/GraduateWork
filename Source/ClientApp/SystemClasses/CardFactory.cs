@@ -599,9 +599,8 @@ namespace ClientApp.SystemClasses
                             if (deleteOK)
                             {
                                 sTabCard.ListViews[CardViewStruct.FileListView].Items.Remove(sTabCard.Card.FilesControls[item.Key]);
-                                sTabCard.Card.Files.FileDic.Remove(item.Key);
-                                sTabCard.Card.FilesControls.Remove(item.Key);
-                                RemoveFileFromCardTable(item.Key);
+                                
+                                RemoveFileFromCard(item.Key);
                             }
                         }
                     };
@@ -758,7 +757,7 @@ namespace ClientApp.SystemClasses
                 };
                 ButtonsSaveButton.Click += (sender, args) =>
                 {
-                    //TODO: клик4
+                    sTabCard.SaveUpdatedCard();
                 };
                 sTabCard.Buttons.Add(CardViewStruct.ButtonsSaveButton, ButtonsSaveButton);
                 sTabCard.StackPanels[CardViewStruct.ButtonsStackPanel].Children.Add(ButtonsSaveButton);
@@ -806,40 +805,6 @@ namespace ClientApp.SystemClasses
 
             #endregion
 
-        }
-
-        private static void RemoveFileFromCardTable(Guid FileID)
-        {
-            try
-            {
-                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
-                {
-                    using (var command = new SqlCommand(SqlCommands.DeleteFileCommand, con))
-                    {
-                        command.Parameters.Add("@FileID", SqlDbType.UniqueIdentifier);
-                        command.Parameters["@FileID"].Value = FileID;
-                        EnvironmentHelper.SendLogSQL(command.CommandText);
-                        con.Open();
-                        int colms = command.ExecuteNonQuery();
-                        con.Close();
-                        if (colms != 0)
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            EnvironmentHelper.SendDialogBox(
-                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_FileInBaseNotFound") + "\n" + FileID.ToString(),
-                                "SQL Error"
-                            );
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
-            }
         }
     }
 }

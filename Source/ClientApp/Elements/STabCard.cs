@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using ClientApp.BaseClasses;
+using ClientApp.SupportClasses;
+using ClientApp.SystemClasses;
 
 namespace ClientApp.Elements
 {
@@ -30,5 +34,59 @@ namespace ClientApp.Elements
         public Dictionary<string, Button> Buttons = new Dictionary<string, Button>();
         //Вкладка для основной панели
         public TabItem TabItem; 
+        public int Changes = 0;
+        public List<Guid> DeletedFiles = new List<Guid>();
+        public void FileDelete(Guid FileID)
+        {
+            Changes++;
+            DeletedFiles.Add(FileID);
+        }
+        private void RemoveFileFromCard(Guid FileID)
+        {
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    using (var command = new SqlCommand(SqlCommands.DeleteFileCommand, con))
+                    {
+                        command.Parameters.Add("@FileID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@FileID"].Value = FileID;
+                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                        con.Open();
+                        int colms = command.ExecuteNonQuery();
+                        con.Close();
+                        if (colms != 0)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            EnvironmentHelper.SendDialogBox(
+                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_FileInBaseNotFound") + "\n" + FileID.ToString(),
+                                "SQL Error"
+                            );
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+            }
+        }
+        public void SaveUpdatedCard()
+        {
+            while (Changes > 0)
+            {
+                foreach (var item in DeletedFiles)
+                {
+                    Card.Files.FileDic.Remove(item);
+                    Card.FilesControls.Remove(item);
+                    RemoveFileFromCard(item);
+                    Changes--;
+                }
+
+            }
+        }
     }
 }
