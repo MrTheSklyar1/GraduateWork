@@ -130,6 +130,7 @@ namespace ClientApp.SupportClasses
 
             foreach (var item in SystemSingleton.CurrentSession.UserRoles)
             {
+                if (item.ID == new Guid("9efcd5cd-bf54-47f3-95e3-2953cb235941")) continue;
                 tempItem = new STabItem();
                 tempItem.ToRole = item.ID.Value;
                 if (item.Name == StaticTypes.PersonalRole)

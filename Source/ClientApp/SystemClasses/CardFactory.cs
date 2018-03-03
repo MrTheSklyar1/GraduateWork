@@ -689,7 +689,86 @@ namespace ClientApp.SystemClasses
                 sTabCard.TextBoxes.Add(CardViewStruct.CompletedByTextBox, CompletedByTextBox);
                 sTabCard.DocPanels[CardViewStruct.CompleteByDockPanel].Children.Add(CompletedByTextBox);
             }
-            
+
+
+            #endregion
+
+            #region Контрол кнопок
+
+            //Border
+            var ButtonsBorder = new Border
+            {
+                CornerRadius = new CornerRadius(6),
+                BorderBrush = new SolidColorBrush(Colors.LightGray),
+                BorderThickness = new Thickness(2),
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Margin = new Thickness(10, 0, 0, 0),
+                VerticalAlignment = VerticalAlignment.Bottom
+            };
+            sTabCard.Borders.Add(CardViewStruct.ButtonsBorder, ButtonsBorder);
+            sTabCard.DocPanels[CardViewStruct.FifthDockPanel].Children.Add(ButtonsBorder);
+            //Вспомогательная панель
+            var ButtonsStackPanel = new StackPanel();
+            sTabCard.StackPanels.Add(CardViewStruct.ButtonsStackPanel, ButtonsStackPanel);
+            sTabCard.Borders[CardViewStruct.ButtonsBorder].Child = ButtonsStackPanel;
+            if(sTabCard.Card.State.ID.Value == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c"))
+            {
+                //Кнопка сохранить
+                var ButtonsSaveButton = new Button
+                {
+                    Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_SaveCard"),
+                    Width = 145,
+                    Height = 25,
+                    FontSize = 14,
+                    Margin = new Thickness(5)
+                };
+                ButtonsSaveButton.Click += (sender, args) =>
+                {
+                    //TODO: клик4
+                };
+                sTabCard.Buttons.Add(CardViewStruct.ButtonsSaveButton, ButtonsSaveButton);
+                sTabCard.StackPanels[CardViewStruct.ButtonsStackPanel].Children.Add(ButtonsSaveButton);
+            }
+            else
+            {
+                foreach (Role item in SystemSingleton.CurrentSession.UserRoles)
+                {
+                    if(item.ID==new Guid("9efcd5cd-bf54-47f3-95e3-2953cb235941") && (sTabCard.Card.Task.ToRoleID!=SystemSingleton.CurrentSession.ID || new PersonalRole(SystemSingleton.CurrentSession.ID).isAdmin))
+                    {
+                        //Кнопка delete
+                        var ButtonsDeleteButton = new Button
+                        {
+                            Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_DeleteCard"),
+                            Width = 145,
+                            Height = 25,
+                            FontSize = 14,
+                            Margin = new Thickness(5)
+                        };
+                        ButtonsDeleteButton.Click += (sender, args) =>
+                        {
+                            //TODO: клик5
+                        };
+                        sTabCard.Buttons.Add(CardViewStruct.ButtonsDeleteButton, ButtonsDeleteButton);
+                        sTabCard.StackPanels[CardViewStruct.ButtonsStackPanel].Children.Add(ButtonsDeleteButton);
+                        break;
+                    }
+                }
+            }
+            //Кнопка закрыть
+            var ButtonsCloseButton = new Button
+            {
+                Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_CloseCard"),
+                Width = 145,
+                Height = 25,
+                FontSize = 14,
+                Margin = new Thickness(5)
+            };
+            ButtonsCloseButton.Click += (sender, args) =>
+            {
+                //TODO: клик6
+            };
+            sTabCard.Buttons.Add(CardViewStruct.ButtonsCloseButton, ButtonsCloseButton);
+            sTabCard.StackPanels[CardViewStruct.ButtonsStackPanel].Children.Add(ButtonsCloseButton);
 
             #endregion
 

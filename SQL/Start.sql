@@ -2,6 +2,7 @@ create database Base;
 
 DECLARE @AdminID uniqueidentifier = 'f111d495-1aa4-468c-9885-30e4ad13ecd8';
 DECLARE @PersonalRoleID uniqueidentifier = 'fffee627-a5a6-4345-bc55-8fba3709dc48';
+DECLARE @CardReviewerRoleID uniqueidentifier = '9efcd5cd-bf54-47f3-95e3-2953cb235941';
 
 create table Roles
 (
@@ -13,6 +14,7 @@ ALTER TABLE Roles ADD PRIMARY KEY (ID);
 
 insert into Roles values (@AdminID, 'Admin A.');
 insert into Roles values (@PersonalRoleID, 'Personal Role');
+insert into Roles values (@CardReviewerRoleID, 'Card Reviewer Role');
 
 create table WorkingType
 (
@@ -59,6 +61,7 @@ create table StaticRoles
 ALTER TABLE StaticRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 
 insert into StaticRoles values (@PersonalRoleID, 'PersonalRole', 'Personal Role');
+insert into StaticRoles values (@CardReviewerRoleID, 'CardReviewerRole', 'Card Reviewer Role');
 
 create table RoleUsers
 (
@@ -70,6 +73,7 @@ ALTER TABLE RoleUsers ADD FOREIGN KEY(RoleID) REFERENCES Roles(ID);
 ALTER TABLE RoleUsers ADD FOREIGN KEY(PersonID) REFERENCES Roles(ID);
 
 insert into RoleUsers values (@PersonalRoleID, @AdminID);
+insert into RoleUsers values (@CardReviewerRoleID, @AdminID);
 
 create table DocTypes
 (
@@ -99,6 +103,7 @@ insert into TaskState values (@WorkID, 'Work', 'Work');
 
 create table Tasks
 (
+	MainNumber int NOT NULL IDENTITY(1,1),
 	ID	uniqueidentifier NOT NULL,
 	Number nvarchar(20) NOT NULL,
 	FromPersonalID uniqueidentifier NOT NULL,

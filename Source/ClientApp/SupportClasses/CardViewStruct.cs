@@ -62,7 +62,7 @@ namespace ClientApp.SupportClasses
                 public const string ButtonsBorder = "ButtonsBorder";
                     public const string ButtonsStackPanel = "ButtonsStackPanel";
                         public const string ButtonsSaveButton = "ButtonsSaveButton";
-                        public const string ButtonsUpdateButton = "ButtonsUpdateButton";
+                        public const string ButtonsDeleteButton = "ButtonsDeleteButton";
                         public const string ButtonsCloseButton = "ButtonsCloseButton";
 
     }

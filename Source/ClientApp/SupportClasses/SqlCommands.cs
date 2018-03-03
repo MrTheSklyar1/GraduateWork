@@ -41,7 +41,7 @@ namespace ClientApp.SupportClasses
             @"select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName, FullName from PersonalRoles where Login=@LoginText";
 
         public const string LoadTaskCommand =
-            @"select ID, Number, FromPersonalID, FromPersonalName, ToRoleID, ToRoleName, Date, DocType, StateID, isnull(Commentary,''), isnull(Respond,''), isnull(CompletedByID, cast(cast(0 as binary) as uniqueidentifier)), isnull(CompleteDate, convert(datetime, '2000'))
+            @"select ID, Number, FromPersonalID, FromPersonalName, ToRoleID, ToRoleName, Date, DocType, StateID, isnull(Commentary,''), isnull(Respond,''), isnull(CompletedByID, cast(cast(0 as binary) as uniqueidentifier)), isnull(CompleteDate, convert(datetime, '2000')), MainNumber
                 from Tasks where ID=@TaskID";
 
         public const string LoadPersonalRoleCommand =
