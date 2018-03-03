@@ -77,6 +77,7 @@ namespace ClientApp.SystemClasses
         {
             public static string ConnectionString { get; set; }
             public static bool SQLLog { get; set; }
+            public static string FilesPath { get; set; }
             public static MainWindow mainWindow { get; set; }
             public static TabControl tabControl { get; set; }
         }

@@ -10,6 +10,7 @@ namespace ClientApp.SupportClasses
     {
         public string ConnectionString { get; set; }
         public bool SQLLog { get; set; }
+        public string FilesPath { get; set; }
     }
 
     public class XMLConfigurationBase
@@ -29,11 +30,21 @@ namespace ClientApp.SupportClasses
                 var config = new XMLConfiguration();
                 config.ConnectionString = "Server=.\\SQLEXPRESS;Database=Base;Integrated Security=True;User Id=userid;Password=password;";
                 config.SQLLog = false;
+                config.FilesPath = @"C:\Users\Public\Documents\";
                 config.Save("settings.xml");
                 return false;
             }
             SystemSingleton.Configuration.ConnectionString = result.ConnectionString;
             SystemSingleton.Configuration.SQLLog = result.SQLLog;
+            if (result.FilesPath[result.FilesPath.Length - 1] != '\\')
+            {
+                SystemSingleton.Configuration.FilesPath = result.FilesPath+"\\"+"AppTaskFiles\\";
+            }
+            else
+            {
+                SystemSingleton.Configuration.FilesPath = result.FilesPath + "AppTaskFiles\\";
+            }
+            
             return true;
         }
 

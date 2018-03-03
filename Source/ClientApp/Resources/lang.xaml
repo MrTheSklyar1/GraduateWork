@@ -68,4 +68,10 @@
     <v:String x:Key="m_StateNotFound">State not found</v:String>
     <v:String x:Key="m_AlreadyOpened">Card is already opened</v:String>
     <v:String x:Key="m_StatesNotFound">States not found</v:String>
+    <v:String x:Key="m_FileNotFoundInDirectory">File not found, check settings.xml</v:String>
+    <v:String x:Key="m_DirectoryToDeleteNotFound">Directory with file not found, check settings.xml</v:String>
+    <v:String x:Key="m_FileInBaseNotFound">File not found in database</v:String>
+    <v:String x:Key="m_AttentionHeader">Attention</v:String>
+    <v:String x:Key="m_MakeSureDeletingFile">Are you sure, you want to delete file?</v:String>
+
 </ResourceDictionary>

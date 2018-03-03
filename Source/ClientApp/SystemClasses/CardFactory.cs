@@ -8,6 +8,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ClientApp.Elements;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.IO;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace ClientApp.SystemClasses
 {
@@ -27,12 +32,12 @@ namespace ClientApp.SystemClasses
                 };
                 try
                 {
-                    FillMainStackPanelToTab(ref result);
-                    FillFirstLine(ref result);
-                    FillSecondLine(ref result);
-                    FillThirdLine(ref result);
-                    FillFourthLine(ref result);
-                    FillFifthLine(ref result);
+                    FillMainStackPanelToTab(result);
+                    FillFirstLine(result);
+                    FillSecondLine(result);
+                    FillThirdLine(result);
+                    FillFourthLine(result);
+                    FillFifthLine(result);
                 }
                 catch (Exception ex)
                 {
@@ -56,7 +61,7 @@ namespace ClientApp.SystemClasses
             );
         }
 
-        private static void FillMainStackPanelToTab(ref STabCard sTabCard)
+        private static void FillMainStackPanelToTab(STabCard sTabCard)
         {
             var MainStackPanel = new StackPanel
             {
@@ -66,7 +71,7 @@ namespace ClientApp.SystemClasses
             sTabCard.TabItem.Content = MainStackPanel;
         }
 
-        private static void FillFirstLine(ref STabCard sTabCard)
+        private static void FillFirstLine(STabCard sTabCard)
         {
 
             #region Основная панель
@@ -219,7 +224,7 @@ namespace ClientApp.SystemClasses
 
         }
 
-        private static void FillSecondLine(ref STabCard sTabCard)
+        private static void FillSecondLine(STabCard sTabCard)
         {
             #region Основная панель
 
@@ -388,7 +393,7 @@ namespace ClientApp.SystemClasses
             #endregion
         }
 
-        private static void FillThirdLine(ref STabCard sTabCard)
+        private static void FillThirdLine(STabCard sTabCard)
         {
             #region Основной Border
 
@@ -443,7 +448,7 @@ namespace ClientApp.SystemClasses
             #endregion
         }
 
-        private static void FillFourthLine(ref STabCard sTabCard)
+        private static void FillFourthLine(STabCard sTabCard)
         {
             #region Основной Border
 
@@ -498,7 +503,7 @@ namespace ClientApp.SystemClasses
             #endregion
         }
 
-        private static void FillFifthLine(ref STabCard sTabCard)
+        private static void FillFifthLine(STabCard sTabCard)
         {
 
             #region Основная панель
@@ -576,11 +581,40 @@ namespace ClientApp.SystemClasses
                     };
                     temp.Button.Click += (sender, args) =>
                     {
-                        //TODO: клик
+                        MessageBoxResult dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureDeletingFile"), 
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"), 
+                            MessageBoxButton.YesNo);
+                        if (dialogResult == MessageBoxResult.Yes)
+                        {
+                            bool deleteOK = false;
+                            try
+                            {
+                                Directory.Delete(SystemSingleton.Configuration.FilesPath + item.Key + "\\", true);
+                                deleteOK = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                EnvironmentHelper.SendDialogBox((string)SystemSingleton.Configuration.mainWindow.FindResource("m_DirectoryToDeleteNotFound"), "Directory Error");
+                            }
+                            if (deleteOK)
+                            {
+                                sTabCard.ListViews[CardViewStruct.FileListView].Items.Remove(sTabCard.Card.FilesControls[item.Key]);
+                                sTabCard.Card.Files.FileDic.Remove(item.Key);
+                                sTabCard.Card.FilesControls.Remove(item.Key);
+                                RemoveFileFromCardTable(item.Key);
+                            }
+                        }
                     };
                     temp.TextBlock.MouseLeftButtonDown += (sender, args) =>
                     {
-                        //TODO: клик2
+                        try
+                        {
+                            Process.Start(SystemSingleton.Configuration.FilesPath+item.Key+"\\"+item.Value);
+                        }
+                        catch (Exception ex)
+                        {
+                            EnvironmentHelper.SendDialogBox((string)SystemSingleton.Configuration.mainWindow.FindResource("m_FileNotFoundInDirectory"), "Directory Error");
+                        }
                     };
                     sTabCard.Card.FilesControls.Add(item.Key, temp);
                     temp.DockPanel.Children.Add(temp.Button);
@@ -772,6 +806,40 @@ namespace ClientApp.SystemClasses
 
             #endregion
 
+        }
+
+        private static void RemoveFileFromCardTable(Guid FileID)
+        {
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    using (var command = new SqlCommand(SqlCommands.DeleteFileCommand, con))
+                    {
+                        command.Parameters.Add("@FileID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@FileID"].Value = FileID;
+                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                        con.Open();
+                        int colms = command.ExecuteNonQuery();
+                        con.Close();
+                        if (colms != 0)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            EnvironmentHelper.SendDialogBox(
+                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_FileInBaseNotFound") + "\n" + FileID.ToString(),
+                                "SQL Error"
+                            );
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+            }
         }
     }
 }

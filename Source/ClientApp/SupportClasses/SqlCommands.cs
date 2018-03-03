@@ -62,5 +62,8 @@ namespace ClientApp.SupportClasses
 
         public const string LoadAllStatesCommand =
             @"select ID, Name, Caption from TaskState";
+
+        public const string DeleteFileCommand =
+            @"delete from Files where FileID=@FileID";
     }
 }

@@ -68,4 +68,10 @@
     <v:String x:Key="m_StateNotFound">Состояние не найдено</v:String>
     <v:String x:Key="m_AlreadyOpened">Карточка уже открыта</v:String>
     <v:String x:Key="m_StatesNotFound">Состояния не найдены</v:String>
+    <v:String x:Key="m_FileNotFoundInDirectory">Файл не найден, проверьте settings.xml</v:String>
+    <v:String x:Key="m_DirectoryToDeleteNotFound">Папка с файлом не найдена, проверьте settings.xml</v:String>
+    <v:String x:Key="m_FileInBaseNotFound">Файл не найден в базе данных</v:String>
+    <v:String x:Key="m_AttentionHeader">Внимание</v:String>
+    <v:String x:Key="m_MakeSureDeletingFile">Вы уверены, что хотите удалить файл?</v:String>
+    
 </ResourceDictionary>
