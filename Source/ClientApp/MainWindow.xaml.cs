@@ -151,10 +151,10 @@ namespace ClientApp
                 SendInfoToBottomBar("m_tab_LogIn_LogOffCompleted");
                 EnvironmentHelper.SendLog("Log Off - " + SystemSingleton.CurrentSession.Login);
                 SystemSingleton.CurrentSession.CloseSession();
-                //TODO: Отключать остальные вкладки, все
                 LogOffItem.Visibility = Visibility.Collapsed;
                 WorkingTab.Visibility = Visibility.Collapsed;
                 menuLanguage.Visibility = Visibility.Visible;
+                EnvironmentHelper.CloseAllEditingTabs();
                 TabWorkControl.Items.Clear();
                 while (TabControl.Items.Count > 2)
                 {
@@ -250,8 +250,15 @@ namespace ClientApp
         {
             EnvironmentHelper.UpdateView();
         }
+
         #endregion
 
-
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if (SystemSingleton.CurrentSession.Login != "")
+            {
+                EnvironmentHelper.CloseAllEditingTabs();
+            }
+        }
     }
 }

@@ -35,6 +35,7 @@ insert into WorkingType values (@OnLeaveID, 'OnLeave', 'On leave');
 
 create table PersonalRoles
 (
+	InstanceID uniqueidentifier NOT NULL,
 	ID	uniqueidentifier NOT NULL,
 	Login nvarchar(50) NOT NULL,
 	PassWord nvarchar(512) NOT NULL,
@@ -45,35 +46,37 @@ create table PersonalRoles
 	isAdmin bit NOT NULL,
 	WorkingTypeID uniqueidentifier NOT NULL
 );
-
+ALTER TABLE PersonalRoles ADD PRIMARY KEY (InstanceID);
 ALTER TABLE PersonalRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 ALTER TABLE PersonalRoles ADD FOREIGN KEY(WorkingTypeID) REFERENCES WorkingType(ID);
 
-insert into PersonalRoles values (@AdminID, 'Admin', 'e3afed0047b08059d0fada10f400c1e5', NULL, 'Admin A.', 'Admin', 'Admin', 1, @WorkingID);
+insert into PersonalRoles values (NEWID(), @AdminID, 'Admin', 'e3afed0047b08059d0fada10f400c1e5', NULL, 'Admin A.', 'Admin', 'Admin', 1, @WorkingID);
 
 create table StaticRoles
 (
+	InstanceID uniqueidentifier NOT NULL,
 	ID	uniqueidentifier NOT NULL,
 	Name nvarchar(50) NOT NULL,
     Caption nvarchar(50) NOT NULL
 );
-
+ALTER TABLE StaticRoles ADD PRIMARY KEY (InstanceID);
 ALTER TABLE StaticRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 
-insert into StaticRoles values (@PersonalRoleID, 'PersonalRole', 'Personal Role');
-insert into StaticRoles values (@CardReviewerRoleID, 'CardReviewerRole', 'Card Reviewer Role');
+insert into StaticRoles values (NEWID(), @PersonalRoleID, 'PersonalRole', 'Personal Role');
+insert into StaticRoles values (NEWID(), @CardReviewerRoleID, 'CardReviewerRole', 'Card Reviewer Role');
 
 create table RoleUsers
 (
+	ID uniqueidentifier NOT NULL,
 	RoleID	uniqueidentifier NOT NULL,
 	PersonID uniqueidentifier NOT NULL
 );
-
+ALTER TABLE RoleUsers ADD PRIMARY KEY (ID);
 ALTER TABLE RoleUsers ADD FOREIGN KEY(RoleID) REFERENCES Roles(ID);
 ALTER TABLE RoleUsers ADD FOREIGN KEY(PersonID) REFERENCES Roles(ID);
 
-insert into RoleUsers values (@PersonalRoleID, @AdminID);
-insert into RoleUsers values (@CardReviewerRoleID, @AdminID);
+insert into RoleUsers values (NEWID(), @PersonalRoleID, @AdminID);
+insert into RoleUsers values (NEWID(), @CardReviewerRoleID, @AdminID);
 
 create table DocTypes
 (
@@ -116,7 +119,8 @@ create table Tasks
 	Commentary nvarchar(2048) NULL,
 	Respond nvarchar(2048) NULL,
 	CompletedByID uniqueidentifier NULL,
-	CompleteDate datetime NULL
+	CompleteDate datetime NULL,
+	isEditingNow bit NOT NULL
 );
 
 ALTER TABLE Tasks ADD PRIMARY KEY(ID);
@@ -132,12 +136,13 @@ create table Files
 	FileID uniqueidentifier NOT NULL,
 	Name nvarchar(MAX) NOT NULL
 );
-
+ALTER TABLE Files ADD PRIMARY KEY(FileID);
 ALTER TABLE Files ADD FOREIGN KEY(ID) REFERENCES Tasks(ID);
 
 create table CompleteQueue
 (
+	ID uniqueidentifier NOT NULL,
 	TaskID uniqueidentifier NOT NULL
 );
-
+ALTER TABLE CompleteQueue ADD PRIMARY KEY(ID);
 ALTER TABLE CompleteQueue ADD FOREIGN KEY(TaskID) REFERENCES Tasks(ID);

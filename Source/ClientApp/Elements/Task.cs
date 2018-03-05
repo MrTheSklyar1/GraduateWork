@@ -26,6 +26,7 @@ namespace ClientApp.Elements
         public string Respond;
         public Guid? CompletedByID;
         public DateTime? CompletedDate;
+        public bool isEditingNow;
         public Task() { }
         public Task(Guid TaskID)
         {
@@ -57,6 +58,7 @@ namespace ClientApp.Elements
                                 CompletedByID = (reader.GetGuid(11)==Guid.Empty) ? (Guid?) null : reader.GetGuid(11);
                                 CompletedDate = (reader.GetDateTime(12).Year==2000) ? (DateTime?) null : reader.GetDateTime(12);
                                 MainNumber = reader.GetInt32(13);
+                                isEditingNow = reader.GetBoolean(14);
                                 HasValue = true;
                             }
                             else

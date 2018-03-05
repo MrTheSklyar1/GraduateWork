@@ -41,7 +41,7 @@ namespace ClientApp.SupportClasses
             @"select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName, FullName from PersonalRoles where Login=@LoginText";
 
         public const string LoadTaskCommand =
-            @"select ID, Number, FromPersonalID, FromPersonalName, ToRoleID, ToRoleName, Date, DocType, StateID, isnull(Commentary,''), isnull(Respond,''), isnull(CompletedByID, cast(cast(0 as binary) as uniqueidentifier)), isnull(CompleteDate, convert(datetime, '2000')), MainNumber
+            @"select ID, Number, FromPersonalID, FromPersonalName, ToRoleID, ToRoleName, Date, DocType, StateID, isnull(Commentary,''), isnull(Respond,''), isnull(CompletedByID, cast(cast(0 as binary) as uniqueidentifier)), isnull(CompleteDate, convert(datetime, '2000')), MainNumber , isEditingNow
                 from Tasks where ID=@TaskID";
 
         public const string LoadPersonalRoleCommand =
@@ -77,5 +77,11 @@ namespace ClientApp.SupportClasses
 
         public const string AddFileToDataBaseCommand =
             @"insert into Files values (@TaskID, @FileID, @FileName);";
+
+        public const string SetEditingToTask =
+            @"update Tasks set isEditingNow=1 where ID=@TaskID";
+
+        public const string SetStopEditingToTask =
+            @"update Tasks set isEditingNow=0 where ID=@TaskID";
     }
 }

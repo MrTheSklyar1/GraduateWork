@@ -35,7 +35,7 @@ namespace ClientApp.SupportClasses
                 return false;
             }
 
-            if (result != null && (result.ConnectionString != "" || result.FilesPath != ""))
+            if (result != null && (result.ConnectionString != null && result.FilesPath != null))
             {
                 SystemSingleton.Configuration.ConnectionString = result.ConnectionString;
                 SystemSingleton.Configuration.SQLLog = result.SQLLog;

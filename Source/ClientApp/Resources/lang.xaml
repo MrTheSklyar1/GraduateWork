@@ -80,5 +80,8 @@
     <v:String x:Key="m_CantSaveFile">Can't save file, check permissions</v:String>
     <v:String x:Key="m_MakeSureSavingCard">Are you sure, you want to save card?</v:String>
     <v:String x:Key="m_MakeSureClosingCard">Are you sure, you want to close card without saving?</v:String>
+    <v:String x:Key="m_AlreadyEditing">Someone editing card now, and you can only see what was before</v:String>
+    <v:String x:Key="m_CantSetEditing">Can't set editing status to card</v:String>
+    
 
 </ResourceDictionary>

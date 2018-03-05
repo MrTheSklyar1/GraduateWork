@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -24,7 +25,48 @@ namespace ClientApp.SupportClasses
             {
                 sw.WriteLine(DateTime.UtcNow + " -- " + message + "\n\n" + trace);
             }
+            CloseAllEditingTabs();
             Application.Current.Shutdown(1);
+        }
+
+        public static void CloseAllEditingTabs()
+        {
+            foreach (var item in SystemSingleton.CurrentSession.TabCards)
+            {
+                if (item.Value.Card.Task.isEditingNow ||
+                    item.Value.Card.Task.StateID != new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c")) continue;
+                try
+                {
+                    using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                    {
+                        using (var command = new SqlCommand(SqlCommands.SetStopEditingToTask, con))
+                        {
+                            command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+                            command.Parameters["@TaskID"].Value = item.Value.Card.Task.ID.Value;
+                            EnvironmentHelper.SendLogSQL(command.CommandText);
+                            con.Open();
+                            int colms = command.ExecuteNonQuery();
+                            con.Close();
+                            if (colms == 0)
+                            {
+                                EnvironmentHelper.SendDialogBox(
+                                    (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                        "m_CantSetEditing") + "\n" + item.Value.Card.Task.ID.Value.ToString(),
+                                    "SQL Error"
+                                );
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    EnvironmentHelper.SendDialogBox(
+                        (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                            "m_CantSetEditing") + "\n" + item.Value.Card.Task.ID.Value.ToString(),
+                        "SQL Error"
+                    );
+                }
+            }
         }
         public static void SendDialogBox(string message, string header)
         {
@@ -200,7 +242,6 @@ namespace ClientApp.SupportClasses
                 DataTable dt = new DataTable("Tasks");
                 sda.Fill(dt);
                 dataGrid.ItemsSource = dt.DefaultView;
-                //TODO: datetime.ToString("G")
             }
             catch (Exception ex)
             {

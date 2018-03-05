@@ -332,7 +332,7 @@ namespace ClientApp.SystemClasses
 
             #region Контрол нового состояния
 
-            if (sTabCard.Card.State.ID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c"))
+            if (sTabCard.Card.State.ID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c") && !sTabCard.Card.Task.isEditingNow)
             {
                 //Border newState
                 var NewStateBorder = new Border
@@ -507,7 +507,7 @@ namespace ClientApp.SystemClasses
                 MinHeight = 40,
                 MaxHeight = 100,
                 Margin = new Thickness(5),
-                IsReadOnly = sTabCard.Card.Task.StateID != new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c")
+                IsReadOnly = (sTabCard.Card.Task.StateID != new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c") || sTabCard.Card.Task.isEditingNow)
             };
             FourthLineTextBox.TextChanged += (sender, args) =>
             {
@@ -586,7 +586,7 @@ namespace ClientApp.SystemClasses
                             FontSize = 14,
                             Margin = new Thickness(0,0,5,0),
                             Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_Delete"),
-                            IsEnabled = sTabCard.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c")
+                            IsEnabled = (sTabCard.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c") && !sTabCard.Card.Task.isEditingNow) 
                         },
                         TextBlock = new TextBlock
                         {
@@ -624,7 +624,7 @@ namespace ClientApp.SystemClasses
                 }
             }
 
-            if (sTabCard.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c"))
+            if (sTabCard.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c") && !sTabCard.Card.Task.isEditingNow)
             {
                 //Кнопка добавить
                 var FileButton = new Button
@@ -805,7 +805,7 @@ namespace ClientApp.SystemClasses
             var ButtonsStackPanel = new StackPanel();
             sTabCard.StackPanels.Add(CardViewStruct.ButtonsStackPanel, ButtonsStackPanel);
             sTabCard.Borders[CardViewStruct.ButtonsBorder].Child = ButtonsStackPanel;
-            if(sTabCard.Card.State.ID.Value == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c"))
+            if(sTabCard.Card.State.ID.Value == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c") && !sTabCard.Card.Task.isEditingNow)
             {
                 //Кнопка сохранить
                 var ButtonsSaveButton = new Button
@@ -827,7 +827,7 @@ namespace ClientApp.SystemClasses
             {
                 foreach (Role item in SystemSingleton.CurrentSession.UserRoles)
                 {
-                    if(item.ID==new Guid("9efcd5cd-bf54-47f3-95e3-2953cb235941") && (sTabCard.Card.Task.ToRoleID!=SystemSingleton.CurrentSession.ID || new PersonalRole(SystemSingleton.CurrentSession.ID).isAdmin))
+                    if(item.ID==new Guid("9efcd5cd-bf54-47f3-95e3-2953cb235941") && (sTabCard.Card.Task.ToRoleID!=SystemSingleton.CurrentSession.ID || new PersonalRole(SystemSingleton.CurrentSession.ID).isAdmin) && !sTabCard.Card.Task.isEditingNow)
                     {
                         //Кнопка delete
                         var ButtonsDeleteButton = new Button
@@ -870,6 +870,36 @@ namespace ClientApp.SystemClasses
                 {
                     SystemSingleton.Configuration.tabControl.Items.Remove(sTabCard.TabItem);
                     SystemSingleton.CurrentSession.TabCards.Remove(sTabCard.Card.Task.Number);
+                }
+                if (!sTabCard.Card.Task.isEditingNow && sTabCard.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c"))
+                {
+                    try
+                    {
+                        using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                        {
+                            using (var command = new SqlCommand(SqlCommands.SetStopEditingToTask, con))
+                            {
+                                command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+                                command.Parameters["@TaskID"].Value = sTabCard.Card.Task.ID.Value;
+                                EnvironmentHelper.SendLogSQL(command.CommandText);
+                                con.Open();
+                                int colms = command.ExecuteNonQuery();
+                                con.Close();
+                                if (colms == 0)
+                                {
+                                    EnvironmentHelper.SendDialogBox(
+                                        (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                            "m_CantSetEditing") + "\n" + sTabCard.Card.Task.ID.Value.ToString(),
+                                        "SQL Error"
+                                    );
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+                    }
                 }
             };
             sTabCard.Buttons.Add(CardViewStruct.ButtonsCloseButton, ButtonsCloseButton);

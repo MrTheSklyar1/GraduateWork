@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,9 +31,48 @@ namespace ClientApp.SupportClasses
                     }
                     else
                     {
+                        if (temp.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c"))
+                        {
+                            if (temp.Card.Task.isEditingNow)
+                            {
+                                EnvironmentHelper.SendDialogBox(
+                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AlreadyEditing"),
+                                    "Attention"
+                                );
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                                    {
+                                        using (var command = new SqlCommand(SqlCommands.SetEditingToTask, con))
+                                        {
+                                            command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+                                            command.Parameters["@TaskID"].Value = temp.Card.Task.ID.Value;
+                                            EnvironmentHelper.SendLogSQL(command.CommandText);
+                                            con.Open();
+                                            int colms = command.ExecuteNonQuery();
+                                            con.Close();
+                                            if (colms == 0)
+                                            {
+                                                EnvironmentHelper.SendDialogBox(
+                                                    (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                                        "m_CantSetEditing") + "\n" + temp.Card.Task.ID.Value.ToString(),
+                                                    "SQL Error"
+                                                );
+                                            }
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+                                }
+                            }
+                        }
                         SystemSingleton.CurrentSession.TabCards.Add(temp.Card.Task.Number, temp);
                         SystemSingleton.Configuration.tabControl.Items.Add(temp.TabItem);
-                        //TODO: переход на вкладку
                     }
                 }
             }

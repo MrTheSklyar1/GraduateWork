@@ -301,7 +301,7 @@ namespace ClientApp.Elements
 
         private void AddFileToDataBase(FileBase file)
         {
-            //TODO: сделать подпись
+            //TODO: сделать подпись файла
             try
             {
                 Directory.CreateDirectory(SystemSingleton.Configuration.FilesPath + file.FileID);
