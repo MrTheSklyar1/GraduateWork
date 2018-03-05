@@ -220,39 +220,59 @@ namespace ClientApp.Elements
             }
         }
 
+        private bool RemoveFileFromHard(Guid FileID)
+        {
+            try
+            {
+                Directory.Delete(SystemSingleton.Configuration.FilesPath + FileID + "\\", true);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendDialogBox((string)SystemSingleton.Configuration.mainWindow.FindResource("m_DirectoryToDeleteNotFound"), "Directory Error");
+                return false;
+            }
+        }
+        public bool RemoveFileFromHardLite(Guid FileID)
+        {
+            try
+            {
+                Directory.Delete(SystemSingleton.Configuration.FilesPath + FileID + "\\", true);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         private void RemoveFileFromCard(Guid FileID)
         {
             try
             {
-                try
+                if (RemoveFileFromHard(FileID))
                 {
-                    Directory.Delete(SystemSingleton.Configuration.FilesPath + FileID + "\\", true);
-                }
-                catch (Exception ex)
-                {
-                    EnvironmentHelper.SendDialogBox((string)SystemSingleton.Configuration.mainWindow.FindResource("m_DirectoryToDeleteNotFound"), "Directory Error");
-                    return;
-                }
-                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
-                {
-                    using (var command = new SqlCommand(SqlCommands.DeleteFileCommand, con))
+                    using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                     {
-                        command.Parameters.Add("@FileID", SqlDbType.UniqueIdentifier);
-                        command.Parameters["@FileID"].Value = FileID;
-                        EnvironmentHelper.SendLogSQL(command.CommandText);
-                        con.Open();
-                        int colms = command.ExecuteNonQuery();
-                        con.Close();
-                        if (colms != 0)
+                        using (var command = new SqlCommand(SqlCommands.DeleteFileCommand, con))
                         {
-                            return;
-                        }
-                        else
-                        {
-                            EnvironmentHelper.SendDialogBox(
-                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_FileInBaseNotFound") + "\n" + FileID.ToString(),
-                                "SQL Error"
-                            );
+                            command.Parameters.Add("@FileID", SqlDbType.UniqueIdentifier);
+                            command.Parameters["@FileID"].Value = FileID;
+                            EnvironmentHelper.SendLogSQL(command.CommandText);
+                            con.Open();
+                            int colms = command.ExecuteNonQuery();
+                            con.Close();
+                            if (colms != 0)
+                            {
+                                return;
+                            }
+                            else
+                            {
+                                EnvironmentHelper.SendDialogBox(
+                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_FileInBaseNotFound") + "\n" + FileID.ToString(),
+                                    "SQL Error"
+                                );
+                            }
                         }
                     }
                 }
@@ -286,7 +306,7 @@ namespace ClientApp.Elements
                         else
                         {
                             EnvironmentHelper.SendDialogBox(
-                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantCompleteTaskFound") + "\n" + Card.Task.ID.Value.ToString(),
+                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantCompleteTaskFound") + " \n " + Card.Task.ID.Value.ToString(),
                                 "SQL Error"
                             );
                         }
@@ -301,11 +321,15 @@ namespace ClientApp.Elements
 
         private void AddFileToDataBase(FileBase file)
         {
-            //TODO: сделать подпись файла
             try
             {
                 Directory.CreateDirectory(SystemSingleton.Configuration.FilesPath + file.FileID);
-                File.Copy(file.Path, SystemSingleton.Configuration.FilesPath + file.FileID + "\\" + file.Name);
+                if (!PDFSigner.PDFSign(file.Path,
+                    SystemSingleton.Configuration.FilesPath + file.FileID + "\\" + file.Name,
+                    this))
+                {
+                    return;
+                }
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
                     using (var command = new SqlCommand(SqlCommands.AddFileToDataBaseCommand, con))

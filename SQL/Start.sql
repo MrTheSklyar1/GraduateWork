@@ -1,5 +1,5 @@
-create database Base;
-
+--create database Base;
+use Base;
 DECLARE @AdminID uniqueidentifier = 'f111d495-1aa4-468c-9885-30e4ad13ecd8';
 DECLARE @PersonalRoleID uniqueidentifier = 'fffee627-a5a6-4345-bc55-8fba3709dc48';
 DECLARE @CardReviewerRoleID uniqueidentifier = '9efcd5cd-bf54-47f3-95e3-2953cb235941';
@@ -46,6 +46,7 @@ create table PersonalRoles
 	isAdmin bit NOT NULL,
 	WorkingTypeID uniqueidentifier NOT NULL
 );
+
 ALTER TABLE PersonalRoles ADD PRIMARY KEY (InstanceID);
 ALTER TABLE PersonalRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 ALTER TABLE PersonalRoles ADD FOREIGN KEY(WorkingTypeID) REFERENCES WorkingType(ID);
@@ -59,6 +60,7 @@ create table StaticRoles
 	Name nvarchar(50) NOT NULL,
     Caption nvarchar(50) NOT NULL
 );
+
 ALTER TABLE StaticRoles ADD PRIMARY KEY (InstanceID);
 ALTER TABLE StaticRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 
@@ -146,3 +148,5 @@ create table CompleteQueue
 );
 ALTER TABLE CompleteQueue ADD PRIMARY KEY(ID);
 ALTER TABLE CompleteQueue ADD FOREIGN KEY(TaskID) REFERENCES Tasks(ID);
+
+use master;

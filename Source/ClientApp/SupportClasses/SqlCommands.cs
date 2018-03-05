@@ -83,5 +83,8 @@ namespace ClientApp.SupportClasses
 
         public const string SetStopEditingToTask =
             @"update Tasks set isEditingNow=0 where ID=@TaskID";
+
+        public const string DeleteTaskAndStaff =
+            @"delete from Files where ID=@TaskID; delete from Tasks where ID=@TaskID;";
     }
 }

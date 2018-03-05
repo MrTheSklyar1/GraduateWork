@@ -52,6 +52,9 @@
     <ApplicationIcon>client.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="itextsharp">
+      <HintPath>ThirdPartyLinks\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -73,6 +76,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BaseClasses\BaseElement.cs" />
+    <Compile Include="BaseClasses\Certificate.cs" />
+    <Compile Include="BaseClasses\MetaDatacs.cs" />
+    <Compile Include="BaseClasses\PDFSigner.cs" />
     <Compile Include="Elements\File.cs" />
     <Compile Include="Elements\FileControl.cs" />
     <Compile Include="Elements\AllStates.cs" />
@@ -81,6 +87,9 @@
     <Compile Include="Elements\STabCard.cs" />
     <Compile Include="Elements\STabItem.cs" />
     <Compile Include="Elements\State.cs" />
+    <Compile Include="SetPassword.xaml.cs">
+      <DependentUpon>SetPassword.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SupportClasses\CardViewStruct.cs" />
     <Compile Include="SupportClasses\StaticTypes.cs" />
     <Compile Include="SystemClasses\CardFactory.cs" />
@@ -110,6 +119,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\lang.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SetPassword.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

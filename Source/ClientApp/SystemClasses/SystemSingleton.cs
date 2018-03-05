@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -77,7 +78,11 @@ namespace ClientApp.SystemClasses
         {
             public static string ConnectionString { get; set; }
             public static bool SQLLog { get; set; }
+            public static bool SignVisible { get; set; }
             public static string FilesPath { get; set; }
+            public static string CertificatePath { get; set; }
+            public static string CompanyName { get; set; }
+            public static string CompanyLocation { get; set; }
             public static MainWindow mainWindow { get; set; }
             public static TabControl tabControl { get; set; }
         }

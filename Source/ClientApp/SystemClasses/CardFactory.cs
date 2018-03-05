@@ -840,7 +840,46 @@ namespace ClientApp.SystemClasses
                         };
                         ButtonsDeleteButton.Click += (sender, args) =>
                         {
-                            //TODO: кнопка удалить
+                            var dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_DeleteTaskQ"),
+                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
+                                MessageBoxButton.YesNo);
+                            if (dialogResult == MessageBoxResult.Yes)
+                            {
+                                try
+                                {
+                                    using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                                    {
+                                        using (var command = new SqlCommand(SqlCommands.DeleteTaskAndStaff, con))
+                                        {
+                                            command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+                                            command.Parameters["@TaskID"].Value = sTabCard.Card.Task.ID.Value;
+                                            EnvironmentHelper.SendLogSQL(command.CommandText);
+                                            con.Open();
+                                            int colms = command.ExecuteNonQuery();
+                                            con.Close();
+                                            if (colms == 0)
+                                            {
+                                                EnvironmentHelper.SendDialogBox(
+                                                    (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                                        "m_CantDeleteTask") + "\n" + sTabCard.Card.Task.ID.Value.ToString(),
+                                                    "SQL Error"
+                                                );
+                                            }
+                                        }
+                                    }
+                                    foreach (var fileID in sTabCard.Card.Files.FileDic.Keys)
+                                    {
+                                        sTabCard.RemoveFileFromHardLite(fileID);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+                                }
+                                SystemSingleton.Configuration.tabControl.Items.Remove(sTabCard.TabItem);
+                                SystemSingleton.CurrentSession.TabCards.Remove(sTabCard.Card.Task.Number);
+                                EnvironmentHelper.UpdateView();
+                            }
                         };
                         sTabCard.Buttons.Add(CardViewStruct.ButtonsDeleteButton, ButtonsDeleteButton);
                         sTabCard.StackPanels[CardViewStruct.ButtonsStackPanel].Children.Add(ButtonsDeleteButton);
