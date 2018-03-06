@@ -43,11 +43,11 @@ namespace ClientApp.SupportClasses
                 return false;
             }
 
-            if (result?.ConnectionString != null && 
-                result.FilesPath != null && 
-                result.CertificatePath!=null && 
-                result.CompanyName!=null &&
-                result.CompanyLocation!=null)
+            if (result?.ConnectionString != null &&
+                result.FilesPath != null &&
+                result.CertificatePath != null &&
+                result.CompanyName != null &&
+                result.CompanyLocation != null)
             {
                 SystemSingleton.Configuration.ConnectionString = result.ConnectionString;
                 SystemSingleton.Configuration.SQLLog = result.SQLLog;
@@ -74,7 +74,7 @@ namespace ClientApp.SupportClasses
             {
                 return false;
             }
-            
+
         }
 
         public void Save(string fileName)

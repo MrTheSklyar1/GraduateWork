@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ClientApp.SupportClasses;
 using ClientApp.SystemClasses;
 
@@ -35,7 +31,7 @@ namespace ClientApp.Elements
                                     Caption = reader.GetString(2)
                                 });
                             }
-                            if(States.Count==0)
+                            if (States.Count == 0)
                             {
                                 EnvironmentHelper.SendDialogBox(
                                     (string)SystemSingleton.Configuration.mainWindow.FindResource("m_StatesNotFound"),

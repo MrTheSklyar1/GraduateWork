@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ClientApp.BaseClasses;
 using ClientApp.SupportClasses;
 using ClientApp.SystemClasses;
@@ -41,7 +37,7 @@ namespace ClientApp.Elements
                                 ID = RoleID;
                                 Login = reader.GetString(1);
                                 PassWord = reader.GetString(2);
-                                TelegramID = (reader.GetInt32(3)==0) ? (int?) null : reader.GetInt32(3);
+                                TelegramID = (reader.GetInt32(3) == 0) ? (int?)null : reader.GetInt32(3);
                                 FullName = reader.GetString(4);
                                 FirstName = reader.GetString(5);
                                 LastName = reader.GetString(6);

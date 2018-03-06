@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ClientApp.BaseClasses;
 using ClientApp.SupportClasses;
 using ClientApp.SystemClasses;
@@ -55,8 +51,8 @@ namespace ClientApp.Elements
                                 StateID = reader.GetGuid(8);
                                 Commentary = reader.GetString(9);
                                 Respond = reader.GetString(10);
-                                CompletedByID = (reader.GetGuid(11)==Guid.Empty) ? (Guid?) null : reader.GetGuid(11);
-                                CompletedDate = (reader.GetDateTime(12).Year==2000) ? (DateTime?) null : reader.GetDateTime(12);
+                                CompletedByID = (reader.GetGuid(11) == Guid.Empty) ? (Guid?)null : reader.GetGuid(11);
+                                CompletedDate = (reader.GetDateTime(12).Year == 2000) ? (DateTime?)null : reader.GetDateTime(12);
                                 MainNumber = reader.GetInt32(13);
                                 isEditingNow = reader.GetBoolean(14);
                                 HasValue = true;

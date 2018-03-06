@@ -88,5 +88,4 @@
     <v:String x:Key="m_DeleteTaskQ">Вы уверены, что хотите удалить карточку?</v:String>
     <v:String x:Key="m_CertPassError">Проверьте правильность введенного пароля и сертификата, осталось попыток</v:String>
     <v:String x:Key="m_CantSaveTransaction">Не удалось сохранить данные в базу, выполнен откат</v:String>
-    
 </ResourceDictionary>

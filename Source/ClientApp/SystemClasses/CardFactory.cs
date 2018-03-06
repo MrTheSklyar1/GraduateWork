@@ -1,16 +1,10 @@
 ﻿using ClientApp.SupportClasses;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ClientApp.Elements;
 using System.Diagnostics;
-using System.ComponentModel;
-using System.IO;
 using System.Data.SqlClient;
 using System.Data;
 using Microsoft.Win32;
@@ -584,9 +578,9 @@ namespace ClientApp.SystemClasses
                         Button = new Button
                         {
                             FontSize = 14,
-                            Margin = new Thickness(0,0,5,0),
+                            Margin = new Thickness(0, 0, 5, 0),
                             Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_Delete"),
-                            IsEnabled = (sTabCard.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c") && !sTabCard.Card.Task.isEditingNow) 
+                            IsEnabled = (sTabCard.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c") && !sTabCard.Card.Task.isEditingNow)
                         },
                         TextBlock = new TextBlock
                         {
@@ -597,8 +591,8 @@ namespace ClientApp.SystemClasses
                     };
                     temp.Button.Click += (sender, args) =>
                     {
-                        MessageBoxResult dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureDeletingFile"), 
-                            (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"), 
+                        MessageBoxResult dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureDeletingFile"),
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
                             MessageBoxButton.YesNo);
                         if (dialogResult == MessageBoxResult.Yes)
                         {
@@ -610,7 +604,7 @@ namespace ClientApp.SystemClasses
                     {
                         try
                         {
-                            Process.Start(SystemSingleton.Configuration.FilesPath+item.Key+"\\"+item.Value);
+                            Process.Start(SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value);
                         }
                         catch (Exception ex)
                         {
@@ -713,7 +707,7 @@ namespace ClientApp.SystemClasses
                     BorderBrush = new SolidColorBrush(Colors.LightGray),
                     BorderThickness = new Thickness(2),
                     HorizontalAlignment = HorizontalAlignment.Right,
-                    Margin = new Thickness(10,0,10,0),
+                    Margin = new Thickness(10, 0, 10, 0),
                     VerticalAlignment = VerticalAlignment.Bottom
                 };
                 sTabCard.Borders.Add(CardViewStruct.CompletedBorder, CompletedBorder);
@@ -805,7 +799,7 @@ namespace ClientApp.SystemClasses
             var ButtonsStackPanel = new StackPanel();
             sTabCard.StackPanels.Add(CardViewStruct.ButtonsStackPanel, ButtonsStackPanel);
             sTabCard.Borders[CardViewStruct.ButtonsBorder].Child = ButtonsStackPanel;
-            if(sTabCard.Card.State.ID.Value == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c") && !sTabCard.Card.Task.isEditingNow)
+            if (sTabCard.Card.State.ID.Value == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c") && !sTabCard.Card.Task.isEditingNow)
             {
                 //Кнопка сохранить
                 var ButtonsSaveButton = new Button
@@ -827,7 +821,7 @@ namespace ClientApp.SystemClasses
             {
                 foreach (Role item in SystemSingleton.CurrentSession.UserRoles)
                 {
-                    if(item.ID==new Guid("9efcd5cd-bf54-47f3-95e3-2953cb235941") && (sTabCard.Card.Task.ToRoleID!=SystemSingleton.CurrentSession.ID || new PersonalRole(SystemSingleton.CurrentSession.ID).isAdmin) && !sTabCard.Card.Task.isEditingNow)
+                    if (item.ID == new Guid("9efcd5cd-bf54-47f3-95e3-2953cb235941") && (sTabCard.Card.Task.ToRoleID != SystemSingleton.CurrentSession.ID || new PersonalRole(SystemSingleton.CurrentSession.ID).isAdmin) && !sTabCard.Card.Task.isEditingNow)
                     {
                         //Кнопка delete
                         var ButtonsDeleteButton = new Button

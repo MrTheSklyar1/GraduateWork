@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Globalization;
-using System.IO;
 using ClientApp.SupportClasses;
 using System.Data.SqlClient;
 using System.ComponentModel;
@@ -151,15 +142,15 @@ namespace ClientApp
                 TabControl.SelectedIndex = 0;
                 SendInfoToBottomBar("m_tab_LogIn_LogOffCompleted");
                 EnvironmentHelper.SendLog("Log Off - " + SystemSingleton.CurrentSession.Login);
+                EnvironmentHelper.CloseAllEditingTabs();
                 SystemSingleton.CurrentSession.CloseSession();
                 LogOffItem.Visibility = Visibility.Collapsed;
                 WorkingTab.Visibility = Visibility.Collapsed;
                 menuLanguage.Visibility = Visibility.Visible;
-                EnvironmentHelper.CloseAllEditingTabs();
                 TabWorkControl.Items.Clear();
                 while (TabControl.Items.Count > 2)
                 {
-                    TabControl.Items.RemoveAt(TabControl.Items.Count-1);
+                    TabControl.Items.RemoveAt(TabControl.Items.Count - 1);
                 }
             }
         }
@@ -264,7 +255,7 @@ namespace ClientApp
 
         private void About_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("ClientApp - "+ Assembly.GetEntryAssembly().GetName().Version.ToString() + "\n\nCreatedBy - Sklyarov Nikita\n\nOrganisation - MAI", (string)FindResource("m_menu_About"), MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("ClientApp - " + Assembly.GetEntryAssembly().GetName().Version.ToString() + "\n\nCreatedBy - Sklyarov Nikita\n\nOrganisation - MAI", (string)FindResource("m_menu_About"), MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

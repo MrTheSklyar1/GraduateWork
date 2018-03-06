@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -25,7 +21,7 @@ namespace ClientApp.SystemClasses
                 LastName = "";
                 FullName = "";
                 UserRoles = new List<Role>();
-                TabItems = new Dictionary<string,STabItem>();
+                TabItems = new Dictionary<string, STabItem>();
                 TabCards = new Dictionary<string, STabCard>();
                 CertPassword = "";
             }
@@ -36,7 +32,7 @@ namespace ClientApp.SystemClasses
             public static string LastName;
             public static string FullName;
             public static List<Role> UserRoles = new List<Role>();
-            public static Dictionary<string,STabItem> TabItems = new Dictionary<string, STabItem>();
+            public static Dictionary<string, STabItem> TabItems = new Dictionary<string, STabItem>();
             public static Dictionary<string, STabCard> TabCards = new Dictionary<string, STabCard>();
             public static string CertPassword = "";
             public static bool SetCaptionToGrid(Window window, KeyValuePair<string, STabItem> item)
@@ -46,11 +42,11 @@ namespace ClientApp.SystemClasses
                     item.Value.DataGrid.Columns[1].Header =
                         (String)window.FindResource("m_column_Number");
                     item.Value.DataGrid.Columns[2].Header =
-                        (String) window.FindResource("m_column_Date");
+                        (String)window.FindResource("m_column_Date");
                     item.Value.DataGrid.Columns[3].Header =
-                        (String) window.FindResource("m_column_DocType");
+                        (String)window.FindResource("m_column_DocType");
                     item.Value.DataGrid.Columns[4].Header =
-                        (String) window.FindResource("m_column_FromPersonalName");
+                        (String)window.FindResource("m_column_FromPersonalName");
                     if (item.Key == StaticTypes.CompletedWorkTab)
                     {
                         item.Value.DataGrid.Columns[5].Header =

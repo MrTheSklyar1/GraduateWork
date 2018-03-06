@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ClientApp.SupportClasses
+﻿namespace ClientApp.SupportClasses
 {
     //Табуляция нужна для визуального понимания
     public static class CardViewStruct
@@ -64,6 +58,5 @@ namespace ClientApp.SupportClasses
                         public const string ButtonsSaveButton = "ButtonsSaveButton";
                         public const string ButtonsDeleteButton = "ButtonsDeleteButton";
                         public const string ButtonsCloseButton = "ButtonsCloseButton";
-
     }
 }

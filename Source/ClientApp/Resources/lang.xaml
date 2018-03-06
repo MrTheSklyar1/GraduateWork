@@ -88,5 +88,4 @@
     <v:String x:Key="m_DeleteTaskQ">Are you sure, you want to delete card?</v:String>
     <v:String x:Key="m_CertPassError">Please make sure you entered a valid certificate file and password, avail attempts </v:String>
     <v:String x:Key="m_CantSaveTransaction">Can't save to database, rollback done</v:String>
-
 </ResourceDictionary>

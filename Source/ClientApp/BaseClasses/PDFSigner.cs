@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ClientApp.Elements;
 using ClientApp.SupportClasses;
 using ClientApp.SystemClasses;
 using iTextSharp.text.pdf;
-using org.bouncycastle.crypto;
 
 namespace ClientApp.BaseClasses
 {
@@ -19,8 +14,8 @@ namespace ClientApp.BaseClasses
             try
             {
                 Certificate cert = new Certificate();
-                int i=3;
-                for (i=3; i > 0; i--)
+                int i = 3;
+                for (i = 3; i > 0; i--)
                 {
                     if (SystemSingleton.CurrentSession.CertPassword == "")
                     {

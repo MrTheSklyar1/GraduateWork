@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
 using ClientApp.SystemClasses;
 
 namespace ClientApp.SupportClasses
@@ -19,8 +14,8 @@ namespace ClientApp.SupportClasses
         {
             if (sender is DataGridRow row)
             {
-                var temp = CardFactory.CreateTab(Guid.Parse(((DataRowView) row.Item).Row.ItemArray[0].ToString()));
-                if (temp!=null)
+                var temp = CardFactory.CreateTab(Guid.Parse(((DataRowView)row.Item).Row.ItemArray[0].ToString()));
+                if (temp != null)
                 {
                     if (SystemSingleton.CurrentSession.TabCards.ContainsKey(temp.Card.Task.Number))
                     {
@@ -80,8 +75,8 @@ namespace ClientApp.SupportClasses
 
         public static void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SystemSingleton.Configuration.mainWindow.Update.Visibility = 
-                SystemSingleton.Configuration.tabControl.SelectedIndex == 1 ? 
+            SystemSingleton.Configuration.mainWindow.Update.Visibility =
+                SystemSingleton.Configuration.tabControl.SelectedIndex == 1 ?
                     Visibility.Visible : Visibility.Collapsed;
         }
     }

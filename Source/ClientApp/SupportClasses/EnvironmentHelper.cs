@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using ClientApp.Elements;
 using ClientApp.SystemClasses;
@@ -316,14 +315,14 @@ namespace ClientApp.SupportClasses
             SetInfoToGridPersonal(ref SystemSingleton.CurrentSession.TabItems[StaticTypes.PersonalRole].DataGrid);
             foreach (var item in SystemSingleton.CurrentSession.TabItems)
             {
-                if (item.Key != StaticTypes.CurrentWorkTab && 
+                if (item.Key != StaticTypes.CurrentWorkTab &&
                     item.Key != StaticTypes.CompletedWorkTab &&
                     item.Key != StaticTypes.PersonalRole)
                 {
                     var temp = item.Value;
                     SetInfoToGridOther(ref temp);
                 }
-            }   
+            }
         }
     }
 }

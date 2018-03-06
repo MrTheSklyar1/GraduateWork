@@ -1,5 +1,4 @@
-﻿
-namespace ClientApp.SupportClasses
+﻿namespace ClientApp.SupportClasses
 {
     public static class StaticTypes
     {
