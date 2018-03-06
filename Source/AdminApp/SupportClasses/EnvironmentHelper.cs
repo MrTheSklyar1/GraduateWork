@@ -68,6 +68,13 @@ namespace AdminApp.SupportClasses
                 }
             }
         }
+        public static void Error(Guid CardID)
+        {
+            SendDialogBox(
+                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CardViewNotCreated") + "\n\n" + CardID.ToString(),
+                "Card Error"
+            );
+        }
         public static void SetWorkingPlace(TabControl tabControl, Window window)
         {
             var tempItem = new STabItem();

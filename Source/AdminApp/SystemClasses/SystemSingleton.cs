@@ -21,7 +21,7 @@ namespace AdminApp.SystemClasses
                 LastName = "";
                 FullName = "";
                 TabItems = new Dictionary<string, STabItem>();
-                TabCards = new Dictionary<string, STabCard>();
+                TabCards = new Dictionary<Guid, STabCard>();
             }
             public static string Login;
             public static Guid ID;
@@ -30,7 +30,7 @@ namespace AdminApp.SystemClasses
             public static string LastName;
             public static string FullName;
             public static Dictionary<string, STabItem> TabItems = new Dictionary<string, STabItem>();
-            public static Dictionary<string, STabCard> TabCards = new Dictionary<string, STabCard>();
+            public static Dictionary<Guid, STabCard> TabCards = new Dictionary<Guid, STabCard>();
             public static bool SetCaptionToGrid(Window window, KeyValuePair<string, STabItem> item)
             {
                 try

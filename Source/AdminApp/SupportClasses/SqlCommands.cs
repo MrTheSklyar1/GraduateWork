@@ -88,5 +88,12 @@
         public const string DeleteTaskAndStaff =
             @"delete from Files where ID=@TaskID; delete from Tasks where ID=@TaskID;";
             */
+        public const string SetEditingToPersonalRole =
+            @"update PersonalRoles set isEditingNow=1 where ID=@ID";
+
+        public const string LoadWorkingTypeCommand =
+            @"select ID, Name, Caption from WorkingType where ID=@ID";
+
+
     }
 }

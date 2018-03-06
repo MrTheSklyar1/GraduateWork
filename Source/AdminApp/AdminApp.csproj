@@ -58,12 +58,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BaseClasses\BaseElement.cs" />
+    <Compile Include="Elements\PersonalRoleCardFactory.cs" />
     <Compile Include="Elements\PersonalRoleCard.cs" />
     <Compile Include="Elements\STabCard.cs" />
     <Compile Include="Elements\STabItem.cs" />
     <Compile Include="Elements\WorkingType.cs" />
     <Compile Include="SupportClasses\EnvironmentHelper.cs" />
     <Compile Include="SupportClasses\Handlers.cs" />
+    <Compile Include="SupportClasses\PersonalRoleCardViewStruct.cs" />
     <Compile Include="SupportClasses\SqlCommands.cs" />
     <Compile Include="SupportClasses\StaticTypes.cs" />
     <Compile Include="SupportClasses\XMLWorker.cs" />

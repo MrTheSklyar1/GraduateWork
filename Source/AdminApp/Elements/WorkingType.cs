@@ -27,10 +27,10 @@ namespace AdminApp.Elements
             {
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
-                    using (var command = new SqlCommand(SqlCommands.LoadPersonalRoleCommand, con))
+                    using (var command = new SqlCommand(SqlCommands.LoadWorkingTypeCommand, con))
                     {
-                        command.Parameters.Add("@RoleID", SqlDbType.UniqueIdentifier);
-                        command.Parameters["@RoleID"].Value = id;
+                        command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@ID"].Value = id;
                         EnvironmentHelper.SendLogSQL(command.CommandText);
                         con.Open();
                         using (var reader = command.ExecuteReader())
@@ -46,7 +46,7 @@ namespace AdminApp.Elements
                             {
                                 EnvironmentHelper.SendDialogBox(
                                     (string)SystemSingleton.Configuration.mainWindow.FindResource("m_WorkingTypeNotFound") + "\n\n" + id.ToString(),
-                                    "Role Error"
+                                    "Working Type Error"
                                 );
                                 HasValue = false;
                             }

@@ -17,10 +17,10 @@ DECLARE @CompletedID uniqueidentifier = '530e4d08-9ef0-48ce-8bb7-f0a989ae53ae';
 DECLARE @CancelledID uniqueidentifier = '3e65b0c5-f533-4e31-956d-c2073df3e58a';
 
 insert into Roles values (@HR, 'Кадры');
-insert into StaticRoles values (NEWID(), @HR, 'HR', 'Кадры', 0);
+insert into StaticRoles values ( @HR, 'HR', 'Кадры', 0);
 insert into Roles values (@BuhUchet, 'Бухгалтерский учет');
-insert into StaticRoles values (NEWID(), @BuhUchet, 'BuhUchet', 'Бухгалтерский учет', 0);
-insert into RoleUsers values (NEWID(), @BuhUchet, @AdminID);
+insert into StaticRoles values (@BuhUchet, 'BuhUchet', 'Бухгалтерский учет', 0);
+insert into RoleUsers values ( @BuhUchet, @AdminID);
 insert into DocTypes values (@DocID, '2NDFL', '2 НДФЛ','2НДФЛ|2-НДФЛ|Налоговая информация|НДФЛ', 0);
 insert into Tasks values (@TaskID2, '2018-03-0001', @AdminID, 'Admin A.', @AdminID, 'Admin A.',SYSDATETIME(), @DocID, @WorkID,'Test doc', NULL, NULL, NULL, 0);
 insert into Tasks values (@TaskID, '2018-03-0002', @AdminID, 'Admin A.', @BuhUchet, 'Бухгалтерский учет',SYSDATETIME(), @DocID, @WorkID,'Test doc2', 'Resp 2', NULL, NULL, 0);

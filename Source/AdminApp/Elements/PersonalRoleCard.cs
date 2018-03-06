@@ -59,7 +59,7 @@ namespace AdminApp.Elements
                                 WorkingTypeID = reader.GetGuid(8);
                                 isEditingNow = reader.GetBoolean(9);
                                 HasValue = true;
-                                WorkingType = new WorkingType(id);
+                                WorkingType = new WorkingType(WorkingTypeID);
                             }
                             else
                             {

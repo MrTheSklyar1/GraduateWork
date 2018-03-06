@@ -35,7 +35,6 @@ insert into WorkingType values (@OnLeaveID, 'OnLeave', 'On leave');
 
 create table PersonalRoles
 (
-	InstanceID uniqueidentifier NOT NULL,
 	ID	uniqueidentifier NOT NULL,
 	Login nvarchar(50) NOT NULL,
 	PassWord nvarchar(512) NOT NULL,
@@ -48,39 +47,34 @@ create table PersonalRoles
 	isEditingNow bit NOT NULL
 );
 
-ALTER TABLE PersonalRoles ADD PRIMARY KEY (InstanceID);
 ALTER TABLE PersonalRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 ALTER TABLE PersonalRoles ADD FOREIGN KEY(WorkingTypeID) REFERENCES WorkingType(ID);
 
-insert into PersonalRoles values (NEWID(), @AdminID, 'Admin', 'e3afed0047b08059d0fada10f400c1e5', NULL, 'Admin A.', 'Admin', 'Admin', 1, @WorkingID, 0);
+insert into PersonalRoles values (@AdminID, 'Admin', 'e3afed0047b08059d0fada10f400c1e5', NULL, 'Admin A.', 'Admin', 'Admin', 1, @WorkingID, 0);
 
 create table StaticRoles
 (
-	InstanceID uniqueidentifier NOT NULL,
 	ID	uniqueidentifier NOT NULL,
 	Name nvarchar(50) NOT NULL,
     Caption nvarchar(50) NOT NULL,
 	isEditingNow bit NOT NULL
 );
 
-ALTER TABLE StaticRoles ADD PRIMARY KEY (InstanceID);
 ALTER TABLE StaticRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 
-insert into StaticRoles values (NEWID(), @PersonalRoleID, 'PersonalRole', 'Personal Role', 0);
-insert into StaticRoles values (NEWID(), @CardReviewerRoleID, 'CardReviewerRole', 'Card Reviewer Role', 0);
+insert into StaticRoles values (@PersonalRoleID, 'PersonalRole', 'Personal Role', 0);
+insert into StaticRoles values (@CardReviewerRoleID, 'CardReviewerRole', 'Card Reviewer Role', 0);
 
 create table RoleUsers
 (
-	ID uniqueidentifier NOT NULL,
 	RoleID	uniqueidentifier NOT NULL,
 	PersonID uniqueidentifier NOT NULL
 );
-ALTER TABLE RoleUsers ADD PRIMARY KEY (ID);
 ALTER TABLE RoleUsers ADD FOREIGN KEY(RoleID) REFERENCES Roles(ID);
 ALTER TABLE RoleUsers ADD FOREIGN KEY(PersonID) REFERENCES Roles(ID);
 
-insert into RoleUsers values (NEWID(), @PersonalRoleID, @AdminID);
-insert into RoleUsers values (NEWID(), @CardReviewerRoleID, @AdminID);
+insert into RoleUsers values (@PersonalRoleID, @AdminID);
+insert into RoleUsers values (@CardReviewerRoleID, @AdminID);
 
 create table DocTypes
 (

@@ -34,7 +34,7 @@ namespace ClientApp.SystemClasses
                     FillFourthLine(result);
                     FillFifthLine(result);
                 }
-                catch (Exception ex)
+                catch
                 {
                     Error(CardID);
                     return null;
