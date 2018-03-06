@@ -42,7 +42,7 @@
                     <MenuItem Name="menuLanguage" Header="{DynamicResource m_menu_Language}" />
                     <MenuItem Name="LogOffItem" Header="{DynamicResource m_menu_LogOff}" Visibility="Collapsed" Click="LogOff"/>
                     <MenuItem Name="Update" Header="{DynamicResource m_menu_Update}" Visibility="Collapsed" Click="UpdateButton_Click"/>
-                    <MenuItem Name="About" Header="{DynamicResource m_menu_About}" Visibility="Visible" />
+                    <MenuItem Name="About" Header="{DynamicResource m_menu_About}" Visibility="Visible" Click="About_Click"/>
                 </Menu>
             </DockPanel>
         </Grid>

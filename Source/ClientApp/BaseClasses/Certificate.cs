@@ -50,6 +50,8 @@ namespace ClientApp.BaseClasses
 
         }
 
+        public Certificate() { }
+
         public Certificate(string cpath, string cpassword)
         {
             path = cpath;

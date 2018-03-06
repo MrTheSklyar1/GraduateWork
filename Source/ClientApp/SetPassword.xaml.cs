@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClientApp.SystemClasses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,12 +27,16 @@ namespace ClientApp
 
         private void PassBoxCert_OnKeyDown(object sender, KeyEventArgs e)
         {
-            throw new NotImplementedException();
+            if (e.Key == Key.Enter)
+            {
+                CertButton_OnClick(sender, e);
+            }
         }
 
         private void CertButton_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            SystemSingleton.CurrentSession.CertPassword = PassBoxCert.Password;
+            this.Close();
         }
     }
 }

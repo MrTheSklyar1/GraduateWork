@@ -260,5 +260,10 @@ namespace ClientApp
                 EnvironmentHelper.CloseAllEditingTabs();
             }
         }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("ClientApp - V1.0\n\nCreatedBy - Sklyarov Nikita\n\nOrganisation - MAI", (string)FindResource("m_menu_About"), MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace ClientApp.Elements
         //Кнопки
         public Dictionary<string, Button> Buttons = new Dictionary<string, Button>();
         //Вкладка для основной панели
-        public TabItem TabItem; 
+        public TabItem TabItem;
         public bool ChangesState = false;
         public bool ChangesFile = false;
         public bool ChangesRespond = false;
@@ -70,7 +70,7 @@ namespace ClientApp.Elements
             ChangesFile = true;
             NewFiles.Add(newFile.FileID, newFile);
         }
-        
+
         public void SaveUpdatedCard()
         {
             MessageBoxResult dialogResult = MessageBoxResult.No;
@@ -82,14 +82,111 @@ namespace ClientApp.Elements
             }
             if (dialogResult == MessageBoxResult.Yes)
             {
+                try
+                {
+                    using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                    {
+                        con.Open();
+                        SqlTransaction transaction = con.BeginTransaction();
+
+                        SqlCommand command = con.CreateCommand();
+                        command.Transaction = transaction;
+                        try
+                        {
+                            if (ChangesState)
+                            {
+                                if (NewState.HasValue)
+                                {
+                                    if (NewState?.ID != null)
+                                    {
+                                        command.CommandText = SqlCommands.SetNewStateCommand;
+                                        command.Parameters.Add("@StateID", SqlDbType.UniqueIdentifier);
+                                        command.Parameters["@StateID"].Value = NewState.ID.Value;
+                                        command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+                                        command.Parameters["@TaskID"].Value = Card.Task.ID.Value;
+                                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                                        command.ExecuteNonQuery();
+                                        command.Parameters.Clear();
+                                    }
+                                    if (Card.Task.StateID != NewState.ID.Value && NewState.ID.Value != new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c"))
+                                    {
+                                        command.CommandText = SqlCommands.SetCompleteInfoCommand;
+                                        command.Parameters.Add("@UserID", SqlDbType.UniqueIdentifier);
+                                        command.Parameters["@UserID"].Value = SystemSingleton.CurrentSession.ID;
+                                        command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+                                        command.Parameters["@TaskID"].Value = Card.Task.ID.Value;
+                                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                                        command.ExecuteNonQuery();
+                                        command.Parameters.Clear();
+                                    }
+                                }
+                            }
+                            if (ChangesFile)
+                            {
+                                foreach (var item in DeletedFiles)
+                                {
+                                    if (Card.Files.FileDic.ContainsKey(item))
+                                    {
+                                        command.CommandText = SqlCommands.DeleteFileCommand;
+                                        command.Parameters.Add("@FileID", SqlDbType.UniqueIdentifier);
+                                        command.Parameters["@FileID"].Value = item;
+                                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                                        command.ExecuteNonQuery();
+                                        command.Parameters.Clear();
+                                    }
+                                    else if (NewFiles.ContainsKey(item))
+                                    {
+                                        if (AddedToBaseFiles.Contains(item))
+                                        {
+                                            command.CommandText = SqlCommands.DeleteFileCommand;
+                                            command.Parameters.Add("@FileID", SqlDbType.UniqueIdentifier);
+                                            command.Parameters["@FileID"].Value = item;
+                                            EnvironmentHelper.SendLogSQL(command.CommandText);
+                                            command.ExecuteNonQuery();
+                                            command.Parameters.Clear();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        throw new Exception((string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantPermanentlyDeleteFiles") + "\n" + item.ToString());
+                                    }
+                                }
+                            }
+                            if (ChangesRespond)
+                            {
+                                command.CommandText = SqlCommands.SetNewRespondCommand;
+                                command.Parameters.Add("@Respond", SqlDbType.NVarChar);
+                                command.Parameters["@Respond"].Value = NewRespond;
+                                command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+                                command.Parameters["@TaskID"].Value = Card.Task.ID.Value;
+                                EnvironmentHelper.SendLogSQL(command.CommandText);
+                                command.ExecuteNonQuery();
+                                command.Parameters.Clear();
+                            }
+                            transaction.Commit();
+                            con.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            EnvironmentHelper.SendDialogBox(
+                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantSaveTransaction") + " \n " + ex.Message,
+                                    "SQL Error"
+                                );
+                            transaction.Rollback();
+                            return;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+                }
                 if (ChangesState)
                 {
                     if (NewState.HasValue)
                     {
-                        if (NewState?.ID != null) ChangeState();
                         if (Card.Task.StateID != NewState.ID.Value && NewState.ID.Value != new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c"))
                         {
-                            SetCompletitionToTask();
                             ComboBoxes[CardViewStruct.NewStateComboBox].IsEnabled = false;
                             TextBoxes[CardViewStruct.FourthLineTextBox].IsEnabled = false;
                             Buttons[CardViewStruct.FileButton].Visibility = Visibility.Collapsed;
@@ -110,7 +207,7 @@ namespace ClientApp.Elements
                         {
                             Card.Files.FileDic.Remove(item);
                             Card.FilesControls.Remove(item);
-                            RemoveFileFromCard(item);
+                            RemoveFileFromHard(item);
                         }
                         else if (NewFiles.ContainsKey(item))
                         {
@@ -118,7 +215,7 @@ namespace ClientApp.Elements
                             NewFileControls.Remove(item);
                             if (AddedToBaseFiles.Contains(item))
                             {
-                                RemoveFileFromCard(item);
+                                RemoveFileFromHard(item);
                                 AddedToBaseFiles.Remove(item);
                             }
                         }
@@ -131,92 +228,21 @@ namespace ClientApp.Elements
                         }
                     }
                     DeletedFiles.Clear();
+                    ChangesRespond = false;
+                    ChangesState = false;
+
                     foreach (var item in NewFiles)
                     {
-                        AddFileToDataBase(item.Value);
+                        if (!AddFileToDataBase(item.Value))
+                        {
+                            ChangesFile = true; return;
+                        }
                         AddedToBaseFiles.Add(item.Key);
                     }
                 }
-                if (ChangesRespond)
-                {
-                    ChangeRespond();
-                }
-
-                ChangesRespond = false;
                 ChangesFile = false;
-                ChangesState = false;
-            }
-        }
+                SystemSingleton.CurrentSession.CertPassword = "";
 
-        private void ChangeState()
-        {
-            try
-            {
-                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
-                {
-                    using (var command = new SqlCommand(SqlCommands.SetNewStateCommand, con))
-                    {
-                        command.Parameters.Add("@StateID", SqlDbType.UniqueIdentifier);
-                        command.Parameters["@StateID"].Value = NewState.ID.Value;
-                        command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
-                        command.Parameters["@TaskID"].Value = Card.Task.ID.Value;
-                        EnvironmentHelper.SendLogSQL(command.CommandText);
-                        con.Open();
-                        int colms = command.ExecuteNonQuery();
-                        con.Close();
-                        if (colms != 0)
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            EnvironmentHelper.SendDialogBox(
-                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantSetStateToTask") + "\n" + Card.Task.ID.Value.ToString() + " <= " + NewState.ID.Value.ToString(),
-                                "SQL Error"
-                            );
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
-            }
-        }
-
-        private void ChangeRespond()
-        {
-            try
-            {
-                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
-                {
-                    using (var command = new SqlCommand(SqlCommands.SetNewRespondCommand, con))
-                    {
-                        command.Parameters.Add("@Respond", SqlDbType.NVarChar);
-                        command.Parameters["@Respond"].Value = NewRespond;
-                        command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
-                        command.Parameters["@TaskID"].Value = Card.Task.ID.Value;
-                        EnvironmentHelper.SendLogSQL(command.CommandText);
-                        con.Open();
-                        int colms = command.ExecuteNonQuery();
-                        con.Close();
-                        if (colms != 0)
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            EnvironmentHelper.SendDialogBox(
-                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantSetRespondeToTask") + "\n" + Card.Task.ID.Value.ToString(),
-                                "SQL Error"
-                            );
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
             }
         }
 
@@ -246,80 +272,8 @@ namespace ClientApp.Elements
             }
         }
 
-        private void RemoveFileFromCard(Guid FileID)
-        {
-            try
-            {
-                if (RemoveFileFromHard(FileID))
-                {
-                    using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
-                    {
-                        using (var command = new SqlCommand(SqlCommands.DeleteFileCommand, con))
-                        {
-                            command.Parameters.Add("@FileID", SqlDbType.UniqueIdentifier);
-                            command.Parameters["@FileID"].Value = FileID;
-                            EnvironmentHelper.SendLogSQL(command.CommandText);
-                            con.Open();
-                            int colms = command.ExecuteNonQuery();
-                            con.Close();
-                            if (colms != 0)
-                            {
-                                return;
-                            }
-                            else
-                            {
-                                EnvironmentHelper.SendDialogBox(
-                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_FileInBaseNotFound") + "\n" + FileID.ToString(),
-                                    "SQL Error"
-                                );
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
-            }
-        }
 
-        private void SetCompletitionToTask()
-        {
-            try
-            {
-                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
-                {
-                    using (var command = new SqlCommand(SqlCommands.SetCompleteInfoCommand, con))
-                    {
-                        command.Parameters.Add("@UserID", SqlDbType.UniqueIdentifier);
-                        command.Parameters["@UserID"].Value = SystemSingleton.CurrentSession.ID;
-                        command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
-                        command.Parameters["@TaskID"].Value = Card.Task.ID.Value;
-                        EnvironmentHelper.SendLogSQL(command.CommandText);
-                        con.Open();
-                        int colms = command.ExecuteNonQuery();
-                        con.Close();
-                        if (colms != 0)
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            EnvironmentHelper.SendDialogBox(
-                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantCompleteTaskFound") + " \n " + Card.Task.ID.Value.ToString(),
-                                "SQL Error"
-                            );
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
-            }
-        }
-
-        private void AddFileToDataBase(FileBase file)
+        private bool AddFileToDataBase(FileBase file)
         {
             try
             {
@@ -328,7 +282,7 @@ namespace ClientApp.Elements
                     SystemSingleton.Configuration.FilesPath + file.FileID + "\\" + file.Name,
                     this))
                 {
-                    return;
+                    return false;
                 }
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
@@ -346,7 +300,7 @@ namespace ClientApp.Elements
                         con.Close();
                         if (colms != 0)
                         {
-                            return;
+                            return true;
                         }
                         else
                         {
@@ -354,6 +308,7 @@ namespace ClientApp.Elements
                                 (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantSaveFile") + "\n" + file.Name,
                                 "File Error"
                             );
+                            return false;
                         }
                     }
                 }
@@ -361,6 +316,7 @@ namespace ClientApp.Elements
             catch (Exception ex)
             {
                 EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+                return false;
             }
         }
     }

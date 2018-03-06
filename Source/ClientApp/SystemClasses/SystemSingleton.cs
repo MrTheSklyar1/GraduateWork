@@ -27,6 +27,7 @@ namespace ClientApp.SystemClasses
                 UserRoles = new List<Role>();
                 TabItems = new Dictionary<string,STabItem>();
                 TabCards = new Dictionary<string, STabCard>();
+                CertPassword = "";
             }
             public static string Login;
             public static Guid ID;
@@ -37,7 +38,7 @@ namespace ClientApp.SystemClasses
             public static List<Role> UserRoles = new List<Role>();
             public static Dictionary<string,STabItem> TabItems = new Dictionary<string, STabItem>();
             public static Dictionary<string, STabCard> TabCards = new Dictionary<string, STabCard>();
-
+            public static string CertPassword = "";
             public static bool SetCaptionToGrid(Window window, KeyValuePair<string, STabItem> item)
             {
                 try

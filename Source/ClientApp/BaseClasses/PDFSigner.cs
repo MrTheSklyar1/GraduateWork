@@ -16,11 +16,38 @@ namespace ClientApp.BaseClasses
     {
         public static bool PDFSign(string inputfile, string outputfile, STabCard sTabCard)
         {
-            Certificate cert;
             try
             {
-                //TODO: окно выбора пароля
-                cert = new Certificate(SystemSingleton.Configuration.CertificatePath, "123456");
+                Certificate cert = new Certificate();
+                int i=3;
+                for (i=3; i > 0; i--)
+                {
+                    if (SystemSingleton.CurrentSession.CertPassword == "")
+                    {
+                        SetPassword window = new SetPassword();
+                        window.ShowDialog();
+                    }
+                    try
+                    {
+                        cert = new Certificate(SystemSingleton.Configuration.CertificatePath, SystemSingleton.CurrentSession.CertPassword);
+                        break;
+                    }
+                    catch
+                    {
+                        EnvironmentHelper.SendDialogBox(
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CertPassError") + (i - 1),
+                            "Certificate/Password Error"
+                        );
+                    }
+                }
+                if (i == 0)
+                {
+                    EnvironmentHelper.SendDialogBox(
+                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantSaveFile"),
+                    "File Error"
+                );
+                    return false;
+                }
                 MetaData MD = new MetaData();
                 MD.Author = SystemSingleton.CurrentSession.FullName;
                 MD.Title = sTabCard.Card.Task.Number;
