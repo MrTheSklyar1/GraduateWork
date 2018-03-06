@@ -145,7 +145,7 @@ namespace ClientApp.Elements
                                     }
                                     else
                                     {
-                                        throw new Exception((string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantPermanentlyDeleteFiles") + "\n" + item.ToString());
+                                        throw new Exception((string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantPermanentlyDeleteFiles") + "\n\n" + item.ToString());
                                     }
                                 }
                             }
@@ -166,7 +166,7 @@ namespace ClientApp.Elements
                         catch (Exception ex)
                         {
                             EnvironmentHelper.SendDialogBox(
-                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantSaveTransaction") + " \n " + ex.Message,
+                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantSaveTransaction") + " \n\n " + ex.Message,
                                     "SQL Error"
                                 );
                             transaction.Rollback();
@@ -219,7 +219,7 @@ namespace ClientApp.Elements
                         else
                         {
                             EnvironmentHelper.SendDialogBox(
-                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantPermanentlyDeleteFiles") + "\n" + item.ToString(),
+                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantPermanentlyDeleteFiles") + "\n\n" + item.ToString(),
                                 "Files Error"
                             );
                         }
@@ -302,7 +302,7 @@ namespace ClientApp.Elements
                         else
                         {
                             EnvironmentHelper.SendDialogBox(
-                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantSaveFile") + "\n" + file.Name,
+                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantSaveFile") + "\n\n" + file.Name,
                                 "File Error"
                             );
                             return false;

@@ -1,6 +1,7 @@
 ﻿using AdminApp.SystemClasses;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -13,10 +14,201 @@ namespace AdminApp.SupportClasses
 {
     public static class Handlers
     {
-
+        public static void RowPersonalRole_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("PR");
+            //if (sender is DataGridRow row)
+            //{
+            //    var temp = CardPersonalRoleFactory.CreateTab(Guid.Parse(((DataRowView)row.Item).Row.ItemArray[0].ToString()));
+            //    if (temp != null)
+            //    {
+            //        if (SystemSingleton.CurrentSession.TabCards.ContainsKey(temp.Card.Task.Number))
+            //        {
+            //            EnvironmentHelper.SendDialogBox(
+            //                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AlreadyOpened"),
+            //                "Attention"
+            //            );
+            //        }
+            //        else
+            //        {
+            //            if (temp.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c"))
+            //            {
+            //                if (temp.Card.Task.isEditingNow)
+            //                {
+            //                    EnvironmentHelper.SendDialogBox(
+            //                        (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AlreadyEditing"),
+            //                        "Attention"
+            //                    );
+            //                }
+            //                else
+            //                {
+            //                    try
+            //                    {
+            //                        using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+            //                        {
+            //                            using (var command = new SqlCommand(SqlCommands.SetEditingToPersonalRole, con))
+            //                            {
+            //                                command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+            //                                command.Parameters["@TaskID"].Value = temp.Card.Task.ID.Value;
+            //                                EnvironmentHelper.SendLogSQL(command.CommandText);
+            //                                con.Open();
+            //                                int colms = command.ExecuteNonQuery();
+            //                                con.Close();
+            //                                if (colms == 0)
+            //                                {
+            //                                    EnvironmentHelper.SendDialogBox(
+            //                                        (string)SystemSingleton.Configuration.mainWindow.FindResource(
+            //                                            "m_CantSetEditing") + "\n\n" + temp.Card.Task.ID.Value.ToString(),
+            //                                        "SQL Error"
+            //                                    );
+            //                                }
+            //                            }
+            //                        }
+            //                    }
+            //                    catch (Exception ex)
+            //                    {
+            //                        EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+            //                    }
+            //                }
+            //            }
+            //            SystemSingleton.CurrentSession.TabCards.Add(temp.Card.Task.Number, temp);
+            //            SystemSingleton.Configuration.tabControl.Items.Add(temp.TabItem);
+            //        }
+            //    }
+            //}
+        }
+        public static void RowStaticRole_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("SR");
+            //if (sender is DataGridRow row)
+            //{
+            //    var temp = CardPersonalRoleFactory.CreateTab(Guid.Parse(((DataRowView)row.Item).Row.ItemArray[0].ToString()));
+            //    if (temp != null)
+            //    {
+            //        if (SystemSingleton.CurrentSession.TabCards.ContainsKey(temp.Card.Task.Number))
+            //        {
+            //            EnvironmentHelper.SendDialogBox(
+            //                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AlreadyOpened"),
+            //                "Attention"
+            //            );
+            //        }
+            //        else
+            //        {
+            //            if (temp.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c"))
+            //            {
+            //                if (temp.Card.Task.isEditingNow)
+            //                {
+            //                    EnvironmentHelper.SendDialogBox(
+            //                        (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AlreadyEditing"),
+            //                        "Attention"
+            //                    );
+            //                }
+            //                else
+            //                {
+            //                    try
+            //                    {
+            //                        using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+            //                        {
+            //                            using (var command = new SqlCommand(SqlCommands.SetEditingToPersonalRole, con))
+            //                            {
+            //                                command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+            //                                command.Parameters["@TaskID"].Value = temp.Card.Task.ID.Value;
+            //                                EnvironmentHelper.SendLogSQL(command.CommandText);
+            //                                con.Open();
+            //                                int colms = command.ExecuteNonQuery();
+            //                                con.Close();
+            //                                if (colms == 0)
+            //                                {
+            //                                    EnvironmentHelper.SendDialogBox(
+            //                                        (string)SystemSingleton.Configuration.mainWindow.FindResource(
+            //                                            "m_CantSetEditing") + "\n\n" + temp.Card.Task.ID.Value.ToString(),
+            //                                        "SQL Error"
+            //                                    );
+            //                                }
+            //                            }
+            //                        }
+            //                    }
+            //                    catch (Exception ex)
+            //                    {
+            //                        EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+            //                    }
+            //                }
+            //            }
+            //            SystemSingleton.CurrentSession.TabCards.Add(temp.Card.Task.Number, temp);
+            //            SystemSingleton.Configuration.tabControl.Items.Add(temp.TabItem);
+            //        }
+            //    }
+            //}
+        }
+        public static void RowDocType_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("DT");
+            //if (sender is DataGridRow row)
+            //{
+            //    var temp = CardPersonalRoleFactory.CreateTab(Guid.Parse(((DataRowView)row.Item).Row.ItemArray[0].ToString()));
+            //    if (temp != null)
+            //    {
+            //        if (SystemSingleton.CurrentSession.TabCards.ContainsKey(temp.Card.Task.Number))
+            //        {
+            //            EnvironmentHelper.SendDialogBox(
+            //                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AlreadyOpened"),
+            //                "Attention"
+            //            );
+            //        }
+            //        else
+            //        {
+            //            if (temp.Card.Task.StateID == new Guid("6a52791d-7e42-42d6-a521-4252f276bb6c"))
+            //            {
+            //                if (temp.Card.Task.isEditingNow)
+            //                {
+            //                    EnvironmentHelper.SendDialogBox(
+            //                        (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AlreadyEditing"),
+            //                        "Attention"
+            //                    );
+            //                }
+            //                else
+            //                {
+            //                    try
+            //                    {
+            //                        using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+            //                        {
+            //                            using (var command = new SqlCommand(SqlCommands.SetEditingToPersonalRole, con))
+            //                            {
+            //                                command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+            //                                command.Parameters["@TaskID"].Value = temp.Card.Task.ID.Value;
+            //                                EnvironmentHelper.SendLogSQL(command.CommandText);
+            //                                con.Open();
+            //                                int colms = command.ExecuteNonQuery();
+            //                                con.Close();
+            //                                if (colms == 0)
+            //                                {
+            //                                    EnvironmentHelper.SendDialogBox(
+            //                                        (string)SystemSingleton.Configuration.mainWindow.FindResource(
+            //                                            "m_CantSetEditing") + "\n\n" + temp.Card.Task.ID.Value.ToString(),
+            //                                        "SQL Error"
+            //                                    );
+            //                                }
+            //                            }
+            //                        }
+            //                    }
+            //                    catch (Exception ex)
+            //                    {
+            //                        EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+            //                    }
+            //                }
+            //            }
+            //            SystemSingleton.CurrentSession.TabCards.Add(temp.Card.Task.Number, temp);
+            //            SystemSingleton.Configuration.tabControl.Items.Add(temp.TabItem);
+            //        }
+            //    }
+            //}
+        }
         public static void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SystemSingleton.Configuration.mainWindow.Update.Visibility =
+                SystemSingleton.Configuration.tabControl.SelectedIndex == 1 ?
+                    Visibility.Visible : Visibility.Collapsed;
+            SystemSingleton.Configuration.mainWindow.CreateNew.Visibility =
                 SystemSingleton.Configuration.tabControl.SelectedIndex == 1 ?
                     Visibility.Visible : Visibility.Collapsed;
         }

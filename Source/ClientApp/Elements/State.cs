@@ -37,7 +37,7 @@ namespace ClientApp.Elements
                             else
                             {
                                 EnvironmentHelper.SendDialogBox(
-                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_StateNotFound") + "\n" + StateID.ToString(),
+                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_StateNotFound") + "\n\n" + StateID.ToString(),
                                     "State Error"
                                 );
                                 HasValue = false;

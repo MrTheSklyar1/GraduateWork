@@ -50,7 +50,7 @@ namespace ClientApp.SupportClasses
                             {
                                 EnvironmentHelper.SendDialogBox(
                                     (string)SystemSingleton.Configuration.mainWindow.FindResource(
-                                        "m_CantSetEditing") + "\n" + item.Value.Card.Task.ID.Value.ToString(),
+                                        "m_CantSetEditing") + "\n\n" + item.Value.Card.Task.ID.Value.ToString(),
                                     "SQL Error"
                                 );
                             }
@@ -61,7 +61,7 @@ namespace ClientApp.SupportClasses
                 {
                     EnvironmentHelper.SendDialogBox(
                         (string)SystemSingleton.Configuration.mainWindow.FindResource(
-                            "m_CantSetEditing") + "\n" + item.Value.Card.Task.ID.Value.ToString(),
+                            "m_CantSetEditing") + "\n\n" + item.Value.Card.Task.ID.Value.ToString(),
                         "SQL Error"
                     );
                 }

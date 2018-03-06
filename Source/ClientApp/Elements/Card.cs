@@ -37,7 +37,7 @@ namespace ClientApp.Elements
                 }
             }
             EnvironmentHelper.SendDialogBox(
-                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CardNotCreated") + "\n" + ID.ToString(),
+                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CardNotCreated") + "\n\n" + ID.ToString(),
                 "Card Error"
             );
             HasValue = false;

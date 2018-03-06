@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using ClientApp.BaseClasses;
-using ClientApp.SupportClasses;
-using ClientApp.SystemClasses;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AdminApp.BaseClasses;
+using AdminApp.SupportClasses;
+using AdminApp.SystemClasses;
 
-namespace ClientApp.Elements
+namespace AdminApp.Elements
 {
-    public class PersonalRole : BaseElement
+    public class PersonalRoleCard : BaseElement
     {
         public string Login;
         public string PassWord;
@@ -17,8 +21,18 @@ namespace ClientApp.Elements
         public string LastName;
         public bool isAdmin;
         public Guid WorkingTypeID;
-        public PersonalRole() { }
-        public PersonalRole(Guid RoleID)
+        public bool isEditingNow;
+
+        public WorkingType WorkingType;
+
+        public PersonalRoleCard()
+        {
+            ID=new Guid();
+            WorkingType = new WorkingType();
+            WorkingTypeID = WorkingType.ID.Value;
+        }
+
+        public PersonalRoleCard(Guid id)
         {
             try
             {
@@ -27,14 +41,14 @@ namespace ClientApp.Elements
                     using (var command = new SqlCommand(SqlCommands.LoadPersonalRoleCommand, con))
                     {
                         command.Parameters.Add("@RoleID", SqlDbType.UniqueIdentifier);
-                        command.Parameters["@RoleID"].Value = RoleID;
+                        command.Parameters["@RoleID"].Value = id;
                         EnvironmentHelper.SendLogSQL(command.CommandText);
                         con.Open();
                         using (var reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                ID = RoleID;
+                                ID = id;
                                 Login = reader.GetString(1);
                                 PassWord = reader.GetString(2);
                                 TelegramID = (reader.GetInt32(3) == 0) ? (int?)null : reader.GetInt32(3);
@@ -43,12 +57,14 @@ namespace ClientApp.Elements
                                 LastName = reader.GetString(6);
                                 isAdmin = reader.GetBoolean(7);
                                 WorkingTypeID = reader.GetGuid(8);
+                                isEditingNow = reader.GetBoolean(9);
                                 HasValue = true;
+                                WorkingType = new WorkingType(id);
                             }
                             else
                             {
                                 EnvironmentHelper.SendDialogBox(
-                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_UserNotFound") + "\n\n" + RoleID.ToString(),
+                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_UserNotFound") + "\n\n" + id.ToString(),
                                     "Role Error"
                                 );
                                 HasValue = false;

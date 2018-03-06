@@ -6,7 +6,10 @@
         public const string PersonalRole = "PersonalRole";
         public const string DocType = "DocType";
         public const string StaticRoleGrid = "StaticRoleGrid";
-        public const string PersonalRoleGrid = "StaticRoleGrid";
-        public const string DocTypeGrid = "StaticRoleGrid";
+        public const string PersonalRoleGrid = "PersonalRoleGrid";
+        public const string DocTypeGrid = "DocTypeGrid";
+        public const string StaticRoleTab = "StaticRoleTab";
+        public const string PersonalRoleTab = "PersonalRoleTab";
+        public const string DocTypeTab = "DocTypeTab";
     }
 }

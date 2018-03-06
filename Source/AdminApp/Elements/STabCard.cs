@@ -8,6 +8,6 @@ namespace AdminApp.Elements
 {
     public class STabCard
     {
-        public Card Card;
+        public object Card;
     }
 }

@@ -53,7 +53,7 @@ namespace ClientApp.SupportClasses
                                             {
                                                 EnvironmentHelper.SendDialogBox(
                                                     (string)SystemSingleton.Configuration.mainWindow.FindResource(
-                                                        "m_CantSetEditing") + "\n" + temp.Card.Task.ID.Value.ToString(),
+                                                        "m_CantSetEditing") + "\n\n" + temp.Card.Task.ID.Value.ToString(),
                                                     "SQL Error"
                                                 );
                                             }

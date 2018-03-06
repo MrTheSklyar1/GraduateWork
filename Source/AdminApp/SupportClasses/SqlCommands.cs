@@ -2,16 +2,18 @@
 {
     public static class SqlCommands
     {
-        /*public const string SetInfoToGridWorkCommand =
-            @"select t.ID, t.Number, t.Date, d.Caption, t.FromPersonalName, t.ToRoleName from Tasks t 
-                inner join (
-                    select RoleID as ID from RoleUsers ru where ru.PersonID=@UserID
-                    union
-                    select ID as RoleID from PersonalRoles where ID=@UserID
-                ) temp on t.ToRoleID=temp.ID
-            inner join DocTypes d on t.DocType=d.ID where StateID='6a52791d-7e42-42d6-a521-4252f276bb6c'";
+        public const string SetInfoToGridPersonalRoles =
+            @"select t.ID, t.Login, isnull(t.TelegramID,'') as TelegramID, t.FirstName, t.LastName, d.Caption from PersonalRoles t 
+            inner join WorkingType d on t.WorkingTypeID=d.ID order by t.Login";
 
-        public const string SetInfoToGridEndWorkCommand =
+        public const string SetInfoToGridStaticRoles =
+            @"select t.ID, t.Caption from StaticRoles t 
+            where t.ID!='fffee627-a5a6-4345-bc55-8fba3709dc48' order by t.Caption";
+
+        public const string SetInfoToGridDocTypes =
+            @"select ID, Caption from DocTypes order by Caption";
+
+        /*public const string SetInfoToGridEndWorkCommand =
             @"select t.ID, t.Number, t.Date, d.Caption, t.FromPersonalName, t.ToRoleName, ts.Caption, r.Name, t.CompleteDate from Tasks t 
                 inner join (
                     select RoleID as ID from RoleUsers ru where ru.PersonID=@UserID
@@ -43,9 +45,9 @@
             @"select ID, Number, FromPersonalID, FromPersonalName, ToRoleID, ToRoleName, Date, DocType, StateID, isnull(Commentary,''), isnull(Respond,''), isnull(CompletedByID, cast(cast(0 as binary) as uniqueidentifier)), isnull(CompleteDate, convert(datetime, '2000')), MainNumber , isEditingNow
                 from Tasks where ID=@TaskID";
 
-        public const string LoadPersonalRoleCommand =
-            @"select ID, Login, PassWord, isnull(TelegramID,0), FullName, FirstName, LastName, isAdmin, WorkingTypeID from PersonalRoles where ID=@RoleID";
-
+        */public const string LoadPersonalRoleCommand =
+            @"select ID, Login, PassWord, isnull(TelegramID,0), FullName, FirstName, LastName, isAdmin, WorkingTypeID, isEditingNow from PersonalRoles where ID=@RoleID";
+        /*
         public const string LoadStaticRoleCommand =
             @"select r.ID, isnull(sr.Caption, r.Name) as Caption from StaticRoles sr
                 right join Roles r on r.ID=sr.ID where r.ID=@RoleID";

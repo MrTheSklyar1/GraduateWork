@@ -2,17 +2,36 @@
 using AdminApp.SystemClasses;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace AdminApp.SupportClasses
 {
     public static class EnvironmentHelper
     {
+        public static void CreateNew()
+        {
+            switch (SystemSingleton.Configuration.mainWindow.TabWorkControl.SelectedIndex)
+            {
+                case 0://PersonalRole
+                    MessageBox.Show("PRN");
+                    break;
+                case 1://StaticRole
+                    MessageBox.Show("SRN");
+                    break;
+                case 2://DocTypes
+                    MessageBox.Show("DTN");
+                    break;
+            }
+        }
+
         public static void SendErrorDialogBox(string message, string header, string trace)
         {
             MessageBox.Show(message, header, MessageBoxButton.OK, MessageBoxImage.Error);
@@ -51,100 +70,93 @@ namespace AdminApp.SupportClasses
         }
         public static void SetWorkingPlace(TabControl tabControl, Window window)
         {
-            //TODO: переделать
             var tempItem = new STabItem();
             tempItem.TabItem = new TabItem
             {
-                Header = (String)window.FindResource("m_tab_WorkingTab_CurrentWork"),
-                Name = StaticTypes.CurrentWorkTab,
+                Header = (String)window.FindResource("m_tab_PersonalRole"),
+                Name = StaticTypes.PersonalRoleTab,
                 Height = 40,
                 FontSize = 14
             };
             tempItem.DataGrid = new DataGrid
             {
-                Name = StaticTypes.CurrentWorkGrid,
+                Name = StaticTypes.PersonalRoleGrid,
                 SelectionMode = DataGridSelectionMode.Single,
                 CanUserAddRows = false,
                 CanUserDeleteRows = false,
                 IsReadOnly = true
             };
-            SetInfoToGridWork(ref tempItem.DataGrid);
+            SetInfoToGridPersonalRole(ref tempItem.DataGrid);
             tempItem.TabItem.Content = tempItem.DataGrid;
-            SystemSingleton.CurrentSession.TabItems.Add(StaticTypes.CurrentWorkTab, tempItem);
+            SystemSingleton.CurrentSession.TabItems.Add(StaticTypes.PersonalRoleTab, tempItem);
+            tabControl.Items.Add(tempItem.TabItem);
+            
+
+            tempItem = new STabItem();
+            tempItem.TabItem = new TabItem
+            {
+                Header = (String)window.FindResource("m_tab_StaticRole"),
+                Name = StaticTypes.StaticRoleTab,
+                Height = 40,
+                FontSize = 14
+            };
+            tempItem.DataGrid = new DataGrid
+            {
+                Name = StaticTypes.StaticRoleGrid,
+                SelectionMode = DataGridSelectionMode.Single,
+                CanUserAddRows = false,
+                CanUserDeleteRows = false,
+                IsReadOnly = true
+            };
+            SetInfoToGridStaticRole(ref tempItem.DataGrid);
+            tempItem.TabItem.Content = tempItem.DataGrid;
+            SystemSingleton.CurrentSession.TabItems.Add(StaticTypes.StaticRoleTab, tempItem);
             tabControl.Items.Add(tempItem.TabItem);
 
             tempItem = new STabItem();
             tempItem.TabItem = new TabItem
             {
-                Header = (String)window.FindResource("m_tab_WorkingTab_CompletedWork"),
-                Name = StaticTypes.CompletedWorkTab,
+                Header = (String)window.FindResource("m_tab_DocType"),
+                Name = StaticTypes.DocTypeTab,
                 Height = 40,
                 FontSize = 14
             };
             tempItem.DataGrid = new DataGrid
             {
-                Name = StaticTypes.CompletedWorkGrid,
+                Name = StaticTypes.DocTypeGrid,
                 SelectionMode = DataGridSelectionMode.Single,
                 CanUserAddRows = false,
                 CanUserDeleteRows = false,
                 IsReadOnly = true
             };
-            SetInfoToGridEndWork(ref tempItem.DataGrid);
+            SetInfoToGridDocType(ref tempItem.DataGrid);
             tempItem.TabItem.Content = tempItem.DataGrid;
-            SystemSingleton.CurrentSession.TabItems.Add(StaticTypes.CompletedWorkTab, tempItem);
+            SystemSingleton.CurrentSession.TabItems.Add(StaticTypes.DocTypeTab, tempItem);
             tabControl.Items.Add(tempItem.TabItem);
 
-            foreach (var item in SystemSingleton.CurrentSession.UserRoles)
-            {
-                if (item.ID == new Guid("9efcd5cd-bf54-47f3-95e3-2953cb235941")) continue;
-                tempItem = new STabItem();
-                tempItem.ToRole = item.ID.Value;
-                if (item.Name == StaticTypes.PersonalRole)
-                {
-                    tempItem.TabItem = new TabItem
-                    {
-                        Header = (String)window.FindResource("m_tab_" + StaticTypes.PersonalRole),
-                        Name = item.Name,
-                        Height = 40,
-                        FontSize = 14
-                    };
-                }
-                else
-                {
-                    tempItem.TabItem = new TabItem
-                    {
-                        Header = item.Caption,
-                        Name = item.Name,
-                        Height = 40,
-                        FontSize = 14
-                    };
-                }
-                tempItem.DataGrid = new DataGrid
-                {
-                    Name = item.Name,
-                    SelectionMode = DataGridSelectionMode.Single,
-                    CanUserAddRows = false,
-                    CanUserDeleteRows = false,
-                    IsReadOnly = true
-                };
-                if (item.Name == StaticTypes.PersonalRole)
-                {
-                    SetInfoToGridPersonal(ref tempItem.DataGrid);
-                }
-                else
-                {
-                    SetInfoToGridOther(ref tempItem);
-                }
-                tempItem.TabItem.Content = tempItem.DataGrid;
-                SystemSingleton.CurrentSession.TabItems.Add(item.Name, tempItem);
-                tabControl.Items.Add(tempItem.TabItem);
-            }
             foreach (var item in SystemSingleton.CurrentSession.TabItems)
             {
-                Style rowStyle = new Style(typeof(DataGridRow));
-                rowStyle.Setters.Add(new EventSetter(DataGridRow.MouseDoubleClickEvent,
-                                         new MouseButtonEventHandler(Handlers.Row_DoubleClick)));
-                item.Value.DataGrid.RowStyle = rowStyle;
+                if (item.Key == StaticTypes.PersonalRoleTab)
+                {
+                    Style rowStyle = new Style(typeof(DataGridRow));
+                    rowStyle.Setters.Add(new EventSetter(DataGridRow.MouseDoubleClickEvent,
+                        new MouseButtonEventHandler(Handlers.RowPersonalRole_DoubleClick)));
+                    item.Value.DataGrid.RowStyle = rowStyle;
+                }
+                else if (item.Key == StaticTypes.StaticRoleTab)
+                {
+                    Style rowStyle = new Style(typeof(DataGridRow));
+                    rowStyle.Setters.Add(new EventSetter(DataGridRow.MouseDoubleClickEvent,
+                        new MouseButtonEventHandler(Handlers.RowStaticRole_DoubleClick)));
+                    item.Value.DataGrid.RowStyle = rowStyle;
+                }
+                else if (item.Key == StaticTypes.DocTypeTab)
+                {
+                    Style rowStyle = new Style(typeof(DataGridRow));
+                    rowStyle.Setters.Add(new EventSetter(DataGridRow.MouseDoubleClickEvent,
+                        new MouseButtonEventHandler(Handlers.RowDocType_DoubleClick)));
+                    item.Value.DataGrid.RowStyle = rowStyle;
+                }
                 item.Value.DataGrid.AutoGeneratedColumns += (sender, args) =>
                 {
                     item.Value.DataGrid.Columns[0].Visibility = Visibility.Collapsed;
@@ -153,40 +165,19 @@ namespace AdminApp.SupportClasses
             }
         }
 
-        public static void SetInfoToGridWork(ref DataGrid dataGrid)
+        public static void SetInfoToGridPersonalRole(ref DataGrid dataGrid)
         {
             try
             {
                 SqlConnection con = new SqlConnection(SystemSingleton.Configuration.ConnectionString);
-                SqlCommand cmd = new SqlCommand(SqlCommands.SetInfoToGridWorkCommand, con);
-                cmd.Parameters.Add("@UserID", SqlDbType.UniqueIdentifier);
-                cmd.Parameters["@UserID"].Value = SystemSingleton.CurrentSession.ID;
+                SqlCommand cmd = new SqlCommand(SqlCommands.SetInfoToGridPersonalRoles, con);
                 EnvironmentHelper.SendLogSQL(cmd.CommandText);
                 SqlDataAdapter sda = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable("Tasks");
-                sda.Fill(dt);
-                dataGrid.ItemsSource = dt.DefaultView;
-            }
-            catch (Exception ex)
-            {
-                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
-            }
-        }
-        public static void SetInfoToGridEndWork(ref DataGrid dataGrid)
-        {
-            try
-            {
-                SqlConnection con = new SqlConnection(SystemSingleton.Configuration.ConnectionString);
-                SqlCommand cmd = new SqlCommand(SqlCommands.SetInfoToGridEndWorkCommand, con);
-                cmd.Parameters.Add("@UserID", SqlDbType.UniqueIdentifier);
-                cmd.Parameters["@UserID"].Value = SystemSingleton.CurrentSession.ID;
-                EnvironmentHelper.SendLogSQL(cmd.CommandText);
-                SqlDataAdapter sda = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable("Tasks");
+                DataTable dt = new DataTable("PersonalRoles");
                 sda.Fill(dt);
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    dt.Rows[i][6] = (string)SystemSingleton.Configuration.mainWindow.FindResource((string)dt.Rows[i][6]);
+                    dt.Rows[i][5] = (string)SystemSingleton.Configuration.mainWindow.FindResource((string)dt.Rows[i][5]);
                 }
                 dataGrid.ItemsSource = dt.DefaultView;
             }
@@ -195,17 +186,32 @@ namespace AdminApp.SupportClasses
                 EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
             }
         }
-        public static void SetInfoToGridPersonal(ref DataGrid dataGrid)
+        public static void SetInfoToGridStaticRole(ref DataGrid dataGrid)
         {
             try
             {
                 SqlConnection con = new SqlConnection(SystemSingleton.Configuration.ConnectionString);
-                SqlCommand cmd = new SqlCommand(SqlCommands.SetInfoToGridPersonalCommand, con);
-                cmd.Parameters.Add("@UserID", SqlDbType.UniqueIdentifier);
-                cmd.Parameters["@UserID"].Value = SystemSingleton.CurrentSession.ID;
+                SqlCommand cmd = new SqlCommand(SqlCommands.SetInfoToGridStaticRoles, con);
                 EnvironmentHelper.SendLogSQL(cmd.CommandText);
                 SqlDataAdapter sda = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable("Tasks");
+                DataTable dt = new DataTable("StaticRoles");
+                sda.Fill(dt);
+                dataGrid.ItemsSource = dt.DefaultView;
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+            }
+        }
+        public static void SetInfoToGridDocType(ref DataGrid dataGrid)
+        {
+            try
+            {
+                SqlConnection con = new SqlConnection(SystemSingleton.Configuration.ConnectionString);
+                SqlCommand cmd = new SqlCommand(SqlCommands.SetInfoToGridDocTypes, con);
+                EnvironmentHelper.SendLogSQL(cmd.CommandText);
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable("DocTypes");
                 sda.Fill(dt);
                 dataGrid.ItemsSource = dt.DefaultView;
             }
@@ -216,19 +222,9 @@ namespace AdminApp.SupportClasses
         }
         public static void UpdateView()
         {
-            SetInfoToGridWork(ref SystemSingleton.CurrentSession.TabItems[StaticTypes.CurrentWorkTab].DataGrid);
-            SetInfoToGridEndWork(ref SystemSingleton.CurrentSession.TabItems[StaticTypes.CompletedWorkTab].DataGrid);
-            SetInfoToGridPersonal(ref SystemSingleton.CurrentSession.TabItems[StaticTypes.PersonalRole].DataGrid);
-            foreach (var item in SystemSingleton.CurrentSession.TabItems)
-            {
-                if (item.Key != StaticTypes.CurrentWorkTab &&
-                    item.Key != StaticTypes.CompletedWorkTab &&
-                    item.Key != StaticTypes.PersonalRole)
-                {
-                    var temp = item.Value;
-                    SetInfoToGridOther(ref temp);
-                }
-            }
+            SetInfoToGridPersonalRole(ref SystemSingleton.CurrentSession.TabItems[StaticTypes.PersonalRoleTab].DataGrid);
+            SetInfoToGridStaticRole(ref SystemSingleton.CurrentSession.TabItems[StaticTypes.StaticRoleTab].DataGrid);
+            SetInfoToGridDocType(ref SystemSingleton.CurrentSession.TabItems[StaticTypes.DocTypeTab].DataGrid);
         }
     }
 }

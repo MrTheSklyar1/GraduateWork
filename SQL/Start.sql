@@ -87,6 +87,7 @@ create table DocTypes
 	ID uniqueidentifier NOT NULL,
 	Name nvarchar(50) NOT NULL,
 	Caption nvarchar(50) NOT NULL,
+	TagWords nvarchar(MAX) NOT NULL,
 	isEditingNow bit NOT NULL
 );
 

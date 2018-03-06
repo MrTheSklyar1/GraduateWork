@@ -35,7 +35,7 @@ namespace ClientApp.Elements
                             else
                             {
                                 EnvironmentHelper.SendDialogBox(
-                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_RoleNotFound") + "\n" + RoleID.ToString(),
+                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_RoleNotFound") + "\n\n" + RoleID.ToString(),
                                     "Role Error"
                                 );
                                 HasValue = false;

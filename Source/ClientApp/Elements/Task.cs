@@ -60,7 +60,7 @@ namespace ClientApp.Elements
                             else
                             {
                                 EnvironmentHelper.SendDialogBox(
-                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CardNotFound") + "\n" + TaskID.ToString(),
+                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CardNotFound") + "\n\n" + TaskID.ToString(),
                                     "Card Error"
                                 );
                                 HasValue = false;

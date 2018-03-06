@@ -5,12 +5,14 @@
     <v:String x:Key="m_menu_Language">Язык</v:String>
     <v:String x:Key="m_menu_LogOff">Выйти</v:String>
     <v:String x:Key="m_app_Header">Администраторское приложение</v:String>
-    <v:String x:Key="m_app_PassHeader">Окно пароля сертификата</v:String>
-    <v:String x:Key="m_app_PassBlockHeader">Пароль сертификата</v:String>
     <v:String x:Key="m_menu_About">О программе</v:String>
     <v:String x:Key="m_menu_Update">Обновить</v:String>
     <v:String x:Key="m_menu_Save">Сохранить</v:String>
     <v:String x:Key="m_menu_Open">Открыть</v:String>
+    <v:String x:Key="m_menu_CreateStaticRole">Создать статическую роль</v:String>
+    <v:String x:Key="m_menu_CreatePersonalRole">Создать персональную роль</v:String>
+    <v:String x:Key="m_menu_CreateDocType">Создать тип документа</v:String>
+    <v:String x:Key="m_menu_CreateNew">Создать новый элемент</v:String>
     <!--Вкладка Логин основные элементы-->
     <v:String x:Key="m_tab_LogIn">Вход</v:String>
     <v:String x:Key="m_tab_LogIn_LogInText">Используйте свой логин и пароль для доступа к системе</v:String>
@@ -18,8 +20,6 @@
     <v:String x:Key="m_tab_LogIn_PassWord">Пароль</v:String>
     <!--Вкладка Логин основные элементы-->
     <v:String x:Key="m_tab_WorkingTab">Рабочая область</v:String>
-    <v:String x:Key="m_tab_WorkingTab_CurrentWork">Текущие задачи</v:String>
-    <v:String x:Key="m_tab_WorkingTab_CompletedWork">Завершенные задачи</v:String>
     <!--Сообщения BottomBar-->
     <v:String x:Key="m_tab_LogIn_PasWrong">Логин или пароль неверны</v:String>
     <v:String x:Key="m_tab_LogIn_NotAdmin_PasWrong">Пользователь не является администратором</v:String>
@@ -29,21 +29,26 @@
     <v:String x:Key="m_tab_LogIn_BrokenSettingsFile">Файл настроек поврежден</v:String>
     <v:String x:Key="m_tab_LogIn_CheckConnection">Проверка соединения</v:String>
     <v:String x:Key="m_tab_LogIn_NoConnection">Нет соединения</v:String>
-    <!--Вкладки задач-->
-    <v:String x:Key="m_tab_PersonalRole">Персональные задачи</v:String>
-    <!--Столбцы-->
-    <v:String x:Key="m_column_Date">Дата</v:String>
-    <v:String x:Key="m_column_Number">Номер</v:String>
-    <v:String x:Key="m_column_DocType">Тип документа</v:String>
-    <v:String x:Key="m_column_FromPersonalName">От</v:String>
-    <v:String x:Key="m_column_ToRoleName">Назначен для</v:String>
-    <v:String x:Key="m_column_State">Состояние</v:String>
-    <v:String x:Key="m_column_CompletedBy">Завершен</v:String>
-    <v:String x:Key="m_column_CompleteDate">Дата завершения</v:String>
+    <!--Вкладки-->
+    <v:String x:Key="m_tab_PersonalRole">Персональные роли</v:String>
+    <v:String x:Key="m_tab_StaticRole">Статические роли</v:String>
+    <v:String x:Key="m_tab_DocType">Типы документов</v:String>
+    <!--Столбцы personal role-->
+    <v:String x:Key="m_column_Login">Логин</v:String>
+    <v:String x:Key="m_column_TelegramID">Telegram ID</v:String>
+    <v:String x:Key="m_column_FirstName">Имя</v:String>
+    <v:String x:Key="m_column_LastName">Фамилия</v:String>
+    <v:String x:Key="m_column_WorkingTypeID">Состояние</v:String>
+    <!--Столбцы static role и doctype-->
+    <v:String x:Key="m_column_Caption">Наименование</v:String>
     <!--Состояния-->
     <v:String x:Key="Completed">Выполнено</v:String>
     <v:String x:Key="Cancelled">Отменено</v:String>
     <v:String x:Key="Work">В работе</v:String>
+    <!--Состояния персональной роли-->
+    <v:String x:Key="Working">Работает</v:String>
+    <v:String x:Key="Dismissed">Уволен</v:String>
+    <v:String x:Key="On leave">В отпуске/Отгул</v:String>
     <!--Контролы карточки-->
     <v:String x:Key="c_CreationDate">Дата создания</v:String>
     <v:String x:Key="c_DocType">Тип документа</v:String>
@@ -64,6 +69,7 @@
     <!--Сообщения об ошибках-->
     <v:String x:Key="m_CardNotFound">Карточка не найдена</v:String>
     <v:String x:Key="m_UserNotFound">Пользователь не найден</v:String>
+    <v:String x:Key="m_WorkingTypeNotFound">Статус работы не найден</v:String>
     <v:String x:Key="m_RoleNotFound">Роль не найдена</v:String>
     <v:String x:Key="m_TypeNotFound">Тип документа не найден</v:String>
     <v:String x:Key="m_CardNotCreated">Не удалось создать карточку</v:String>

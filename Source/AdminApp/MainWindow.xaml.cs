@@ -261,7 +261,12 @@ namespace AdminApp
 
         private void About_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("ClientApp - " + Assembly.GetEntryAssembly().GetName().Version.ToString() + "\n\nCreatedBy - Sklyarov Nikita\n\nOrganisation - MAI", (string)FindResource("m_menu_About"), MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("AdminApp - " + Assembly.GetEntryAssembly().GetName().Version.ToString() + "\n\nCreatedBy - Sklyarov Nikita\n\nOrganisation - MAI", (string)FindResource("m_menu_About"), MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void CreateNew_OnClick_Click(object sender, RoutedEventArgs e)
+        {
+            EnvironmentHelper.CreateNew();
         }
     }
 }

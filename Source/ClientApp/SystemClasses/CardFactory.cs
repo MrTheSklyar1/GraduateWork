@@ -51,7 +51,7 @@ namespace ClientApp.SystemClasses
         private static void Error(Guid CardID)
         {
             EnvironmentHelper.SendDialogBox(
-                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CardViewNotCreated") + "\n" + CardID.ToString(),
+                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CardViewNotCreated") + "\n\n" + CardID.ToString(),
                 "Card Error"
             );
         }
@@ -855,7 +855,7 @@ namespace ClientApp.SystemClasses
                                             {
                                                 EnvironmentHelper.SendDialogBox(
                                                     (string)SystemSingleton.Configuration.mainWindow.FindResource(
-                                                        "m_CantDeleteTask") + "\n" + sTabCard.Card.Task.ID.Value.ToString(),
+                                                        "m_CantDeleteTask") + "\n\n" + sTabCard.Card.Task.ID.Value.ToString(),
                                                     "SQL Error"
                                                 );
                                             }
@@ -922,7 +922,7 @@ namespace ClientApp.SystemClasses
                                 {
                                     EnvironmentHelper.SendDialogBox(
                                         (string)SystemSingleton.Configuration.mainWindow.FindResource(
-                                            "m_CantSetEditing") + "\n" + sTabCard.Card.Task.ID.Value.ToString(),
+                                            "m_CantSetEditing") + "\n\n" + sTabCard.Card.Task.ID.Value.ToString(),
                                         "SQL Error"
                                     );
                                 }

@@ -36,7 +36,7 @@ namespace ClientApp.Elements
                             else
                             {
                                 EnvironmentHelper.SendDialogBox(
-                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_TypeNotFound") + "\n" + TypeID.ToString(),
+                                    (string)SystemSingleton.Configuration.mainWindow.FindResource("m_TypeNotFound") + "\n\n" + TypeID.ToString(),
                                     "Document Error"
                                 );
                                 HasValue = false;

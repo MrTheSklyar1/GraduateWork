@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AdminApp"
         mc:Ignorable="d"
-         Title="{DynamicResource m_app_Header}" MinHeight="670" MinWidth="1190" Height="675" Width="1200">
+         Title="{DynamicResource m_app_Header}" MinHeight="670" MinWidth="1190" Height="675" Width="1200" Closed="Window_Closed">
     <Window.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -36,12 +36,91 @@
                 <TabItem Name="WorkingTab" FontSize="15" Height="40" Header="{DynamicResource m_tab_WorkingTab}">
                     <TabControl TabStripPlacement="Left" Name="TabWorkControl"/>
                 </TabItem>
+                <TabItem FontSize="15" Height="40" Header="Васяпупкович В.">
+                    <StackPanel Margin="10">
+                        <DockPanel Margin="5,0,5,10">
+                            <Border CornerRadius="6" BorderBrush="LightGray" BorderThickness="2" Margin="0,0,5,0" HorizontalAlignment="Left">
+                                <DockPanel>
+                                    <TextBlock Text="Login" VerticalAlignment="Center" TextAlignment="Left" FontSize="14" Margin="5,0,5,0"/>
+                                    <TextBox Text="Тип документа большой и 11111111111111сложный" VerticalContentAlignment="Center" TextAlignment="Left" MinWidth="150" MaxWidth="300" FontSize="14" Height="40" IsReadOnly="False" MaxLength="50"/>
+                                </DockPanel>
+                            </Border>
+                            <Border CornerRadius="6" BorderBrush="LightGray" BorderThickness="2" Margin="5,0,5,0" HorizontalAlignment="Right">
+                                <DockPanel>
+                                    <TextBlock Text="Telegram ID" VerticalAlignment="Center" TextAlignment="Left" FontSize="14" Margin="5,0,5,0"/>
+                                    <TextBox Text="444444444444444444445" VerticalContentAlignment="Center" TextAlignment="Left" MinWidth="150" MaxWidth="200" FontSize="14" Height="40" IsReadOnly="False" MaxLength="20"/>
+                                </DockPanel>
+                            </Border>
+                        </DockPanel>
+                        <DockPanel Margin="5,0,5,10">
+                            <Border CornerRadius="6" BorderBrush="LightGray" BorderThickness="2" Margin="0,0,5,0" HorizontalAlignment="Left">
+                                <DockPanel>
+                                    <TextBlock Text="Password" VerticalAlignment="Center" TextAlignment="Left"  FontSize="14" Margin="5,0,5,0"/>
+                                    <PasswordBox Password="Тип документа большой и 11111111111111сложный" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" MinWidth="150" MaxWidth="300" FontSize="14" Height="40" IsEnabled="False" MaxLength="512"/>
+                                </DockPanel>
+                            </Border>
+                            <Border CornerRadius="6" BorderBrush="LightGray" BorderThickness="2" Margin="5,0,5,0" HorizontalAlignment="Left">
+                                <DockPanel>
+                                    <TextBlock Text="Repeat Password" VerticalAlignment="Center" TextAlignment="Left" FontSize="14" Margin="5,0,5,0"/>
+                                    <PasswordBox Password="Тип документа большой и 11111111111111сложный" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" MinWidth="150" MaxWidth="300" FontSize="14" Height="40" IsEnabled="False" MaxLength="512"/>
+                                </DockPanel>
+                            </Border>
+                        </DockPanel>
+                        <DockPanel Margin="5,0,5,10">
+                            <Border CornerRadius="6" BorderBrush="LightGray" BorderThickness="2" Margin="0,0,5,0" HorizontalAlignment="Left">
+                                <DockPanel>
+                                    <TextBlock Text="Last Name" VerticalAlignment="Center" TextAlignment="Left"  FontSize="14" Margin="5,0,5,0"/>
+                                    <TextBox Text="Тип документа большой и 11111111111111сложный" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" MinWidth="150" MaxWidth="300" FontSize="14" Height="40" IsReadOnly="False" MaxLength="50"/>
+                                </DockPanel>
+                            </Border>
+                            <Border CornerRadius="6" BorderBrush="LightGray" BorderThickness="2" Margin="5,0,5,0" HorizontalAlignment="Left">
+                                <DockPanel>
+                                    <TextBlock Text="First Name" VerticalAlignment="Center" TextAlignment="Left" FontSize="14" Margin="5,0,5,0"/>
+                                    <TextBox Text="Тип документа большой и 11111111111111сложный" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" MinWidth="150" MaxWidth="300" FontSize="14" Height="40" IsReadOnly="False" MaxLength="50"/>
+                                </DockPanel>
+                            </Border>
+                            <Border CornerRadius="6" BorderBrush="LightGray" BorderThickness="2" Margin="5,0,5,0" HorizontalAlignment="Right">
+                                <DockPanel>
+                                    <TextBlock Text="Full Name" VerticalAlignment="Center" TextAlignment="Left"  FontSize="14" Margin="5,0,5,0"/>
+                                    <TextBox Text="Ти64644654566511сложный" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" MinWidth="150" MaxWidth="300" FontSize="14" Height="40" IsReadOnly="True" MaxLength="100"/>
+                                </DockPanel>
+                            </Border>
+                        </DockPanel>
+                        <DockPanel>
+                            <StackPanel>
+                                <Border CornerRadius="6" BorderBrush="LightGray" BorderThickness="2" Margin="5,5,5,10" HorizontalAlignment="Left">
+                                    <DockPanel>
+                                        <TextBlock Text="Working type" VerticalAlignment="Center" TextAlignment="Left"  FontSize="14" Margin="5,0,5,0"/>
+                                        <ComboBox Text="Ти64644654566511сложный" VerticalContentAlignment="Center" HorizontalAlignment="Left" FontSize="14" Height="40" MinWidth="120" IsReadOnly="True" SelectedIndex="0">
+                                            <TextBlock Text="В отпуске" VerticalAlignment="Center" TextAlignment="Left" FontSize="14" />
+                                        </ComboBox>
+                                    </DockPanel>
+                                </Border>
+                                <Border CornerRadius="6" BorderBrush="LightGray"  BorderThickness="2" Margin="5,0,5,0" Height="40" HorizontalAlignment="Left">
+                                    <DockPanel>
+                                        <TextBlock Text="Is Admin" VerticalAlignment="Center" TextAlignment="Left" FontSize="14" Margin="5,0,5,0"/>
+                                        <CheckBox HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,5,1" IsEnabled="True"/>
+                                    </DockPanel>
+                                </Border>
+                                
+                            </StackPanel>
+                            <Border CornerRadius="6" BorderBrush="LightGray" BorderThickness="2" Margin="5,0,5,0" HorizontalAlignment="Right">
+                                <StackPanel>
+                                    <Button Width="145" Height="25" FontSize="14" Margin="5" Content="Close"/>
+                                    <Button Width="145" Height="25" FontSize="14" Margin="5" Content="Delete"/>
+                                    <Button Width="145" Height="25" FontSize="14" Margin="5" Content="Save"/>
+                                </StackPanel>
+                            </Border>
+                        </DockPanel>
+                    </StackPanel>
+                </TabItem>
             </TabControl>
             <DockPanel Grid.Row="1">
                 <Label Name="BottomBarLabel" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="15" Height="30"/>
                 <Menu Background="{x:Null}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="15">
                     <MenuItem Name="menuLanguage" Header="{DynamicResource m_menu_Language}" />
                     <MenuItem Name="LogOffItem" Header="{DynamicResource m_menu_LogOff}" Visibility="Collapsed" Click="LogOff"/>
+                    <MenuItem Name="CreateNew" Header="{DynamicResource m_menu_CreateNew}" Visibility="Collapsed" Click="CreateNew_OnClick_Click"/>
                     <MenuItem Name="Update" Header="{DynamicResource m_menu_Update}" Visibility="Collapsed" Click="UpdateButton_Click"/>
                     <MenuItem Name="About" Header="{DynamicResource m_menu_About}" Visibility="Visible" Click="About_Click"/>
                 </Menu>
