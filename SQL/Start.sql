@@ -44,28 +44,30 @@ create table PersonalRoles
 	FirstName nvarchar(50) NOT NULL,
 	LastName nvarchar(50) NOT NULL,
 	isAdmin bit NOT NULL,
-	WorkingTypeID uniqueidentifier NOT NULL
+	WorkingTypeID uniqueidentifier NOT NULL,
+	isEditingNow bit NOT NULL
 );
 
 ALTER TABLE PersonalRoles ADD PRIMARY KEY (InstanceID);
 ALTER TABLE PersonalRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 ALTER TABLE PersonalRoles ADD FOREIGN KEY(WorkingTypeID) REFERENCES WorkingType(ID);
 
-insert into PersonalRoles values (NEWID(), @AdminID, 'Admin', 'e3afed0047b08059d0fada10f400c1e5', NULL, 'Admin A.', 'Admin', 'Admin', 1, @WorkingID);
+insert into PersonalRoles values (NEWID(), @AdminID, 'Admin', 'e3afed0047b08059d0fada10f400c1e5', NULL, 'Admin A.', 'Admin', 'Admin', 1, @WorkingID, 0);
 
 create table StaticRoles
 (
 	InstanceID uniqueidentifier NOT NULL,
 	ID	uniqueidentifier NOT NULL,
 	Name nvarchar(50) NOT NULL,
-    Caption nvarchar(50) NOT NULL
+    Caption nvarchar(50) NOT NULL,
+	isEditingNow bit NOT NULL
 );
 
 ALTER TABLE StaticRoles ADD PRIMARY KEY (InstanceID);
 ALTER TABLE StaticRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 
-insert into StaticRoles values (NEWID(), @PersonalRoleID, 'PersonalRole', 'Personal Role');
-insert into StaticRoles values (NEWID(), @CardReviewerRoleID, 'CardReviewerRole', 'Card Reviewer Role');
+insert into StaticRoles values (NEWID(), @PersonalRoleID, 'PersonalRole', 'Personal Role', 0);
+insert into StaticRoles values (NEWID(), @CardReviewerRoleID, 'CardReviewerRole', 'Card Reviewer Role', 0);
 
 create table RoleUsers
 (
@@ -84,7 +86,8 @@ create table DocTypes
 (
 	ID uniqueidentifier NOT NULL,
 	Name nvarchar(50) NOT NULL,
-	Caption nvarchar(50) NOT NULL
+	Caption nvarchar(50) NOT NULL,
+	isEditingNow bit NOT NULL
 );
 
 ALTER TABLE DocTypes ADD PRIMARY KEY (ID);

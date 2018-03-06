@@ -1,13 +1,92 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:v="clr-namespace:System;assembly=mscorlib">
+    <!--Основные тексты программы-->
     <v:String x:Key="m_menu_Language">Language</v:String>
+    <v:String x:Key="m_menu_LogOff">Log Off</v:String>
+    <v:String x:Key="m_app_Header">Admin App</v:String>
+    <v:String x:Key="m_app_PassHeader">Certificate password window</v:String>
+    <v:String x:Key="m_app_PassBlockHeader">Certificate password</v:String>
+    <v:String x:Key="m_menu_About">About</v:String>
+    <v:String x:Key="m_menu_Update">Update</v:String>
+    <v:String x:Key="m_menu_Save">Save</v:String>
+    <v:String x:Key="m_menu_Open">Open</v:String>
+    <!--Вкладка Логин основные элементы-->
     <v:String x:Key="m_tab_LogIn">Log In</v:String>
     <v:String x:Key="m_tab_LogIn_LogInText">Use your Login and Password to access the system</v:String>
     <v:String x:Key="m_tab_LogIn_LogIn">Login</v:String>
     <v:String x:Key="m_tab_LogIn_PassWord">Password</v:String>
+    <!--Вкладка Логин основные элементы-->
+    <v:String x:Key="m_tab_WorkingTab">Working Place</v:String>
+    <v:String x:Key="m_tab_WorkingTab_CurrentWork">Current work</v:String>
+    <v:String x:Key="m_tab_WorkingTab_CompletedWork">Completed work</v:String>
+    <!--Сообщения BottomBar-->
     <v:String x:Key="m_tab_LogIn_PasWrong">Login or Password is incorrect</v:String>
-    <v:String x:Key="m_menu_LogOff">Log Off</v:String>
-    <v:String x:Key="m_app_Header">Admin App</v:String>
-    <v:String x:Key="m_menu_About">About</v:String>
+    <v:String x:Key="m_tab_LogIn_NotAdmin_PasWrong">User is not Admin</v:String>
+    <v:String x:Key="m_tab_LogIn_LogOffCompleted">Log off completed</v:String>
+    <v:String x:Key="m_tab_LogIn_LogOrPassNotTyped">Login or password is not set</v:String>
+    <v:String x:Key="m_tab_LogIn_NoConnectionToDatabase">No connection to Database</v:String>
+    <v:String x:Key="m_tab_LogIn_BrokenSettingsFile">Broken Settings File</v:String>
+    <v:String x:Key="m_tab_LogIn_CheckConnection">Checking connection</v:String>
+    <v:String x:Key="m_tab_LogIn_NoConnection">No connection</v:String>
+    <!--Вкладки задач-->
+    <v:String x:Key="m_tab_PersonalRole">Personal tasks</v:String>
+    <!--Столбцы-->
+    <v:String x:Key="m_column_Date">Date</v:String>
+    <v:String x:Key="m_column_Number">Number</v:String>
+    <v:String x:Key="m_column_DocType">Document Type</v:String>
+    <v:String x:Key="m_column_FromPersonalName">From</v:String>
+    <v:String x:Key="m_column_ToRoleName">To Role</v:String>
+    <v:String x:Key="m_column_State">State</v:String>
+    <v:String x:Key="m_column_CompletedBy">Completed by</v:String>
+    <v:String x:Key="m_column_CompleteDate">Complete time</v:String>
+    <!--Состояния-->
+    <v:String x:Key="Completed">Completed</v:String>
+    <v:String x:Key="Cancelled">Cancelled</v:String>
+    <v:String x:Key="Work">Work</v:String>
+    <!--Контролы карточки-->
+    <v:String x:Key="c_CreationDate">Creation date</v:String>
+    <v:String x:Key="c_DocType">Document type</v:String>
+    <v:String x:Key="c_State">State</v:String>
+    <v:String x:Key="c_LastName">Last name</v:String>
+    <v:String x:Key="c_FirstName">First name</v:String>
+    <v:String x:Key="c_NewState">New State</v:String>
+    <v:String x:Key="c_Comment">Commentary</v:String>
+    <v:String x:Key="c_Respond">Respond</v:String>
+    <v:String x:Key="c_Files">Files</v:String>
+    <v:String x:Key="c_Delete">Delete</v:String>
+    <v:String x:Key="c_AddFile">Add file</v:String>
+    <v:String x:Key="c_CompletedDate">Completed date</v:String>
+    <v:String x:Key="c_CompletedBy">Completed by</v:String>
+    <v:String x:Key="c_SaveCard">Save card</v:String>
+    <v:String x:Key="c_DeleteCard">Delete card</v:String>
+    <v:String x:Key="c_CloseCard">Close card</v:String>
+    <!--Сообщения об ошибках-->
+    <v:String x:Key="m_CardNotFound">Card not found</v:String>
+    <v:String x:Key="m_UserNotFound">Personal role not found</v:String>
+    <v:String x:Key="m_RoleNotFound">Role not found</v:String>
+    <v:String x:Key="m_TypeNotFound">Document type not found</v:String>
+    <v:String x:Key="m_CardNotCreated">Card not created</v:String>
+    <v:String x:Key="m_CardViewNotCreated">Card view not created</v:String>
+    <v:String x:Key="m_StateNotFound">State not found</v:String>
+    <v:String x:Key="m_AlreadyOpened">Card is already opened</v:String>
+    <v:String x:Key="m_StatesNotFound">States not found</v:String>
+    <v:String x:Key="m_FileNotFoundInDirectory">File not found, check settings.xml</v:String>
+    <v:String x:Key="m_DirectoryToDeleteNotFound">Directory with file not found, check settings.xml</v:String>
+    <v:String x:Key="m_FileInBaseNotFound">File not found in database</v:String>
+    <v:String x:Key="m_AttentionHeader">Attention</v:String>
+    <v:String x:Key="m_MakeSureDeletingFile">Are you sure, you want to delete file?</v:String>
+    <v:String x:Key="m_CantSetStateToTask">Can't change task state in database</v:String>
+    <v:String x:Key="m_CantSetRespondeToTask">Can't change respond in database for task</v:String>
+    <v:String x:Key="m_CantCompleteTaskFound">Can't complete task</v:String>
+    <v:String x:Key="m_CantPermanentlyDeleteFiles">Can't delete files from card permanently</v:String>
+    <v:String x:Key="m_CantSaveFile">Can't save file, check permissions</v:String>
+    <v:String x:Key="m_MakeSureSavingCard">Are you sure, you want to save card?</v:String>
+    <v:String x:Key="m_MakeSureClosingCard">Are you sure, you want to close card without saving?</v:String>
+    <v:String x:Key="m_AlreadyEditing">Someone editing card now, and you can only see what was before</v:String>
+    <v:String x:Key="m_CantSetEditing">Can't set editing status to card</v:String>
+    <v:String x:Key="m_CantDeleteTask">Can't delete task</v:String>
+    <v:String x:Key="m_DeleteTaskQ">Are you sure, you want to delete card?</v:String>
+    <v:String x:Key="m_CertPassError">Please make sure you entered a valid certificate file and password, avail attempts</v:String>
+    <v:String x:Key="m_CantSaveTransaction">Can't save to database, rollback done</v:String>
 </ResourceDictionary>

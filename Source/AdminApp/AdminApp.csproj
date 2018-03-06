@@ -57,6 +57,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BaseClasses\BaseElement.cs" />
+    <Compile Include="Elements\Card.cs" />
+    <Compile Include="Elements\STabCard.cs" />
+    <Compile Include="Elements\STabItem.cs" />
+    <Compile Include="SupportClasses\EnvironmentHelper.cs" />
+    <Compile Include="SupportClasses\Handlers.cs" />
+    <Compile Include="SupportClasses\SqlCommands.cs" />
+    <Compile Include="SupportClasses\StaticTypes.cs" />
+    <Compile Include="SupportClasses\XMLWorker.cs" />
+    <Compile Include="SystemClasses\SystemSingleton.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -107,5 +117,6 @@
   <ItemGroup>
     <Resource Include="admin.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
