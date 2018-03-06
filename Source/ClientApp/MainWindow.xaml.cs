@@ -21,6 +21,7 @@ using System.Threading;
 using System.Security.Cryptography;
 using System.Data;
 using ClientApp.SystemClasses;
+using System.Reflection;
 
 namespace ClientApp
 {
@@ -263,7 +264,7 @@ namespace ClientApp
 
         private void About_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("ClientApp - V1.0\n\nCreatedBy - Sklyarov Nikita\n\nOrganisation - MAI", (string)FindResource("m_menu_About"), MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("ClientApp - "+ Assembly.GetEntryAssembly().GetName().Version.ToString() + "\n\nCreatedBy - Sklyarov Nikita\n\nOrganisation - MAI", (string)FindResource("m_menu_About"), MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
