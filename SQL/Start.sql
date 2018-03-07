@@ -38,7 +38,7 @@ create table PersonalRoles
 	ID	uniqueidentifier NOT NULL,
 	Login nvarchar(50) NOT NULL,
 	PassWord nvarchar(512) NOT NULL,
-	TelegramID int NULL,
+	TelegramID bigint NULL,
 	FullName nvarchar(100) NOT NULL,
 	FirstName nvarchar(50) NOT NULL,
 	LastName nvarchar(50) NOT NULL,
@@ -106,7 +106,7 @@ insert into TaskState values (@WorkID, 'Work', 'Work');
 
 create table Tasks
 (
-	MainNumber int NOT NULL IDENTITY(1,1),
+	MainNumber bigint NOT NULL IDENTITY(1,1),
 	ID	uniqueidentifier NOT NULL,
 	Number nvarchar(20) NOT NULL,
 	FromPersonalID uniqueidentifier NOT NULL,

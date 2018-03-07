@@ -97,7 +97,15 @@
     <v:String x:Key="m_AlreadyEditing">Someone editing card now, and you can only see what was before</v:String>
     <v:String x:Key="m_CantSetEditing">Can't set editing status to card</v:String>
     <v:String x:Key="m_CantDeleteTask">Can't delete task</v:String>
+    <v:String x:Key="m_CantDeleteCard">Can't delete card</v:String>
     <v:String x:Key="m_DeleteTaskQ">Are you sure, you want to delete card?</v:String>
     <v:String x:Key="m_CertPassError">Please make sure you entered a valid certificate file and password, avail attempts</v:String>
     <v:String x:Key="m_CantSaveTransaction">Can't save to database, rollback done</v:String>
+    <v:String x:Key="m_PasswordsNotEq">New passwords isn't match</v:String>
+    <v:String x:Key="m_CantDeleteCardTasks">Can't delete role with active tasks</v:String>
+    <v:String x:Key="m_CantConvert">Can't build Telegram ID</v:String>
+    <v:String x:Key="m_NullFields">All fields, except Telegram ID, must not be empty</v:String>
+    <v:String x:Key="m_CantEditMySelf">You can't edit yourself</v:String>
+    <v:String x:Key="m_NewCard">New Card</v:String>
+
 </ResourceDictionary>

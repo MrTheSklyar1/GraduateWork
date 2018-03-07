@@ -21,7 +21,22 @@ namespace AdminApp.SupportClasses
             switch (SystemSingleton.Configuration.mainWindow.TabWorkControl.SelectedIndex)
             {
                 case 0://PersonalRole
-                    MessageBox.Show("PRN");
+                    var temp = PersonalRoleCardFactory.CreateTab();
+                    if (temp != null)
+                    {
+                        if (SystemSingleton.CurrentSession.TabCards.ContainsKey(((PersonalRoleCard)temp.Card).ID.Value))
+                        {
+                            EnvironmentHelper.SendDialogBox(
+                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AlreadyOpened"),
+                                "Attention"
+                            );
+                        }
+                        else
+                        {
+                            SystemSingleton.CurrentSession.TabCards.Add(((PersonalRoleCard)temp.Card).ID.Value, temp);
+                            SystemSingleton.Configuration.tabControl.Items.Add(temp.TabItem);
+                        }
+                    }
                     break;
                 case 1://StaticRole
                     MessageBox.Show("SRN");

@@ -27,7 +27,7 @@ namespace ClientApp.SystemClasses
             }
             public static string Login;
             public static Guid ID;
-            public static int TelegramID;
+            public static long TelegramID;
             public static string FirstName;
             public static string LastName;
             public static string FullName;

@@ -17,9 +17,17 @@ namespace AdminApp.SupportClasses
     {
         public static void RowPersonalRole_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("PR");
             if (sender is DataGridRow row)
             {
+                if (Guid.Parse(((DataRowView) row.Item).Row.ItemArray[0].ToString()) ==
+                    SystemSingleton.CurrentSession.ID)
+                {
+                    EnvironmentHelper.SendDialogBox(
+                        (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantEditMySelf"),
+                        "Attention"
+                    );
+                    return;
+                }
                 var temp = PersonalRoleCardFactory.CreateTab(Guid.Parse(((DataRowView)row.Item).Row.ItemArray[0].ToString()));
                 if (temp != null)
                 {

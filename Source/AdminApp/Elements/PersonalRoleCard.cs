@@ -15,7 +15,7 @@ namespace AdminApp.Elements
     {
         public string Login;
         public string PassWord;
-        public int? TelegramID;
+        public long? TelegramID;
         public string FullName;
         public string FirstName;
         public string LastName;
@@ -28,9 +28,18 @@ namespace AdminApp.Elements
 
         public PersonalRoleCard()
         {
-            ID=new Guid();
+            ID=Guid.NewGuid();
             WorkingType = new WorkingType();
             WorkingTypeID = WorkingType.ID.Value;
+            Login = "";
+            PassWord = "";
+            TelegramID = null;
+            FullName = "_.";
+            FirstName = "";
+            LastName = "";
+            isAdmin = false;
+            isEditingNow = false;
+            HasValue = true;
         }
 
         public PersonalRoleCard(Guid id)
@@ -52,7 +61,7 @@ namespace AdminApp.Elements
                                 ID = id;
                                 Login = reader.GetString(1);
                                 PassWord = reader.GetString(2);
-                                TelegramID = (reader.GetInt32(3) == 0) ? (int?)null : reader.GetInt32(3);
+                                TelegramID = (reader.GetInt64(3) == 0) ? (long?)null : reader.GetInt64(3);
                                 FullName = reader.GetString(4);
                                 FirstName = reader.GetString(5);
                                 LastName = reader.GetString(6);

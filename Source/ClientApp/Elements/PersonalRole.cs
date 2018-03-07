@@ -11,7 +11,7 @@ namespace ClientApp.Elements
     {
         public string Login;
         public string PassWord;
-        public int? TelegramID;
+        public long? TelegramID;
         public string FullName;
         public string FirstName;
         public string LastName;
@@ -37,7 +37,7 @@ namespace ClientApp.Elements
                                 ID = RoleID;
                                 Login = reader.GetString(1);
                                 PassWord = reader.GetString(2);
-                                TelegramID = (reader.GetInt32(3) == 0) ? (int?)null : reader.GetInt32(3);
+                                TelegramID = (reader.GetInt64(3) == 0) ? (long?)null : reader.GetInt64(3);
                                 FullName = reader.GetString(4);
                                 FirstName = reader.GetString(5);
                                 LastName = reader.GetString(6);

@@ -187,7 +187,7 @@ namespace AdminApp
                                 {
                                     SystemSingleton.CurrentSession.ID = reader.GetGuid(0);
                                     hashfromsql = reader.GetString(1);
-                                    SystemSingleton.CurrentSession.TelegramID = reader.GetInt32(2);
+                                    SystemSingleton.CurrentSession.TelegramID = reader.GetInt64(2);
                                     SystemSingleton.CurrentSession.FirstName = reader.GetString(3);
                                     SystemSingleton.CurrentSession.LastName = reader.GetString(4);
                                     SystemSingleton.CurrentSession.FullName = reader.GetString(5);
@@ -202,14 +202,14 @@ namespace AdminApp
                 {
                     EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
                 }
-                if (!isAdmin)
-                {
-                    SendAttentionToBottomBar("m_tab_LogIn_NotAdmin_PasWrong");
-                    SystemSingleton.CurrentSession.CloseSession();
-                }
-                else if (SystemSingleton.CurrentSession.ID == Guid.Empty || hash != hashfromsql)
+                if (SystemSingleton.CurrentSession.ID == Guid.Empty || hash != hashfromsql)
                 {
                     SendAttentionToBottomBar("m_tab_LogIn_PasWrong");
+                    SystemSingleton.CurrentSession.CloseSession();
+                }
+                else if (!isAdmin)
+                {
+                    SendAttentionToBottomBar("m_tab_LogIn_NotAdmin_PasWrong");
                     SystemSingleton.CurrentSession.CloseSession();
                 }
                 else

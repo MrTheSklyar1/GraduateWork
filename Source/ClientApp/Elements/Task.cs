@@ -9,7 +9,7 @@ namespace ClientApp.Elements
 {
     public class Task : BaseElement
     {
-        public int MainNumber;
+        public long MainNumber;
         public string Number;
         public Guid FromPersonalID;
         public string FromPersonalName;
@@ -53,7 +53,7 @@ namespace ClientApp.Elements
                                 Respond = reader.GetString(10);
                                 CompletedByID = (reader.GetGuid(11) == Guid.Empty) ? (Guid?)null : reader.GetGuid(11);
                                 CompletedDate = (reader.GetDateTime(12).Year == 2000) ? (DateTime?)null : reader.GetDateTime(12);
-                                MainNumber = reader.GetInt32(13);
+                                MainNumber = reader.GetInt64(13);
                                 isEditingNow = reader.GetBoolean(14);
                                 HasValue = true;
                             }

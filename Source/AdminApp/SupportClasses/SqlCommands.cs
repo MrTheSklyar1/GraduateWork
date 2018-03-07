@@ -13,6 +13,12 @@
         public const string SetInfoToGridDocTypes =
             @"select ID, Caption from DocTypes order by Caption";
 
+        public const string DeletePersonalRole =
+            @"delete from PersonalRoles where ID=@ID";
+
+        public const string CheckDeletePersonalRole =
+            @"select * from Tasks where ToRoleID=@ID and StateID='6a52791d-7e42-42d6-a521-4252f276bb6c'";
+
         /*public const string SetInfoToGridEndWorkCommand =
             @"select t.ID, t.Number, t.Date, d.Caption, t.FromPersonalName, t.ToRoleName, ts.Caption, r.Name, t.CompleteDate from Tasks t 
                 inner join (

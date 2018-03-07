@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using AdminApp.SupportClasses;
 
 namespace AdminApp.Elements
 {
@@ -33,5 +34,6 @@ namespace AdminApp.Elements
         public Dictionary<string, Button> Buttons = new Dictionary<string, Button>();
         //Вкладка для основной панели
         public TabItem TabItem;
+
     }
 }

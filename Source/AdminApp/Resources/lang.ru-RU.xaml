@@ -100,4 +100,10 @@
     <v:String x:Key="m_DeleteTaskQ">Вы уверены, что хотите удалить карточку?</v:String>
     <v:String x:Key="m_CertPassError">Проверьте правильность введенного пароля и сертификата, осталось попыток</v:String>
     <v:String x:Key="m_CantSaveTransaction">Не удалось сохранить данные в базу, выполнен откат</v:String>
+    <v:String x:Key="m_PasswordsNotEq">Новые пароли должны совпадать</v:String>
+    <v:String x:Key="m_CantDeleteCardTasks">Ошибка при удалении роли, пристутсвуют активные задачи</v:String>
+    <v:String x:Key="m_CantConvert">Ошибка при преобразовании Telegram ID</v:String>
+    <v:String x:Key="m_NullFields">Все поля, кроме Telegram ID, обязательны для заполнения</v:String>
+    <v:String x:Key="m_CantEditMySelf">Вы не можете редактировать себя</v:String>
+    <v:String x:Key="m_NewCard">Новая карточка</v:String>
 </ResourceDictionary>

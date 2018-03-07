@@ -186,7 +186,7 @@ namespace ClientApp
                                 {
                                     SystemSingleton.CurrentSession.ID = reader.GetGuid(0);
                                     hashfromsql = reader.GetString(1);
-                                    SystemSingleton.CurrentSession.TelegramID = reader.GetInt32(2);
+                                    SystemSingleton.CurrentSession.TelegramID = reader.GetInt64(2);
                                     SystemSingleton.CurrentSession.FirstName = reader.GetString(3);
                                     SystemSingleton.CurrentSession.LastName = reader.GetString(4);
                                     SystemSingleton.CurrentSession.FullName = reader.GetString(5);
