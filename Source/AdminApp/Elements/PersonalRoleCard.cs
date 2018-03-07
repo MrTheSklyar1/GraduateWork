@@ -23,6 +23,7 @@ namespace AdminApp.Elements
         public Guid WorkingTypeID;
         public bool isEditingNow;
 
+        public AllWorkingTypes AllWorkingTypes = new AllWorkingTypes();
         public WorkingType WorkingType;
 
         public PersonalRoleCard()

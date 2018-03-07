@@ -58,6 +58,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BaseClasses\BaseElement.cs" />
+    <Compile Include="Elements\AllWorkingTypes.cs" />
     <Compile Include="Elements\PersonalRoleCardFactory.cs" />
     <Compile Include="Elements\PersonalRoleCard.cs" />
     <Compile Include="Elements\STabCard.cs" />

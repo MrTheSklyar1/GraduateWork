@@ -55,6 +55,7 @@
     <v:String x:Key="c_State">State</v:String>
     <v:String x:Key="c_LastName">Last name</v:String>
     <v:String x:Key="c_FirstName">First name</v:String>
+    <v:String x:Key="c_FullName">Full name</v:String>
     <v:String x:Key="c_NewState">New State</v:String>
     <v:String x:Key="c_Comment">Commentary</v:String>
     <v:String x:Key="c_Respond">Respond</v:String>
@@ -68,6 +69,8 @@
     <v:String x:Key="c_CloseCard">Close card</v:String>
     <v:String x:Key="c_TelegramID">Telegram ID</v:String>
     <v:String x:Key="c_TelegramIDNULL">Empty</v:String>
+    <v:String x:Key="c_RepeatPassword">Repeat Password</v:String>
+    <v:String x:Key="c_IsAdmin">Administrator</v:String>
     <!--Сообщения об ошибках-->
     <v:String x:Key="m_CardNotFound">Card not found</v:String>
     <v:String x:Key="m_UserNotFound">Personal role not found</v:String>

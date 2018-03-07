@@ -91,9 +91,13 @@
         public const string SetEditingToPersonalRole =
             @"update PersonalRoles set isEditingNow=1 where ID=@ID";
 
+        public const string SetStopEditingToPersonalRole =
+            @"update PersonalRoles set isEditingNow=0 where ID=@ID";
+
         public const string LoadWorkingTypeCommand =
             @"select ID, Name, Caption from WorkingType where ID=@ID";
 
-
+        public const string LoadAllWorkingTypesCommand =
+            @"select ID, NAme, Caption from WorkingType";
     }
 }

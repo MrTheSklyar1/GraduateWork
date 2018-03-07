@@ -15,6 +15,10 @@ namespace AdminApp.Elements
         public Dictionary<string, TextBlock> TextBlocks = new Dictionary<string, TextBlock>();
         //Текст боксы
         public Dictionary<string, TextBox> TextBoxes = new Dictionary<string, TextBox>();
+        //Password боксы
+        public Dictionary<string, PasswordBox> PasswordBoxes = new Dictionary<string, PasswordBox>();
+        //Check box
+        public Dictionary<string, CheckBox> CheckBoxes = new Dictionary<string, CheckBox>();
         //Панели
         public Dictionary<string, DockPanel> DocPanels = new Dictionary<string, DockPanel>();
         //Границы
