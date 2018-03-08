@@ -12,6 +12,7 @@ namespace AdminApp.Elements
     {
         public string CardType;
         public object Card;
+        public bool isNew;
         //Не изменяемые блоки текста
         public Dictionary<string, TextBlock> TextBlocks = new Dictionary<string, TextBlock>();
         //Текст боксы

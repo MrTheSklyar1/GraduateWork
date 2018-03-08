@@ -83,6 +83,7 @@ namespace ClientApp.Elements
                 {
                     using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                     {
+                        SystemSingleton.Configuration.SqlConnections.Add(con);
                         con.Open();
                         SqlTransaction transaction = con.BeginTransaction();
 
@@ -283,6 +284,7 @@ namespace ClientApp.Elements
                 }
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
                     using (var command = new SqlCommand(SqlCommands.AddFileToDataBaseCommand, con))
                     {
                         command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,6 +28,7 @@ namespace ClientApp
             InitializeComponent();
             SystemSingleton.Configuration.mainWindow = this;
             SystemSingleton.Configuration.tabControl = TabControl;
+            SystemSingleton.Configuration.SqlConnections = new List<SqlConnection>();
             App.LanguageChanged += LanguageChanged;
             CultureInfo currLang = App.Language;
             menuLanguage.Items.Clear();
@@ -91,6 +93,7 @@ namespace ClientApp
             {
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
                     con.Open();
                     con.Close();
                 }
@@ -174,6 +177,7 @@ namespace ClientApp
                 {
                     using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                     {
+                        SystemSingleton.Configuration.SqlConnections.Add(con);
                         using (var command = new SqlCommand(SqlCommands.LoginCommand, con))
                         {
                             command.Parameters.Add("@LoginText", SqlDbType.NVarChar);
@@ -251,6 +255,8 @@ namespace ClientApp
             {
                 EnvironmentHelper.CloseAllEditingTabs();
             }
+
+            EnvironmentHelper.CloseAllConnections();
         }
 
         private void About_Click(object sender, RoutedEventArgs e)

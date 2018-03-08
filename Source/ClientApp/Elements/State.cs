@@ -19,6 +19,7 @@ namespace ClientApp.Elements
             {
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
                     using (var command = new SqlCommand(SqlCommands.LoadStateCommand, con))
                     {
                         command.Parameters.Add("@StateID", SqlDbType.UniqueIdentifier);

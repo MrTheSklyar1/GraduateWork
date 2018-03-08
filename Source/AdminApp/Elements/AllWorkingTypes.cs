@@ -20,6 +20,7 @@ namespace AdminApp.Elements
             {
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
                     using (var command = new SqlCommand(SqlCommands.LoadAllWorkingTypesCommand, con))
                     {
                         EnvironmentHelper.SendLogSQL(command.CommandText);

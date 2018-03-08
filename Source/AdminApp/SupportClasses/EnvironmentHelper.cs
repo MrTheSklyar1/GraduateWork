@@ -47,6 +47,15 @@ namespace AdminApp.SupportClasses
             }
         }
 
+        public static void CloseAllConnections()
+        {
+            foreach (var item in SystemSingleton.Configuration.SqlConnections)
+            {
+                if(item.State==ConnectionState.Closed) continue;
+                item.Close();
+            }
+        }
+
         public static void SendErrorDialogBox(string message, string header, string trace)
         {
             MessageBox.Show(message, header, MessageBoxButton.OK, MessageBoxImage.Error);
@@ -54,7 +63,8 @@ namespace AdminApp.SupportClasses
             {
                 sw.WriteLine(DateTime.UtcNow + " -- " + message + "\n\n" + trace);
             }
-            //TODO: Закрытие работы со вкладками
+            EnvironmentHelper.CloseAllEditingTabs();
+            CloseAllConnections();
             Application.Current.Shutdown(1);
         }
 
@@ -247,6 +257,57 @@ namespace AdminApp.SupportClasses
             SetInfoToGridPersonalRole(ref SystemSingleton.CurrentSession.TabItems[StaticTypes.PersonalRoleTab].DataGrid);
             SetInfoToGridStaticRole(ref SystemSingleton.CurrentSession.TabItems[StaticTypes.StaticRoleTab].DataGrid);
             SetInfoToGridDocType(ref SystemSingleton.CurrentSession.TabItems[StaticTypes.DocTypeTab].DataGrid);
+        }
+
+        public static void CloseAllEditingTabs()
+        {
+            foreach (var item in SystemSingleton.CurrentSession.TabCards)
+            {
+                if (item.Value.isNew) continue;
+                if (item.Value.CardType == StaticTypes.PersonalRole)
+                {
+                    try
+                    {
+                        using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                        {
+                            SystemSingleton.Configuration.SqlConnections.Add(con);
+                            using (var command = new SqlCommand(SqlCommands.SetStopEditingToPersonalRole, con))
+                            {
+                                command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                                command.Parameters["@ID"].Value = ((PersonalRoleCard)item.Value.Card).ID.Value;
+                                EnvironmentHelper.SendLogSQL(command.CommandText);
+                                con.Open();
+                                int colms = command.ExecuteNonQuery();
+                                con.Close();
+                                if (colms == 0)
+                                {
+                                    EnvironmentHelper.SendDialogBox(
+                                        (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                            "m_CantSetEditing") + "\n\n" + ((PersonalRoleCard)item.Value.Card).ID.Value.ToString(),
+                                        "SQL Error"
+                                    );
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnvironmentHelper.SendDialogBox(
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                "m_CantSetEditing") + "\n\n" + ((PersonalRoleCard)item.Value.Card).ID.Value.ToString(),
+                            "SQL Error"
+                        );
+                    }
+                }
+                else if (item.Value.CardType == StaticTypes.StaticRole)
+                {
+
+                }
+                else if (item.Value.CardType == StaticTypes.DocType)
+                {
+
+                }
+            }
         }
     }
 }

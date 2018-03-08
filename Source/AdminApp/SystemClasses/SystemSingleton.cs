@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -67,6 +68,7 @@ namespace AdminApp.SystemClasses
             public static bool SQLLog { get; set; }
             public static MainWindow mainWindow { get; set; }
             public static TabControl tabControl { get; set; }
+            public static List<SqlConnection> SqlConnections { get; set; }
         }
 
         public static class BotomTab

@@ -41,6 +41,7 @@ namespace ClientApp.SupportClasses
                                 {
                                     using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                                     {
+                                        SystemSingleton.Configuration.SqlConnections.Add(con);
                                         using (var command = new SqlCommand(SqlCommands.SetEditingToTask, con))
                                         {
                                             command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);

@@ -18,13 +18,12 @@ namespace AdminApp.Elements
     public static class PersonalRoleCardFactory
     {
         public static WorkingType SelectedType = new WorkingType();
-        public static bool isNew;
         public static STabCard CreateTab(Guid PersonalID)
         {
-            isNew = false;
             var result = new STabCard();
             result.Card = new PersonalRoleCard(PersonalID);
             result.CardType = StaticTypes.PersonalRole;
+            result.isNew = false;
             if (((PersonalRoleCard)result.Card).HasValue)
             {
                 result.TabItem = new TabItem
@@ -40,7 +39,7 @@ namespace AdminApp.Elements
                     FillSecondLine(result);
                     FillThirdLine(result);
                     FillFourthLine(result);
-                    if (isNew)
+                    if (result.isNew)
                     {
                         SetButtonsNew(result);
                     }
@@ -64,10 +63,10 @@ namespace AdminApp.Elements
         }
         public static STabCard CreateTab()
         {
-            isNew = true;
             var result = new STabCard();
             result.Card = new PersonalRoleCard();
             result.CardType = StaticTypes.PersonalRole;
+            result.isNew = true;
             if (((PersonalRoleCard)result.Card).HasValue)
             {
                 result.TabItem = new TabItem
@@ -83,7 +82,7 @@ namespace AdminApp.Elements
                     FillSecondLine(result);
                     FillThirdLine(result);
                     FillFourthLine(result);
-                    if (isNew)
+                    if (result.isNew)
                     {
                         SetButtonsNew(result);
                     }
@@ -155,9 +154,12 @@ namespace AdminApp.Elements
                     string commandtext = PrepareInsertCommand(sTabCard, ref commandInt);
                     if (commandtext == "")
                     {
+                        EnvironmentHelper.SendDialogBox(
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                "m_NullToSave"), "Fileds Info");
                         return;
                     }
-                    if (commandInt > 4)
+                    if (commandInt > 5)
                     {
                         dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureSavingCard"),
                             (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
@@ -167,6 +169,7 @@ namespace AdminApp.Elements
                     {
                         using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                         {
+                            SystemSingleton.Configuration.SqlConnections.Add(con);
                             con.Open();
                             SqlTransaction transaction = con.BeginTransaction();
                             SqlCommand command = con.CreateCommand();
@@ -192,6 +195,7 @@ namespace AdminApp.Elements
                             }
                         }
                         sTabCard.Card = new PersonalRoleCard(((PersonalRoleCard)sTabCard.Card).ID.Value);
+                        sTabCard.isNew = false;
                         ((PersonalRoleCard)sTabCard.Card).isEditingNow = false;
                         EnvironmentHelper.UpdateView();
                         RebuildView(sTabCard);
@@ -859,6 +863,7 @@ namespace AdminApp.Elements
                             commandtext += "where ID='" + ((PersonalRoleCard)sTabCard.Card).ID.Value.ToString() + "';";
                             using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                             {
+                                SystemSingleton.Configuration.SqlConnections.Add(con);
                                 con.Open();
                                 SqlTransaction transaction = con.BeginTransaction();
                                 SqlCommand command = con.CreateCommand();
@@ -919,6 +924,7 @@ namespace AdminApp.Elements
                             {
                                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                                 {
+                                    SystemSingleton.Configuration.SqlConnections.Add(con);
                                     using (var command = new SqlCommand(SqlCommands.DeletePersonalRole, con))
                                     {
                                         command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
@@ -994,6 +1000,7 @@ namespace AdminApp.Elements
                     {
                         using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                         {
+                            SystemSingleton.Configuration.SqlConnections.Add(con);
                             using (var command = new SqlCommand(SqlCommands.SetStopEditingToPersonalRole, con))
                             {
                                 command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
@@ -1031,15 +1038,16 @@ namespace AdminApp.Elements
             {
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
                     using (var command = new SqlCommand(SqlCommands.CheckDeletePersonalRole, con))
                     {
                         command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
                         command.Parameters["@ID"].Value = ID;
                         EnvironmentHelper.SendLogSQL(command.CommandText);
                         con.Open();
-                        int colms = command.ExecuteNonQuery();
+                        int colms = Convert.ToInt32(command.ExecuteScalar());
                         con.Close();
-                        if (colms == -1)
+                        if (colms == 0)
                         {
                             return true;
                         }
@@ -1099,7 +1107,7 @@ namespace AdminApp.Elements
             }
 
             bool newPassword = false;
-            if (temppassword != ((PersonalRoleCard)sTabCard.Card).PassWord)
+            if (temppasswordhash != ((PersonalRoleCard)sTabCard.Card).PassWord && temppassword != ((PersonalRoleCard)sTabCard.Card).PassWord)
             {
                 newPassword = true;
                 if (temppassword != temprepeatpassword)
@@ -1150,6 +1158,7 @@ namespace AdminApp.Elements
             if (sTabCard.TextBoxes[PersonalRoleCardViewStruct.LoginTextBox].Text != futureNewLogin)
             {
                 futureNewLogin = sTabCard.TextBoxes[PersonalRoleCardViewStruct.LoginTextBox].Text;
+                if (!CheckLogin(futureNewLogin)) return "";
                 commandtext += "Login='" + futureNewLogin + "', ";
             }
 
@@ -1199,7 +1208,6 @@ namespace AdminApp.Elements
         }
         private static string PrepareInsertCommand(STabCard sTabCard, ref int num)
         {
-            //TODO: добавить вписывание в таблицу роли и в таблицу roleusers для персональной роли
             num = 0;
             if (CheckNULL(sTabCard))
             {
@@ -1227,7 +1235,7 @@ namespace AdminApp.Elements
             }
 
             bool newPassword = false;
-            if (temppassword != ((PersonalRoleCard)sTabCard.Card).PassWord)
+            if (sTabCard.PasswordBoxes[PersonalRoleCardViewStruct.PasswordPasswordBox].Password!="")
             {
                 newPassword = true;
                 if (temppassword != temprepeatpassword)
@@ -1280,6 +1288,7 @@ namespace AdminApp.Elements
             if (sTabCard.TextBoxes[PersonalRoleCardViewStruct.LoginTextBox].Text != futureNewLogin)
             {
                 futureNewLogin = sTabCard.TextBoxes[PersonalRoleCardViewStruct.LoginTextBox].Text;
+                if(!CheckLogin(futureNewLogin)) return "";
                 commandtext += "Login, ";
                 commandvalues += "'" + futureNewLogin + "', ";
                 num++;
@@ -1301,9 +1310,8 @@ namespace AdminApp.Elements
                 num++;
 
             }
-            else if (tempTelegramID == 0)
+            else
             {
-                commandtext += "TelegramID=NULL, ";
                 commandtext += "TelegramID, ";
                 commandvalues += "NULL, ";
                 num++;
@@ -1341,10 +1349,60 @@ namespace AdminApp.Elements
                 commandvalues += isadmin + ", ";
                 num++;
             }
+            else
+            {
+                commandtext += "isAdmin, ";
+                commandvalues += "0, ";
+                num++;
+            }
             commandtext += "isEditingNow) ";
-            commandvalues += "0);";
-            return commandtext+commandvalues;
+            commandvalues += "1);";
+            string insertroles = "insert into Roles values ('"+ ((PersonalRoleCard)sTabCard.Card).ID.Value.ToString() + "', '"+ sTabCard.TextBoxes[PersonalRoleCardViewStruct.FullNameTextBox].Text + "');";
+            string inserttostatic = "insert into RoleUsers values ('fffee627-a5a6-4345-bc55-8fba3709dc48', '"+ ((PersonalRoleCard)sTabCard.Card).ID.Value.ToString() + "');";
+            sTabCard.PasswordBoxes[PersonalRoleCardViewStruct.PasswordPasswordBox].Password = temppassword;
+            sTabCard.PasswordBoxes[PersonalRoleCardViewStruct.RepeatPasswordPasswordBox].Password = temppassword;
+            return insertroles+commandtext+commandvalues+inserttostatic;
         }
+
+        private static bool CheckLogin(string login)
+        {
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.CheckLoginCommand, con))
+                    {
+                        command.Parameters.Add("@Login", SqlDbType.NVarChar);
+                        command.Parameters["@Login"].Value = login;
+                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                        con.Open();
+                        int colms = Convert.ToInt32(command.ExecuteScalar());
+                        con.Close();
+                        if (colms > 0)
+                        {
+                            EnvironmentHelper.SendDialogBox(
+                                (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                    "m_CantSetLogin") + "\n\n" + login,
+                                "Login Error"
+                            );
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+                return false;
+            }
+        }
+
         private static bool CheckNULL(STabCard sTabCard)
         {
             if (sTabCard.TextBoxes[PersonalRoleCardViewStruct.LoginTextBox].Text == "" ||

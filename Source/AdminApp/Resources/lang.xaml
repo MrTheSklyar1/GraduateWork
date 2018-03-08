@@ -107,5 +107,7 @@
     <v:String x:Key="m_NullFields">All fields, except Telegram ID, must not be empty</v:String>
     <v:String x:Key="m_CantEditMySelf">You can't edit yourself</v:String>
     <v:String x:Key="m_NewCard">New Card</v:String>
-
+    <v:String x:Key="m_CantSetLogin">Login already in use</v:String>
+    <v:String x:Key="m_NullToSave">Save error</v:String>
+    
 </ResourceDictionary>

@@ -30,6 +30,7 @@ namespace ClientApp.Elements
             {
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
                     using (var command = new SqlCommand(SqlCommands.LoadTaskCommand, con))
                     {
                         command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);

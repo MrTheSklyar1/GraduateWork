@@ -25,7 +25,17 @@ namespace ClientApp.SupportClasses
                 sw.WriteLine(DateTime.UtcNow + " -- " + message + "\n\n" + trace);
             }
             CloseAllEditingTabs();
+            CloseAllConnections();
             Application.Current.Shutdown(1);
+        }
+
+        public static void CloseAllConnections()
+        {
+            foreach (var item in SystemSingleton.Configuration.SqlConnections)
+            {
+                if (item.State == ConnectionState.Closed) continue;
+                item.Close();
+            }
         }
 
         public static void CloseAllEditingTabs()
@@ -38,6 +48,7 @@ namespace ClientApp.SupportClasses
                 {
                     using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                     {
+                        SystemSingleton.Configuration.SqlConnections.Add(con);
                         using (var command = new SqlCommand(SqlCommands.SetStopEditingToTask, con))
                         {
                             command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
@@ -99,6 +110,7 @@ namespace ClientApp.SupportClasses
             {
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
                     using (var command = new SqlCommand(SqlCommands.FindAllRolesCommand, con))
                     {
                         command.Parameters.Add("@UserID", SqlDbType.UniqueIdentifier);

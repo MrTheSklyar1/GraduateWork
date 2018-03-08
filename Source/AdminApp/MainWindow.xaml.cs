@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,6 +28,7 @@ namespace AdminApp
             InitializeComponent();
             SystemSingleton.Configuration.mainWindow = this;
             SystemSingleton.Configuration.tabControl = TabControl;
+            SystemSingleton.Configuration.SqlConnections = new List<SqlConnection>();
             App.LanguageChanged += LanguageChanged;
             CultureInfo currLang = App.Language;
             menuLanguage.Items.Clear();
@@ -91,6 +93,7 @@ namespace AdminApp
             {
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
                     con.Open();
                     con.Close();
                 }
@@ -142,7 +145,7 @@ namespace AdminApp
                 TabControl.SelectedIndex = 0;
                 SendInfoToBottomBar("m_tab_LogIn_LogOffCompleted");
                 EnvironmentHelper.SendLog("Log Off - " + SystemSingleton.CurrentSession.Login);
-                //TODO: EnvironmentHelper.CloseAllEditingTabs();
+                EnvironmentHelper.CloseAllEditingTabs();
                 SystemSingleton.CurrentSession.CloseSession();
                 LogOffItem.Visibility = Visibility.Collapsed;
                 WorkingTab.Visibility = Visibility.Collapsed;
@@ -175,6 +178,7 @@ namespace AdminApp
                 {
                     using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                     {
+                        SystemSingleton.Configuration.SqlConnections.Add(con);
                         using (var command = new SqlCommand(SqlCommands.LoginCommand, con))
                         {
                             command.Parameters.Add("@LoginText", SqlDbType.NVarChar);
@@ -255,7 +259,7 @@ namespace AdminApp
         {
             if (SystemSingleton.CurrentSession.Login != "")
             {
-                //TODO: EnvironmentHelper.CloseAllEditingTabs();
+                EnvironmentHelper.CloseAllEditingTabs();
             }
         }
 

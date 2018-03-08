@@ -53,6 +53,7 @@ namespace AdminApp.SupportClasses
                             {
                                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                                 {
+                                    SystemSingleton.Configuration.SqlConnections.Add(con);
                                     using (var command = new SqlCommand(SqlCommands.SetEditingToPersonalRole, con))
                                     {
                                         command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);

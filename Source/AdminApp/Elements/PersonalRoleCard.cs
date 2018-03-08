@@ -48,6 +48,7 @@ namespace AdminApp.Elements
             {
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
                     using (var command = new SqlCommand(SqlCommands.LoadPersonalRoleCommand, con))
                     {
                         command.Parameters.Add("@RoleID", SqlDbType.UniqueIdentifier);
