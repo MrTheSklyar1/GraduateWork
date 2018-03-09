@@ -889,7 +889,6 @@ namespace AdminApp.Elements
                                 }
                             }
                             sTabCard.Card = new PersonalRoleCard(((PersonalRoleCard) sTabCard.Card).ID.Value);
-                            ((PersonalRoleCard)sTabCard.Card).isEditingNow = false;
                             EnvironmentHelper.UpdateView();
                         }
 

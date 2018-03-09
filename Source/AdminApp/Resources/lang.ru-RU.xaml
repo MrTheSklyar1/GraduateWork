@@ -13,6 +13,7 @@
     <v:String x:Key="m_menu_CreatePersonalRole">Создать персональную роль</v:String>
     <v:String x:Key="m_menu_CreateDocType">Создать тип документа</v:String>
     <v:String x:Key="m_menu_CreateNew">Создать новый элемент</v:String>
+    <v:String x:Key="m_menu_ChoseRole">Выбор персональной роли</v:String>
     <!--Вкладка Логин основные элементы-->
     <v:String x:Key="m_tab_LogIn">Вход</v:String>
     <v:String x:Key="m_tab_LogIn_LogInText">Используйте свой логин и пароль для доступа к системе</v:String>
@@ -61,6 +62,7 @@
     <v:String x:Key="c_Respond">Ответ</v:String>
     <v:String x:Key="c_Files">Файлы</v:String>
     <v:String x:Key="c_Delete">Удалить</v:String>
+    <v:String x:Key="c_AddRole">Добавить персональную роль</v:String>
     <v:String x:Key="c_AddFile">Добавить файл</v:String>
     <v:String x:Key="c_CompletedDate">Дата выполнения</v:String>
     <v:String x:Key="c_CompletedBy">Выполнил</v:String>
@@ -71,6 +73,7 @@
     <v:String x:Key="c_TelegramIDNULL">Отсутствует</v:String>
     <v:String x:Key="c_RepeatPassword">Повтор пароля</v:String>
     <v:String x:Key="c_IsAdmin">Администратор</v:String>
+    <v:String x:Key="c_RolesInRole">Персональные роли, входящие в данную</v:String>
     <!--Сообщения об ошибках-->
     <v:String x:Key="m_CardNotFound">Карточка не найдена</v:String>
     <v:String x:Key="m_UserNotFound">Пользователь не найден</v:String>
@@ -87,10 +90,12 @@
     <v:String x:Key="m_FileInBaseNotFound">Файл не найден в базе данных</v:String>
     <v:String x:Key="m_AttentionHeader">Внимание</v:String>
     <v:String x:Key="m_MakeSureDeletingFile">Вы уверены, что хотите удалить файл?</v:String>
+    <v:String x:Key="m_MakeSureDeletingRoleFromStatic">Вы уверены, что хотите удалить роль из статической?</v:String>
     <v:String x:Key="m_CantSetStateToTask">Ошибка при изменении состояния задачи в базе данных</v:String>
     <v:String x:Key="m_CantSetRespondeToTask">Ошибка при изменении ответа на задачу</v:String>
     <v:String x:Key="m_CantCompleteTaskFound">Ошибка при выполнении задачи</v:String>
     <v:String x:Key="m_CantPermanentlyDeleteFiles">Ошибка при окончательном удалении файлов</v:String>
+    <v:String x:Key="m_CantPermanentlyDeleteRoles">Ошибка при окончательном удалении ролей</v:String>
     <v:String x:Key="m_CantSaveFile">Ошибка при сохранении файла, уточните права доступа</v:String>
     <v:String x:Key="m_MakeSureSavingCard">Вы уверены, что хотите сохранить карточку?</v:String>
     <v:String x:Key="m_MakeSureClosingCard">Вы уверены, что хотите закрыть карточку без сохранения?</v:String>
@@ -104,8 +109,12 @@
     <v:String x:Key="m_CantDeleteCardTasks">Ошибка при удалении роли, пристутсвуют активные задачи</v:String>
     <v:String x:Key="m_CantConvert">Ошибка при преобразовании Telegram ID</v:String>
     <v:String x:Key="m_NullFields">Все поля, кроме Telegram ID, обязательны для заполнения</v:String>
+    <v:String x:Key="m_NullFieldsRole">Все поля, кроме поля ролей в текущей роли, обязательны для заполнения</v:String>
     <v:String x:Key="m_CantEditMySelf">Вы не можете редактировать себя</v:String>
     <v:String x:Key="m_NewCard">Новая карточка</v:String>
     <v:String x:Key="m_CantSetLogin">Такой логин уже используется</v:String>
     <v:String x:Key="m_NullToSave">Ошибка при сохранении</v:String>
+    <v:String x:Key="m_NameRole">Имя (На Английском, только буквы)</v:String>
+    <v:String x:Key="m_CaptionStatic">Название</v:String>
+    <v:String x:Key="m_AlreadyIn">Роль уже есть в данной статической роли</v:String>
 </ResourceDictionary>

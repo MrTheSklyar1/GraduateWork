@@ -21,10 +21,10 @@ namespace AdminApp.SupportClasses
             switch (SystemSingleton.Configuration.mainWindow.TabWorkControl.SelectedIndex)
             {
                 case 0://PersonalRole
-                    var temp = PersonalRoleCardFactory.CreateTab();
-                    if (temp != null)
+                    var temppers = PersonalRoleCardFactory.CreateTab();
+                    if (temppers != null)
                     {
-                        if (SystemSingleton.CurrentSession.TabCards.ContainsKey(((PersonalRoleCard)temp.Card).ID.Value))
+                        if (SystemSingleton.CurrentSession.TabCards.ContainsKey(((PersonalRoleCard)temppers.Card).ID.Value))
                         {
                             EnvironmentHelper.SendDialogBox(
                                 (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AlreadyOpened"),
@@ -33,13 +33,28 @@ namespace AdminApp.SupportClasses
                         }
                         else
                         {
-                            SystemSingleton.CurrentSession.TabCards.Add(((PersonalRoleCard)temp.Card).ID.Value, temp);
-                            SystemSingleton.Configuration.tabControl.Items.Add(temp.TabItem);
+                            SystemSingleton.CurrentSession.TabCards.Add(((PersonalRoleCard)temppers.Card).ID.Value, temppers);
+                            SystemSingleton.Configuration.tabControl.Items.Add(temppers.TabItem);
                         }
                     }
                     break;
                 case 1://StaticRole
-                    MessageBox.Show("SRN");
+                    var tempstat = StaticRoleCardFactory.CreateTab();
+                    if (tempstat != null)
+                    {
+                        if (SystemSingleton.CurrentSession.TabCards.ContainsKey(((StaticRoleCard)tempstat.Card).ID.Value))
+                        {
+                            EnvironmentHelper.SendDialogBox(
+                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AlreadyOpened"),
+                                "Attention"
+                            );
+                        }
+                        else
+                        {
+                            SystemSingleton.CurrentSession.TabCards.Add(((StaticRoleCard)tempstat.Card).ID.Value, tempstat);
+                            SystemSingleton.Configuration.tabControl.Items.Add(tempstat.TabItem);
+                        }
+                    }
                     break;
                 case 2://DocTypes
                     MessageBox.Show("DTN");
@@ -301,7 +316,38 @@ namespace AdminApp.SupportClasses
                 }
                 else if (item.Value.CardType == StaticTypes.StaticRole)
                 {
-
+                    try
+                    {
+                        using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                        {
+                            SystemSingleton.Configuration.SqlConnections.Add(con);
+                            using (var command = new SqlCommand(SqlCommands.SetStopEditingToStaticRole, con))
+                            {
+                                command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                                command.Parameters["@ID"].Value = ((StaticRoleCard)item.Value.Card).ID.Value;
+                                SendLogSQL(command.CommandText);
+                                con.Open();
+                                int colms = command.ExecuteNonQuery();
+                                con.Close();
+                                if (colms == 0)
+                                {
+                                    SendDialogBox(
+                                        (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                            "m_CantSetEditing") + "\n\n" + ((StaticRoleCard)item.Value.Card).ID.Value.ToString(),
+                                        "SQL Error"
+                                    );
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnvironmentHelper.SendDialogBox(
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                "m_CantSetEditing") + "\n\n" + ((StaticRoleCard)item.Value.Card).ID.Value.ToString(),
+                            "SQL Error"
+                        );
+                    }
                 }
                 else if (item.Value.CardType == StaticTypes.DocType)
                 {

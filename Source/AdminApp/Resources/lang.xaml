@@ -13,6 +13,7 @@
     <v:String x:Key="m_menu_Save">Save</v:String>
     <v:String x:Key="m_menu_Open">Open</v:String>
     <v:String x:Key="m_menu_CreateNew">Create new</v:String>
+    <v:String x:Key="m_menu_ChoseRole">Personal Role View</v:String>
     <!--Вкладка Логин основные элементы-->
     <v:String x:Key="m_tab_LogIn">Log In</v:String>
     <v:String x:Key="m_tab_LogIn_LogInText">Use your Login and Password to access the system</v:String>
@@ -62,6 +63,7 @@
     <v:String x:Key="c_Files">Files</v:String>
     <v:String x:Key="c_Delete">Delete</v:String>
     <v:String x:Key="c_AddFile">Add file</v:String>
+    <v:String x:Key="c_AddRole">Add Personal Role</v:String>
     <v:String x:Key="c_CompletedDate">Completed date</v:String>
     <v:String x:Key="c_CompletedBy">Completed by</v:String>
     <v:String x:Key="c_SaveCard">Save card</v:String>
@@ -71,6 +73,7 @@
     <v:String x:Key="c_TelegramIDNULL">Empty</v:String>
     <v:String x:Key="c_RepeatPassword">Repeat Password</v:String>
     <v:String x:Key="c_IsAdmin">Administrator</v:String>
+    <v:String x:Key="c_RolesInRole">Personal Roles in this Static Role</v:String>
     <!--Сообщения об ошибках-->
     <v:String x:Key="m_CardNotFound">Card not found</v:String>
     <v:String x:Key="m_UserNotFound">Personal role not found</v:String>
@@ -80,6 +83,7 @@
     <v:String x:Key="m_CardNotCreated">Card not created</v:String>
     <v:String x:Key="m_CardViewNotCreated">Card view not created</v:String>
     <v:String x:Key="m_StateNotFound">State not found</v:String>
+    <v:String x:Key="m_MakeSureDeletingRoleFromStatic">Are you sure, you want to delete personal role from static role?</v:String>
     <v:String x:Key="m_AlreadyOpened">Card is already opened</v:String>
     <v:String x:Key="m_StatesNotFound">States not found</v:String>
     <v:String x:Key="m_FileNotFoundInDirectory">File not found, check settings.xml</v:String>
@@ -91,6 +95,7 @@
     <v:String x:Key="m_CantSetRespondeToTask">Can't change respond in database for task</v:String>
     <v:String x:Key="m_CantCompleteTaskFound">Can't complete task</v:String>
     <v:String x:Key="m_CantPermanentlyDeleteFiles">Can't delete files from card permanently</v:String>
+    <v:String x:Key="m_CantPermanentlyDeleteRoles">Can't delete roles from card permanently</v:String>
     <v:String x:Key="m_CantSaveFile">Can't save file, check permissions</v:String>
     <v:String x:Key="m_MakeSureSavingCard">Are you sure, you want to save card?</v:String>
     <v:String x:Key="m_MakeSureClosingCard">Are you sure, you want to close card without saving?</v:String>
@@ -105,9 +110,12 @@
     <v:String x:Key="m_CantDeleteCardTasks">Can't delete role with active tasks</v:String>
     <v:String x:Key="m_CantConvert">Can't build Telegram ID</v:String>
     <v:String x:Key="m_NullFields">All fields, except Telegram ID, must not be empty</v:String>
+    <v:String x:Key="m_NullFieldsRole">All fields, except Roles in current role, must not be empty</v:String>
     <v:String x:Key="m_CantEditMySelf">You can't edit yourself</v:String>
     <v:String x:Key="m_NewCard">New Card</v:String>
     <v:String x:Key="m_CantSetLogin">Login already in use</v:String>
     <v:String x:Key="m_NullToSave">Save error</v:String>
-    
+    <v:String x:Key="m_NameRole">Name (In English only letters)</v:String>
+    <v:String x:Key="m_CaptionStatic">Caption</v:String>
+    <v:String x:Key="m_AlreadyIn">Role already in static role</v:String>
 </ResourceDictionary>

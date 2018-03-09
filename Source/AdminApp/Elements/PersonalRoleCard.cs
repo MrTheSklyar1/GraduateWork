@@ -22,6 +22,7 @@ namespace AdminApp.Elements
         public bool isAdmin;
         public Guid WorkingTypeID;
         public bool isEditingNow;
+        
 
         public AllWorkingTypes AllWorkingTypes = new AllWorkingTypes();
         public WorkingType WorkingType;

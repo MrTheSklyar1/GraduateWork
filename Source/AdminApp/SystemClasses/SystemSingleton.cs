@@ -32,6 +32,8 @@ namespace AdminApp.SystemClasses
             public static string FullName;
             public static Dictionary<string, STabItem> TabItems = new Dictionary<string, STabItem>();
             public static Dictionary<Guid, STabCard> TabCards = new Dictionary<Guid, STabCard>();
+            public static Guid ChosenIDForStaticRole = Guid.Empty;
+            public static Window ViewChoose = null;
             public static bool SetCaptionToGrid(Window window, KeyValuePair<string, STabItem> item)
             {
                 try
