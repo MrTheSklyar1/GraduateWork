@@ -108,6 +108,7 @@
     <v:String x:Key="m_CantSaveTransaction">Can't save to database, rollback done</v:String>
     <v:String x:Key="m_PasswordsNotEq">New passwords isn't match</v:String>
     <v:String x:Key="m_CantDeleteCardTasks">Can't delete role with active tasks</v:String>
+    <v:String x:Key="m_CantDeleteCardTasksCardReview">Can't delete role with active tasks or Card Reviewer Role</v:String>
     <v:String x:Key="m_CantConvert">Can't build Telegram ID</v:String>
     <v:String x:Key="m_NullFields">All fields, except Telegram ID, must not be empty</v:String>
     <v:String x:Key="m_NullFieldsRole">All fields, except Roles in current role, must not be empty</v:String>

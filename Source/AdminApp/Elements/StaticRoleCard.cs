@@ -21,7 +21,6 @@ namespace AdminApp.Elements
         public Dictionary<Guid,PersonalRoleCard> PersonalRoleCards = new Dictionary<Guid, PersonalRoleCard>();
         public Dictionary<Guid, PersonalRoleControl> PersonalControls = new Dictionary<Guid, PersonalRoleControl>();
         public List<Guid> DeletedPersons = new List<Guid>();
-        public List<Guid> AddedToBasePersons = new List<Guid>();
         public Dictionary<Guid, PersonalRoleCard> NewPersonalRoles = new Dictionary<Guid, PersonalRoleCard>();
         public Dictionary<Guid, PersonalRoleControl> NewPersonalControls = new Dictionary<Guid, PersonalRoleControl>();
 

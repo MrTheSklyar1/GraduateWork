@@ -36,47 +36,6 @@
                 <TabItem Name="WorkingTab" FontSize="15" Height="40" Header="{DynamicResource m_tab_WorkingTab}">
                     <TabControl TabStripPlacement="Left" Name="TabWorkControl"/>
                 </TabItem>
-                <TabItem Name="StaticRole" FontSize="15" Height="40" Header="Static Role">
-                    <StackPanel Margin="10">
-                        <DockPanel Margin="5,0,5,10">
-                            <Border CornerRadius="6" BorderBrush="LightGray" BorderThickness="2" Margin="0,0,5,0" HorizontalAlignment="Left">
-                                <DockPanel>
-                                    <TextBlock Text="Name" VerticalAlignment="Center" TextAlignment="Left" FontSize="14" Margin="5,0,5,0"/>
-                                    <TextBox Text="Тип документа большой и 11111111111111сложный" VerticalContentAlignment="Center" TextAlignment="Left" MinWidth="150" MaxWidth="300" FontSize="14" Height="40" IsReadOnly="False" MaxLength="50"/>
-                                </DockPanel>
-                            </Border>
-                            <Border CornerRadius="6" BorderBrush="LightGray" BorderThickness="2" Margin="5,0,5,0" HorizontalAlignment="Left">
-                                <DockPanel>
-                                    <TextBlock Text="Caption" VerticalAlignment="Center" TextAlignment="Left" FontSize="14" Margin="5,0,5,0"/>
-                                    <TextBox Text="Тип документа большой и 11111111111111сложный" VerticalContentAlignment="Center" TextAlignment="Left" MinWidth="150" MaxWidth="300" FontSize="14" Height="40" IsReadOnly="False" MaxLength="50"/>
-                                </DockPanel>
-                            </Border>
-                        </DockPanel>
-                        <DockPanel Height="Auto" Width="Auto" Margin="5,0,5,10">
-                            <Border CornerRadius="6" BorderBrush="LightGray" Background="White" BorderThickness="2" HorizontalAlignment="Left">
-                                <StackPanel Margin="5">
-                                    <TextBlock Margin="5,0,0,0" Text="Персональные роли, входящие в данную" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" TextAlignment="Left" />
-                                    <ListView Height="200" MinWidth="500" MaxWidth="1100" Margin="5">
-                                        <DockPanel>
-                                            <Button FontSize="14" Margin="0,0,5,0" Content="Delete"/>
-                                            <TextBlock FontSize="14" Text="1234567890125235235235235235235235" VerticalAlignment="Center"/>
-                                        </DockPanel>
-                                    </ListView>
-                                    <Button Content="Добавить роль" FontSize="14" Height="25" Width="145" HorizontalAlignment="Left" Margin="5"/>
-                                </StackPanel>
-                            </Border>
-                        </DockPanel>
-                        <DockPanel Margin="5,0,5,10">
-                            <Border CornerRadius="6" BorderBrush="LightGray" BorderThickness="2" Margin="5,0,5,0" HorizontalAlignment="Right">
-                                <StackPanel>
-                                    <Button Width="145" Height="25" FontSize="14" Margin="5" Content="Save"/>
-                                    <Button Width="145" Height="25" FontSize="14" Margin="5" Content="Delete"/>
-                                    <Button Width="145" Height="25" FontSize="14" Margin="5" Content="Close"/>
-                                </StackPanel>
-                            </Border>
-                        </DockPanel>
-                    </StackPanel>
-                </TabItem>
             </TabControl>
             <DockPanel Grid.Row="1">
                 <Label Name="BottomBarLabel" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="15" Height="30"/>

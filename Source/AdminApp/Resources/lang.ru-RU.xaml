@@ -100,6 +100,7 @@
     <v:String x:Key="m_MakeSureSavingCard">Вы уверены, что хотите сохранить карточку?</v:String>
     <v:String x:Key="m_MakeSureClosingCard">Вы уверены, что хотите закрыть карточку без сохранения?</v:String>
     <v:String x:Key="m_AlreadyEditing">Кто-то сейчас редактирует карточку и вы можете видеть только ее прошлое состояние</v:String>
+    <v:String x:Key="m_CantDeleteCardTasksCardReview">Ошибка при удалении роли, пристутсвуют активные задачи либо это роль Card Reviewer</v:String>
     <v:String x:Key="m_CantSetEditing">Ошибка при попытке изменения статуса карточки на редактирование</v:String>
     <v:String x:Key="m_CantDeleteTask">Ошибка при удалении карточки</v:String>
     <v:String x:Key="m_DeleteTaskQ">Вы уверены, что хотите удалить карточку?</v:String>

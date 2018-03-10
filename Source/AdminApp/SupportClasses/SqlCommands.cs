@@ -60,5 +60,8 @@
 
         public const string DeleteRoleRoleUsers =
             @"delete from RoleUsers where RoleID=@RoleID and PersonID=@PersonID";
+
+        public const string AddRoleRoleUsers =
+            @"insert into RoleUsers values (@RoleID, @PersonID)";
     }
 }

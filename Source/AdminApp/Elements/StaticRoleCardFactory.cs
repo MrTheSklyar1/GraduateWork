@@ -143,7 +143,7 @@ namespace AdminApp.Elements
                                 "m_NullToSave"), "Fileds Info");
                         return;
                     }
-                    if (commandInt>1 || ((StaticRoleCard)sTabCard.Card).rolesChanged)
+                    if (commandInt > 1 || ((StaticRoleCard)sTabCard.Card).rolesChanged)
                     {
                         dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureSavingCard"),
                             (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
@@ -163,6 +163,17 @@ namespace AdminApp.Elements
                                 command.CommandText = commandtext;
                                 EnvironmentHelper.SendLogSQL(command.CommandText);
                                 command.ExecuteNonQuery();
+                                foreach (var item in ((StaticRoleCard)sTabCard.Card).NewPersonalRoles)
+                                {
+                                    command.CommandText = SqlCommands.AddRoleRoleUsers;
+                                    command.Parameters.Add("@RoleID", SqlDbType.UniqueIdentifier);
+                                    command.Parameters["@RoleID"].Value = ((StaticRoleCard)sTabCard.Card).ID.Value;
+                                    command.Parameters.Add("@PersonID", SqlDbType.UniqueIdentifier);
+                                    command.Parameters["@PersonID"].Value = item.Key;
+                                    EnvironmentHelper.SendLogSQL(command.CommandText);
+                                    command.ExecuteNonQuery();
+                                    command.Parameters.Clear();
+                                }
                                 transaction.Commit();
                                 con.Close();
                             }
@@ -238,7 +249,7 @@ namespace AdminApp.Elements
 
         private static void NameTextBox_LostKeyboardFocus(STabCard sTabCard)
         {
-            if(((StaticRoleCard)sTabCard.Card).isEditingNow) return;
+            if (((StaticRoleCard)sTabCard.Card).isEditingNow) return;
             string temp = sTabCard.TextBoxes[StaticRoleCardViewStruct.NameTextBox].Text;
             for (int i = 0; i < temp.Length; i++)
             {
@@ -444,11 +455,11 @@ namespace AdminApp.Elements
             sTabCard.ListViews.Add(StaticRoleCardViewStruct.RolesListView, RolesListView);
             sTabCard.StackPanels[StaticRoleCardViewStruct.RolesStackPanel].Children.Add(RolesListView);
             //Роли
-            if (((StaticRoleCard)sTabCard.Card).PersonalRoleCards.Count>0)
+            if (((StaticRoleCard)sTabCard.Card).PersonalRoleCards.Count > 0)
             {
                 foreach (var item in ((StaticRoleCard)sTabCard.Card).PersonalRoleCards)
                 {
-                    AddRoleToList(item.Value, sTabCard);
+                    AddRoleToList(item.Value, sTabCard, false);
                 }
             }
 
@@ -473,7 +484,7 @@ namespace AdminApp.Elements
                     {
                         return;
                     }
-                    else if(((StaticRoleCard)sTabCard.Card).PersonalControls.ContainsKey(SystemSingleton.CurrentSession.ChosenIDForStaticRole))
+                    else if (((StaticRoleCard)sTabCard.Card).PersonalControls.ContainsKey(SystemSingleton.CurrentSession.ChosenIDForStaticRole))
                     {
                         EnvironmentHelper.SendDialogBox(
                             (string)SystemSingleton.Configuration.mainWindow.FindResource(
@@ -482,7 +493,7 @@ namespace AdminApp.Elements
                     }
                     else
                     {
-                        AddRoleToList(new PersonalRoleCard(SystemSingleton.CurrentSession.ChosenIDForStaticRole), sTabCard);
+                        AddRoleToList(new PersonalRoleCard(SystemSingleton.CurrentSession.ChosenIDForStaticRole), sTabCard, true);
                         SystemSingleton.CurrentSession.ChosenIDForStaticRole = Guid.Empty;
                         ((StaticRoleCard)sTabCard.Card).rolesChanged = true;
                     }
@@ -494,7 +505,7 @@ namespace AdminApp.Elements
             #endregion
         }
 
-        private static void AddRoleToList(PersonalRoleCard item, STabCard sTabCard)
+        private static void AddRoleToList(PersonalRoleCard item, STabCard sTabCard, bool inwork)
         {
             var temp = new PersonalRoleControl()
             {
@@ -521,7 +532,14 @@ namespace AdminApp.Elements
                     MessageBoxButton.YesNo);
                 if (dialogResult == MessageBoxResult.Yes)
                 {
-                    sTabCard.ListViews[StaticRoleCardViewStruct.RolesListView].Items.Remove(((StaticRoleCard)sTabCard.Card).PersonalControls[item.ID.Value].DockPanel);
+                    if (inwork)
+                    {
+                        sTabCard.ListViews[StaticRoleCardViewStruct.RolesListView].Items.Remove(((StaticRoleCard)sTabCard.Card).NewPersonalControls[item.ID.Value].DockPanel);
+                    }
+                    else
+                    {
+                        sTabCard.ListViews[StaticRoleCardViewStruct.RolesListView].Items.Remove(((StaticRoleCard)sTabCard.Card).PersonalControls[item.ID.Value].DockPanel);
+                    }
                     PersonalRoleDelete(item.ID.Value, sTabCard);
                 }
                 ((StaticRoleCard)sTabCard.Card).rolesChanged = true;
@@ -592,8 +610,15 @@ namespace AdminApp.Elements
                     }
                 }
             };
-            ((StaticRoleCard)sTabCard.Card).AddedToBasePersons.Add(item.ID.Value);
-            ((StaticRoleCard)sTabCard.Card).PersonalControls.Add(item.ID.Value, temp);
+            if (inwork)
+            {
+                ((StaticRoleCard)sTabCard.Card).NewPersonalRoles.Add(item.ID.Value, item);
+                ((StaticRoleCard)sTabCard.Card).NewPersonalControls.Add(item.ID.Value, temp);
+            }
+            else
+            {
+                ((StaticRoleCard)sTabCard.Card).PersonalControls.Add(item.ID.Value, temp);
+            }
             temp.DockPanel.Children.Add(temp.Button);
             temp.DockPanel.Children.Add(temp.TextBlock);
             sTabCard.ListViews[StaticRoleCardViewStruct.RolesListView].Items.Add(temp.DockPanel);
@@ -602,8 +627,16 @@ namespace AdminApp.Elements
         private static void PersonalRoleDelete(Guid idValue, STabCard sTabCard)
         {
             ((StaticRoleCard)sTabCard.Card).DeletedPersons.Add(idValue);
-            ((StaticRoleCard) sTabCard.Card).PersonalRoleCards.Remove(idValue);
-            ((StaticRoleCard)sTabCard.Card).PersonalControls.Remove(idValue);
+            if (((StaticRoleCard) sTabCard.Card).NewPersonalRoles.ContainsKey(idValue))
+            {
+                ((StaticRoleCard) sTabCard.Card).NewPersonalRoles.Remove(idValue);
+                ((StaticRoleCard)sTabCard.Card).NewPersonalControls.Remove(idValue);
+            }
+            else if(((StaticRoleCard)sTabCard.Card).PersonalRoleCards.ContainsKey(idValue))
+            {
+                ((StaticRoleCard)sTabCard.Card).PersonalControls.Remove(idValue);
+            }
+            
         }
 
         private static void FillThirdLine(STabCard sTabCard)
@@ -695,24 +728,17 @@ namespace AdminApp.Elements
                                             command.ExecuteNonQuery();
                                             command.Parameters.Clear();
                                         }
-                                        else if (((StaticRoleCard)sTabCard.Card).NewPersonalRoles.ContainsKey(item))
-                                        {
-                                            if (((StaticRoleCard)sTabCard.Card).AddedToBasePersons.Contains(item))
-                                            {
-                                                command.CommandText = SqlCommands.DeleteRoleRoleUsers;
-                                                command.Parameters.Add("@RoleID", SqlDbType.UniqueIdentifier);
-                                                command.Parameters["@RoleID"].Value = ((StaticRoleCard)sTabCard.Card).ID.Value;
-                                                command.Parameters.Add("@PersonID", SqlDbType.UniqueIdentifier);
-                                                command.Parameters["@PersonID"].Value = item;
-                                                EnvironmentHelper.SendLogSQL(command.CommandText);
-                                                command.ExecuteNonQuery();
-                                                command.Parameters.Clear();
-                                            }
-                                        }
-                                        else
-                                        {
-                                            throw new Exception((string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantPermanentlyDeleteFiles") + "\n\n" + item.ToString());
-                                        }
+                                    }
+                                    foreach (var item in ((StaticRoleCard)sTabCard.Card).NewPersonalRoles)
+                                    {
+                                        command.CommandText = SqlCommands.AddRoleRoleUsers;
+                                        command.Parameters.Add("@RoleID", SqlDbType.UniqueIdentifier);
+                                        command.Parameters["@RoleID"].Value = ((StaticRoleCard)sTabCard.Card).ID.Value;
+                                        command.Parameters.Add("@PersonID", SqlDbType.UniqueIdentifier);
+                                        command.Parameters["@PersonID"].Value = item.Key;
+                                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                                        command.ExecuteNonQuery();
+                                        command.Parameters.Clear();
                                     }
                                     transaction.Commit();
                                     con.Close();
@@ -730,6 +756,7 @@ namespace AdminApp.Elements
                                 }
                             }
                             sTabCard.Card = new StaticRoleCard(((StaticRoleCard)sTabCard.Card).ID.Value);
+                            ((StaticRoleCard)sTabCard.Card).isEditingNow = false;
                             EnvironmentHelper.UpdateView();
                         }
                     }
@@ -764,7 +791,7 @@ namespace AdminApp.Elements
                                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                                 {
                                     SystemSingleton.Configuration.SqlConnections.Add(con);
-                                    using (var command = new SqlCommand(SqlCommands.DeletePersonalRole, con))
+                                    using (var command = new SqlCommand(SqlCommands.DeleteStaticRole, con))
                                     {
                                         command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
                                         command.Parameters["@ID"].Value = ((StaticRoleCard)sTabCard.Card).ID.Value;
@@ -796,7 +823,7 @@ namespace AdminApp.Elements
                     {
                         EnvironmentHelper.SendDialogBox(
                             (string)SystemSingleton.Configuration.mainWindow.FindResource(
-                                "m_CantDeleteCardTasks") + "\n\n" + ((StaticRoleCard)sTabCard.Card).ID.Value.ToString(),
+                                "m_CantDeleteCardTasksCardReview") + "\n\n" + ((StaticRoleCard)sTabCard.Card).ID.Value.ToString(),
                             "Card Error"
                         );
                     }
@@ -886,7 +913,7 @@ namespace AdminApp.Elements
                         con.Open();
                         int colms = Convert.ToInt32(command.ExecuteScalar());
                         con.Close();
-                        if (colms == 0)
+                        if (colms == 0 && ID!=new Guid("9efcd5cd-bf54-47f3-95e3-2953cb235941"))
                         {
                             return true;
                         }
