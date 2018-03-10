@@ -82,10 +82,12 @@ create table DocTypes
 	Name nvarchar(50) NOT NULL,
 	Caption nvarchar(50) NOT NULL,
 	TagWords nvarchar(MAX) NOT NULL,
+	RoleTypeID uniqueidentifier NOT NULL,
 	isEditingNow bit NOT NULL
 );
 
 ALTER TABLE DocTypes ADD PRIMARY KEY (ID);
+ALTER TABLE DocTypes ADD FOREIGN KEY(RoleTypeID) REFERENCES  Roles(ID);
 
 create table TaskState
 (

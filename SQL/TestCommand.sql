@@ -21,7 +21,7 @@ insert into StaticRoles values ( @HR, 'HR', 'Кадры', 0);
 insert into Roles values (@BuhUchet, 'Бухгалтерский учет');
 insert into StaticRoles values (@BuhUchet, 'BuhUchet', 'Бухгалтерский учет', 0);
 insert into RoleUsers values ( @BuhUchet, @AdminID);
-insert into DocTypes values (@DocID, '2NDFL', '2 НДФЛ','2НДФЛ|2-НДФЛ|Налоговая информация|НДФЛ', 0);
+insert into DocTypes values (@DocID, '2NDFL', '2 НДФЛ','2НДФЛ|2-НДФЛ|Налоговая информация|НДФЛ',@BuhUchet, 0);
 insert into Tasks values (@TaskID2, '2018-03-0001', @AdminID, 'Admin A.', @AdminID, 'Admin A.',SYSDATETIME(), @DocID, @WorkID,'Test doc', NULL, NULL, NULL, 0);
 insert into Tasks values (@TaskID, '2018-03-0002', @AdminID, 'Admin A.', @BuhUchet, 'Бухгалтерский учет',SYSDATETIME(), @DocID, @WorkID,'Test doc2', 'Resp 2', NULL, NULL, 0);
 insert into Tasks values (@TaskID3, '2018-03-0003', @AdminID, 'Admin A.', @HR, 'Кадры',SYSDATETIME(), @DocID, @WorkID, 'Test doc3', 'Resp 3', NULL, NULL, 0);
