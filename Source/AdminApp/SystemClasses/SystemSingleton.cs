@@ -39,7 +39,7 @@ namespace AdminApp.SystemClasses
             {
                 try
                 {
-                    if (item.Key == StaticTypes.StaticRoleTab || item.Key == StaticTypes.DocTypeTab || item.Key=="AllRoles")
+                    if (item.Key == StaticTypes.StaticRoleTab || item.Key == StaticTypes.DocTypeTab || item.Key== "AllRolesTab")
                     {
                         item.Value.DataGrid.Columns[1].Header =
                             (String)window.FindResource("m_column_Caption");

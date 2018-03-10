@@ -55,11 +55,17 @@
         public const string SetEditingToStaticRole =
             @"update StaticRoles set isEditingNow=1 where ID=@ID";
 
+        public const string SetEditingToDocType =
+            @"update DocTypes set isEditingNow=1 where ID=@ID";
+
         public const string SetStopEditingToPersonalRole =
             @"update PersonalRoles set isEditingNow=0 where ID=@ID";
 
         public const string SetStopEditingToStaticRole =
             @"update StaticRoles set isEditingNow=0 where ID=@ID";
+
+        public const string SetStopEditingToDocType =
+            @"update DocTypes set isEditingNow=0 where ID=@ID";
 
         public const string LoadWorkingTypeCommand =
             @"select ID, Name, Caption from WorkingType where ID=@ID";

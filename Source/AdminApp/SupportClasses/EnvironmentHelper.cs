@@ -351,7 +351,38 @@ namespace AdminApp.SupportClasses
                 }
                 else if (item.Value.CardType == StaticTypes.DocType)
                 {
-
+                    try
+                    {
+                        using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                        {
+                            SystemSingleton.Configuration.SqlConnections.Add(con);
+                            using (var command = new SqlCommand(SqlCommands.SetStopEditingToDocType, con))
+                            {
+                                command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                                command.Parameters["@ID"].Value = ((DocTypeCard)item.Value.Card).ID.Value;
+                                SendLogSQL(command.CommandText);
+                                con.Open();
+                                int colms = command.ExecuteNonQuery();
+                                con.Close();
+                                if (colms == 0)
+                                {
+                                    SendDialogBox(
+                                        (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                            "m_CantSetEditing") + "\n\n" + ((DocTypeCard)item.Value.Card).ID.Value.ToString(),
+                                        "SQL Error"
+                                    );
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnvironmentHelper.SendDialogBox(
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                "m_CantSetEditing") + "\n\n" + ((DocTypeCard)item.Value.Card).ID.Value.ToString(),
+                            "SQL Error"
+                        );
+                    }
                 }
             }
         }

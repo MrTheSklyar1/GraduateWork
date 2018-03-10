@@ -113,7 +113,7 @@ namespace AdminApp.Elements
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.FifthLineDockPanel, FifthLineDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.FifthLineDockPanel, FifthLineDockPanel);
             sTabCard.StackPanels[PersonalRoleCardViewStruct.MainStackPanel].Children.Add(FifthLineDockPanel);
 
             #endregion
@@ -130,7 +130,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.Borders.Add(PersonalRoleCardViewStruct.FifthLineBorder, FifthLineBorder);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.FifthLineDockPanel].Children.Add(FifthLineBorder);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.FifthLineDockPanel].Children.Add(FifthLineBorder);
             //Вспомогательная панель
             var FifthLineStackPanel = new StackPanel();
             sTabCard.StackPanels.Add(PersonalRoleCardViewStruct.FifthLineStackPanel, FifthLineStackPanel);
@@ -260,10 +260,10 @@ namespace AdminApp.Elements
             sTabCard.Buttons.Remove(PersonalRoleCardViewStruct.SaveButton);
             sTabCard.Borders[PersonalRoleCardViewStruct.FifthLineBorder].Child = null;
             sTabCard.StackPanels.Remove(PersonalRoleCardViewStruct.FifthLineStackPanel);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.FifthLineDockPanel].Children.Remove(sTabCard.Borders[PersonalRoleCardViewStruct.FifthLineBorder]);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.FifthLineDockPanel].Children.Remove(sTabCard.Borders[PersonalRoleCardViewStruct.FifthLineBorder]);
             sTabCard.Borders.Remove(PersonalRoleCardViewStruct.FifthLineBorder);
-            sTabCard.StackPanels[PersonalRoleCardViewStruct.MainStackPanel].Children.Remove(sTabCard.DocPanels[PersonalRoleCardViewStruct.FifthLineDockPanel]);
-            sTabCard.DocPanels.Remove(PersonalRoleCardViewStruct.FifthLineDockPanel);
+            sTabCard.StackPanels[PersonalRoleCardViewStruct.MainStackPanel].Children.Remove(sTabCard.DockPanels[PersonalRoleCardViewStruct.FifthLineDockPanel]);
+            sTabCard.DockPanels.Remove(PersonalRoleCardViewStruct.FifthLineDockPanel);
             FillFifthLine(sTabCard);
         }
 
@@ -286,7 +286,7 @@ namespace AdminApp.Elements
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.FirstLineDockPanel, FirstLineDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.FirstLineDockPanel, FirstLineDockPanel);
             sTabCard.StackPanels[PersonalRoleCardViewStruct.MainStackPanel].Children.Add(FirstLineDockPanel);
 
             #endregion
@@ -303,10 +303,10 @@ namespace AdminApp.Elements
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(PersonalRoleCardViewStruct.LoginBorder, LoginBorder);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.FirstLineDockPanel].Children.Add(LoginBorder);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.FirstLineDockPanel].Children.Add(LoginBorder);
             //Вспомогательная панель
             var LoginDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.LoginDockPanel, LoginDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.LoginDockPanel, LoginDockPanel);
             sTabCard.Borders[PersonalRoleCardViewStruct.LoginBorder].Child = LoginDockPanel;
             //Текстовый блок
             var LoginTextBlock = new TextBlock
@@ -318,7 +318,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.TextBlocks.Add(PersonalRoleCardViewStruct.LoginTextBlock, LoginTextBlock);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.LoginDockPanel].Children.Add(LoginTextBlock);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.LoginDockPanel].Children.Add(LoginTextBlock);
             //Контрол блока 
             var LoginTextBox = new TextBox
             {
@@ -346,7 +346,7 @@ namespace AdminApp.Elements
                 sTabCard.TextBoxes[PersonalRoleCardViewStruct.LoginTextBox].Text = temp;
             };
             sTabCard.TextBoxes.Add(PersonalRoleCardViewStruct.LoginTextBox, LoginTextBox);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.LoginDockPanel].Children.Add(LoginTextBox);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.LoginDockPanel].Children.Add(LoginTextBox);
 
             #endregion
 
@@ -362,10 +362,10 @@ namespace AdminApp.Elements
                 HorizontalAlignment = HorizontalAlignment.Right
             };
             sTabCard.Borders.Add(PersonalRoleCardViewStruct.TelegramBorder, TelegramBorder);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.FirstLineDockPanel].Children.Add(TelegramBorder);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.FirstLineDockPanel].Children.Add(TelegramBorder);
             //Вспомогательная панель 
             var TelegramDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.TelegramDockPanel, TelegramDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.TelegramDockPanel, TelegramDockPanel);
             sTabCard.Borders[PersonalRoleCardViewStruct.TelegramBorder].Child = TelegramDockPanel;
             //Текстовый блок типа документа
             var TelegramTextBlock = new TextBlock
@@ -377,7 +377,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.TextBlocks.Add(PersonalRoleCardViewStruct.TelegramTextBlock, TelegramTextBlock);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.TelegramDockPanel].Children.Add(TelegramTextBlock);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.TelegramDockPanel].Children.Add(TelegramTextBlock);
             //Контрол блока 
             var TelegramTextBox = new TextBox
             {
@@ -402,7 +402,7 @@ namespace AdminApp.Elements
                     sTabCard.TextBoxes[PersonalRoleCardViewStruct.TelegramTextBox].Text.Trim();
             };
             sTabCard.TextBoxes.Add(PersonalRoleCardViewStruct.TelegramTextBox, TelegramTextBox);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.TelegramDockPanel].Children.Add(TelegramTextBox);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.TelegramDockPanel].Children.Add(TelegramTextBox);
 
             #endregion
         }
@@ -415,7 +415,7 @@ namespace AdminApp.Elements
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.SecondLineDockPanel, SecondLineDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.SecondLineDockPanel, SecondLineDockPanel);
             sTabCard.StackPanels[PersonalRoleCardViewStruct.MainStackPanel].Children.Add(SecondLineDockPanel);
 
             #endregion
@@ -432,10 +432,10 @@ namespace AdminApp.Elements
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(PersonalRoleCardViewStruct.PasswordBorder, PasswordBorder);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.SecondLineDockPanel].Children.Add(PasswordBorder);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.SecondLineDockPanel].Children.Add(PasswordBorder);
             //Вспомогательная панель
             var PasswordDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.PasswordDockPanel, PasswordDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.PasswordDockPanel, PasswordDockPanel);
             sTabCard.Borders[PersonalRoleCardViewStruct.PasswordBorder].Child = PasswordDockPanel;
             //Текстовый блок
             var PasswordTextBlock = new TextBlock
@@ -447,7 +447,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.TextBlocks.Add(PersonalRoleCardViewStruct.PasswordTextBlock, PasswordTextBlock);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.PasswordDockPanel].Children.Add(PasswordTextBlock);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.PasswordDockPanel].Children.Add(PasswordTextBlock);
             //Контрол блока 
             var PasswordPasswordBox = new PasswordBox
             {
@@ -462,7 +462,7 @@ namespace AdminApp.Elements
                 IsEnabled = !((PersonalRoleCard)sTabCard.Card).isEditingNow
             };
             sTabCard.PasswordBoxes.Add(PersonalRoleCardViewStruct.PasswordPasswordBox, PasswordPasswordBox);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.PasswordDockPanel].Children.Add(PasswordPasswordBox);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.PasswordDockPanel].Children.Add(PasswordPasswordBox);
 
             #endregion
 
@@ -478,10 +478,10 @@ namespace AdminApp.Elements
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(PersonalRoleCardViewStruct.RepeatPasswordBorder, RepeatPasswordBorder);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.SecondLineDockPanel].Children.Add(RepeatPasswordBorder);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.SecondLineDockPanel].Children.Add(RepeatPasswordBorder);
             //Вспомогательная панель
             var RepeatPasswordDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.RepeatPasswordDockPanel, RepeatPasswordDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.RepeatPasswordDockPanel, RepeatPasswordDockPanel);
             sTabCard.Borders[PersonalRoleCardViewStruct.RepeatPasswordBorder].Child = RepeatPasswordDockPanel;
             //Текстовый блок
             var RepeatPasswordTextBlock = new TextBlock
@@ -493,7 +493,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.TextBlocks.Add(PersonalRoleCardViewStruct.RepeatPasswordTextBlock, RepeatPasswordTextBlock);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.RepeatPasswordDockPanel].Children.Add(RepeatPasswordTextBlock);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.RepeatPasswordDockPanel].Children.Add(RepeatPasswordTextBlock);
             //Контрол блока 
             var RepeatPasswordPasswordBox = new PasswordBox
             {
@@ -508,7 +508,7 @@ namespace AdminApp.Elements
                 IsEnabled = !((PersonalRoleCard)sTabCard.Card).isEditingNow
             };
             sTabCard.PasswordBoxes.Add(PersonalRoleCardViewStruct.RepeatPasswordPasswordBox, RepeatPasswordPasswordBox);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.RepeatPasswordDockPanel].Children.Add(RepeatPasswordPasswordBox);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.RepeatPasswordDockPanel].Children.Add(RepeatPasswordPasswordBox);
 
             #endregion
         }
@@ -521,7 +521,7 @@ namespace AdminApp.Elements
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.ThirdLineDockPanel, ThirdLineDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.ThirdLineDockPanel, ThirdLineDockPanel);
             sTabCard.StackPanels[PersonalRoleCardViewStruct.MainStackPanel].Children.Add(ThirdLineDockPanel);
 
             #endregion
@@ -538,10 +538,10 @@ namespace AdminApp.Elements
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(PersonalRoleCardViewStruct.LastNameBorder, LastNameBorder);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.ThirdLineDockPanel].Children.Add(LastNameBorder);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.ThirdLineDockPanel].Children.Add(LastNameBorder);
             //Вспомогательная панель
             var LastNameDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.LastNameDockPanel, LastNameDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.LastNameDockPanel, LastNameDockPanel);
             sTabCard.Borders[PersonalRoleCardViewStruct.LastNameBorder].Child = LastNameDockPanel;
             //Текстовый блок
             var LastNameTextBlock = new TextBlock
@@ -553,7 +553,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.TextBlocks.Add(PersonalRoleCardViewStruct.LastNameTextBlock, LastNameTextBlock);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.LastNameDockPanel].Children.Add(LastNameTextBlock);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.LastNameDockPanel].Children.Add(LastNameTextBlock);
             //Контрол блока 
             var LastNameTextBox = new TextBox
             {
@@ -572,7 +572,7 @@ namespace AdminApp.Elements
                 NameTextBox_LostKeyboardFocus(sTabCard);
             };
             sTabCard.TextBoxes.Add(PersonalRoleCardViewStruct.LastNameTextBox, LastNameTextBox);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.LastNameDockPanel].Children.Add(LastNameTextBox);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.LastNameDockPanel].Children.Add(LastNameTextBox);
 
             #endregion
 
@@ -588,10 +588,10 @@ namespace AdminApp.Elements
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(PersonalRoleCardViewStruct.FirstNameBorder, FirstNameBorder);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.ThirdLineDockPanel].Children.Add(FirstNameBorder);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.ThirdLineDockPanel].Children.Add(FirstNameBorder);
             //Вспомогательная панель
             var FirstNameDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.FirstNameDockPanel, FirstNameDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.FirstNameDockPanel, FirstNameDockPanel);
             sTabCard.Borders[PersonalRoleCardViewStruct.FirstNameBorder].Child = FirstNameDockPanel;
             //Текстовый блок
             var FirstNameTextBlock = new TextBlock
@@ -603,7 +603,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.TextBlocks.Add(PersonalRoleCardViewStruct.FirstNameTextBlock, FirstNameTextBlock);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.FirstNameDockPanel].Children.Add(FirstNameTextBlock);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.FirstNameDockPanel].Children.Add(FirstNameTextBlock);
             //Контрол блока 
             var FirstNameTextBox = new TextBox
             {
@@ -622,7 +622,7 @@ namespace AdminApp.Elements
                 NameTextBox_LostKeyboardFocus(sTabCard);
             };
             sTabCard.TextBoxes.Add(PersonalRoleCardViewStruct.FirstNameTextBox, FirstNameTextBox);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.FirstNameDockPanel].Children.Add(FirstNameTextBox);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.FirstNameDockPanel].Children.Add(FirstNameTextBox);
 
             #endregion
 
@@ -638,10 +638,10 @@ namespace AdminApp.Elements
                 HorizontalAlignment = HorizontalAlignment.Right
             };
             sTabCard.Borders.Add(PersonalRoleCardViewStruct.FullNameBorder, FullNameBorder);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.ThirdLineDockPanel].Children.Add(FullNameBorder);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.ThirdLineDockPanel].Children.Add(FullNameBorder);
             //Вспомогательная панель
             var FullNameDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.FullNameDockPanel, FullNameDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.FullNameDockPanel, FullNameDockPanel);
             sTabCard.Borders[PersonalRoleCardViewStruct.FullNameBorder].Child = FullNameDockPanel;
             //Текстовый блок
             var FullNameTextBlock = new TextBlock
@@ -653,7 +653,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.TextBlocks.Add(PersonalRoleCardViewStruct.FullNameTextBlock, FullNameTextBlock);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.FullNameDockPanel].Children.Add(FullNameTextBlock);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.FullNameDockPanel].Children.Add(FullNameTextBlock);
             //Контрол блока 
             var FullNameTextBox = new TextBox
             {
@@ -668,7 +668,7 @@ namespace AdminApp.Elements
                 IsReadOnly = true
             };
             sTabCard.TextBoxes.Add(PersonalRoleCardViewStruct.FullNameTextBox, FullNameTextBox);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.FullNameDockPanel].Children.Add(FullNameTextBox);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.FullNameDockPanel].Children.Add(FullNameTextBox);
 
             #endregion
 
@@ -682,7 +682,7 @@ namespace AdminApp.Elements
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.FourthLineDockPanel, FourthLineDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.FourthLineDockPanel, FourthLineDockPanel);
             sTabCard.StackPanels[PersonalRoleCardViewStruct.MainStackPanel].Children.Add(FourthLineDockPanel);
 
             #endregion
@@ -699,10 +699,10 @@ namespace AdminApp.Elements
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(PersonalRoleCardViewStruct.WorkingTypeBorder, WorkingTypeBorder);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.FourthLineDockPanel].Children.Add(WorkingTypeBorder);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.FourthLineDockPanel].Children.Add(WorkingTypeBorder);
             //Вспомогательная панель
             var WorkingTypeDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.WorkingTypeDockPanel, WorkingTypeDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.WorkingTypeDockPanel, WorkingTypeDockPanel);
             sTabCard.Borders[PersonalRoleCardViewStruct.WorkingTypeBorder].Child = WorkingTypeDockPanel;
             //Текстовый блок
             var WorkingTypeTextBlock = new TextBlock
@@ -714,7 +714,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.TextBlocks.Add(PersonalRoleCardViewStruct.WorkingTypeTextBlock, WorkingTypeTextBlock);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.WorkingTypeDockPanel].Children.Add(WorkingTypeTextBlock);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.WorkingTypeDockPanel].Children.Add(WorkingTypeTextBlock);
             //Контрол блока
             var WorkingTypeComboBox = new ComboBox()
             {
@@ -736,7 +736,7 @@ namespace AdminApp.Elements
                 }
             };
             sTabCard.ComboBoxes.Add(PersonalRoleCardViewStruct.WorkingTypeComboBox, WorkingTypeComboBox);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.WorkingTypeDockPanel].Children.Add(WorkingTypeComboBox);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.WorkingTypeDockPanel].Children.Add(WorkingTypeComboBox);
             //Вкладки для комбобокса
             foreach (var item in ((PersonalRoleCard)sTabCard.Card).AllWorkingTypes.States)
             {
@@ -769,10 +769,10 @@ namespace AdminApp.Elements
                 HorizontalAlignment = HorizontalAlignment.Right
             };
             sTabCard.Borders.Add(PersonalRoleCardViewStruct.IsAdminBorder, IsAdminBorder);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.FourthLineDockPanel].Children.Add(IsAdminBorder);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.FourthLineDockPanel].Children.Add(IsAdminBorder);
             //Вспомогательная панель
             var IsAdminDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.IsAdminDockPanel, IsAdminDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.IsAdminDockPanel, IsAdminDockPanel);
             sTabCard.Borders[PersonalRoleCardViewStruct.IsAdminBorder].Child = IsAdminDockPanel;
             //Текстовый блок
             var IsAdminTextBlock = new TextBlock
@@ -784,7 +784,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.TextBlocks.Add(PersonalRoleCardViewStruct.IsAdminTextBlock, IsAdminTextBlock);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.IsAdminDockPanel].Children.Add(IsAdminTextBlock);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.IsAdminDockPanel].Children.Add(IsAdminTextBlock);
             //Контрол блока
             var IsAdminCheckBox = new CheckBox()
             {
@@ -795,7 +795,7 @@ namespace AdminApp.Elements
                 IsEnabled = !((PersonalRoleCard)sTabCard.Card).isEditingNow
             };
             sTabCard.CheckBoxes.Add(PersonalRoleCardViewStruct.IsAdminCheckBox, IsAdminCheckBox);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.IsAdminDockPanel].Children.Add(IsAdminCheckBox);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.IsAdminDockPanel].Children.Add(IsAdminCheckBox);
 
             #endregion
         }
@@ -808,7 +808,7 @@ namespace AdminApp.Elements
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(PersonalRoleCardViewStruct.FifthLineDockPanel, FifthLineDockPanel);
+            sTabCard.DockPanels.Add(PersonalRoleCardViewStruct.FifthLineDockPanel, FifthLineDockPanel);
             sTabCard.StackPanels[PersonalRoleCardViewStruct.MainStackPanel].Children.Add(FifthLineDockPanel);
 
             #endregion
@@ -825,7 +825,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.Borders.Add(PersonalRoleCardViewStruct.FifthLineBorder, FifthLineBorder);
-            sTabCard.DocPanels[PersonalRoleCardViewStruct.FifthLineDockPanel].Children.Add(FifthLineBorder);
+            sTabCard.DockPanels[PersonalRoleCardViewStruct.FifthLineDockPanel].Children.Add(FifthLineBorder);
             //Вспомогательная панель
             var FifthLineStackPanel = new StackPanel();
             sTabCard.StackPanels.Add(PersonalRoleCardViewStruct.FifthLineStackPanel, FifthLineStackPanel);

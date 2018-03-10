@@ -20,7 +20,7 @@ namespace ClientApp.Elements
         //Текст боксы
         public Dictionary<string, TextBox> TextBoxes = new Dictionary<string, TextBox>();
         //Панели
-        public Dictionary<string, DockPanel> DocPanels = new Dictionary<string, DockPanel>();
+        public Dictionary<string, DockPanel> DockPanels = new Dictionary<string, DockPanel>();
         //Границы
         public Dictionary<string, Border> Borders = new Dictionary<string, Border>();
         //Комбобоксы, правда он один

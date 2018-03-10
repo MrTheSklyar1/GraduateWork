@@ -76,6 +76,8 @@
     <v:String x:Key="c_RepeatPassword">Repeat Password</v:String>
     <v:String x:Key="c_IsAdmin">Administrator</v:String>
     <v:String x:Key="c_RolesInRole">Personal Roles in this Static Role</v:String>
+    <v:String x:Key="c_Tags">Tags, Use "|", Example: Tag 1|Tag 2</v:String>
+    <v:String x:Key="c_ForRole">For Role</v:String>
     <!--Сообщения об ошибках-->
     <v:String x:Key="m_CardNotFound">Card not found</v:String>
     <v:String x:Key="m_UserNotFound">Personal role not found</v:String>

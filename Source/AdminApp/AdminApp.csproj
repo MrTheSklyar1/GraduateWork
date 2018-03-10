@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Elements\AllWorkingTypes.cs" />
     <Compile Include="Elements\DocTypeCard.cs" />
+    <Compile Include="Elements\DocTypeCardFactory.cs" />
     <Compile Include="Elements\PersonalRoleCardFactory.cs" />
     <Compile Include="Elements\PersonalRoleCard.cs" />
     <Compile Include="Elements\PersonalRoleControl.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Elements\StaticRoleCard.cs" />
     <Compile Include="Elements\StaticRoleCardFactory.cs" />
     <Compile Include="Elements\WorkingType.cs" />
+    <Compile Include="SupportClasses\DocTypeCardViewStruct.cs" />
     <Compile Include="SupportClasses\EnvironmentHelper.cs" />
     <Compile Include="SupportClasses\Handlers.cs" />
     <Compile Include="SupportClasses\PersonalRoleCardViewStruct.cs" />

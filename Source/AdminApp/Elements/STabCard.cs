@@ -22,7 +22,7 @@ namespace AdminApp.Elements
         //Check box
         public Dictionary<string, CheckBox> CheckBoxes = new Dictionary<string, CheckBox>();
         //Панели
-        public Dictionary<string, DockPanel> DocPanels = new Dictionary<string, DockPanel>();
+        public Dictionary<string, DockPanel> DockPanels = new Dictionary<string, DockPanel>();
         //Границы
         public Dictionary<string, Border> Borders = new Dictionary<string, Border>();
         //Комбобоксы, правда он один

@@ -75,7 +75,7 @@ namespace ClientApp.SystemClasses
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(CardViewStruct.FirstLineDockPanel, FirstLineDockPanel);
+            sTabCard.DockPanels.Add(CardViewStruct.FirstLineDockPanel, FirstLineDockPanel);
             sTabCard.StackPanels[CardViewStruct.MainStackPanel].Children.Add(FirstLineDockPanel);
 
             #endregion
@@ -92,10 +92,10 @@ namespace ClientApp.SystemClasses
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(CardViewStruct.CreatedDateBorder, CreatedDateBorder);
-            sTabCard.DocPanels[CardViewStruct.FirstLineDockPanel].Children.Add(CreatedDateBorder);
+            sTabCard.DockPanels[CardViewStruct.FirstLineDockPanel].Children.Add(CreatedDateBorder);
             //Вспомогательная панель даты
             var CreatedDateDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(CardViewStruct.CreatedDateDockPanel, CreatedDateDockPanel);
+            sTabCard.DockPanels.Add(CardViewStruct.CreatedDateDockPanel, CreatedDateDockPanel);
             sTabCard.Borders[CardViewStruct.CreatedDateBorder].Child = CreatedDateDockPanel;
             //Текстовый блок Дата
             var CreatedDateTextBlock = new TextBlock
@@ -108,7 +108,7 @@ namespace ClientApp.SystemClasses
                 Margin = new Thickness(5, 0, 0, 0)
             };
             sTabCard.TextBlocks.Add(CardViewStruct.CreatedDateTextBlock, CreatedDateTextBlock);
-            sTabCard.DocPanels[CardViewStruct.CreatedDateDockPanel].Children.Add(CreatedDateTextBlock);
+            sTabCard.DockPanels[CardViewStruct.CreatedDateDockPanel].Children.Add(CreatedDateTextBlock);
             //Контрол блока даты
             var CreatedDateTextBox = new TextBox
             {
@@ -122,7 +122,7 @@ namespace ClientApp.SystemClasses
                 IsReadOnly = true
             };
             sTabCard.TextBoxes.Add(CardViewStruct.CreatedDateTextBox, CreatedDateTextBox);
-            sTabCard.DocPanels[CardViewStruct.CreatedDateDockPanel].Children.Add(CreatedDateTextBox);
+            sTabCard.DockPanels[CardViewStruct.CreatedDateDockPanel].Children.Add(CreatedDateTextBox);
 
             #endregion
 
@@ -138,10 +138,10 @@ namespace ClientApp.SystemClasses
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(CardViewStruct.DocTypeBorder, DocTypeBorder);
-            sTabCard.DocPanels[CardViewStruct.FirstLineDockPanel].Children.Add(DocTypeBorder);
+            sTabCard.DockPanels[CardViewStruct.FirstLineDockPanel].Children.Add(DocTypeBorder);
             //Вспомогательная панель типа документа
             var DocTypeDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(CardViewStruct.DocTypeDockPanel, DocTypeDockPanel);
+            sTabCard.DockPanels.Add(CardViewStruct.DocTypeDockPanel, DocTypeDockPanel);
             sTabCard.Borders[CardViewStruct.DocTypeBorder].Child = DocTypeDockPanel;
             //Текстовый блок типа документа
             var DocTypeTextBlock = new TextBlock
@@ -154,7 +154,7 @@ namespace ClientApp.SystemClasses
                 Margin = new Thickness(5, 0, 0, 0)
             };
             sTabCard.TextBlocks.Add(CardViewStruct.DocTypeTextBlock, DocTypeTextBlock);
-            sTabCard.DocPanels[CardViewStruct.DocTypeDockPanel].Children.Add(DocTypeTextBlock);
+            sTabCard.DockPanels[CardViewStruct.DocTypeDockPanel].Children.Add(DocTypeTextBlock);
             //Контрол блока даты
             var DocTypeTextBox = new TextBox
             {
@@ -168,7 +168,7 @@ namespace ClientApp.SystemClasses
                 IsReadOnly = true
             };
             sTabCard.TextBoxes.Add(CardViewStruct.DocTypeTextBox, DocTypeTextBox);
-            sTabCard.DocPanels[CardViewStruct.DocTypeDockPanel].Children.Add(DocTypeTextBox);
+            sTabCard.DockPanels[CardViewStruct.DocTypeDockPanel].Children.Add(DocTypeTextBox);
 
             #endregion
 
@@ -184,10 +184,10 @@ namespace ClientApp.SystemClasses
                 HorizontalAlignment = HorizontalAlignment.Right
             };
             sTabCard.Borders.Add(CardViewStruct.StateBorder, StateBorder);
-            sTabCard.DocPanels[CardViewStruct.FirstLineDockPanel].Children.Add(StateBorder);
+            sTabCard.DockPanels[CardViewStruct.FirstLineDockPanel].Children.Add(StateBorder);
             //Вспомогательная панель состояния
             var StateDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(CardViewStruct.StateDockPanel, StateDockPanel);
+            sTabCard.DockPanels.Add(CardViewStruct.StateDockPanel, StateDockPanel);
             sTabCard.Borders[CardViewStruct.StateBorder].Child = StateDockPanel;
             //Текстовый блок состояния
             var StateTextBlock = new TextBlock
@@ -200,7 +200,7 @@ namespace ClientApp.SystemClasses
                 Margin = new Thickness(5, 0, 0, 0)
             };
             sTabCard.TextBlocks.Add(CardViewStruct.StateTextBlock, StateTextBlock);
-            sTabCard.DocPanels[CardViewStruct.StateDockPanel].Children.Add(StateTextBlock);
+            sTabCard.DockPanels[CardViewStruct.StateDockPanel].Children.Add(StateTextBlock);
             //Контрол блока состояния
             var StateTextBox = new TextBox
             {
@@ -213,7 +213,7 @@ namespace ClientApp.SystemClasses
                 IsReadOnly = true
             };
             sTabCard.TextBoxes.Add(CardViewStruct.StateTextBox, StateTextBox);
-            sTabCard.DocPanels[CardViewStruct.StateDockPanel].Children.Add(StateTextBox);
+            sTabCard.DockPanels[CardViewStruct.StateDockPanel].Children.Add(StateTextBox);
 
             #endregion
 
@@ -227,7 +227,7 @@ namespace ClientApp.SystemClasses
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(CardViewStruct.SecondLineDockPanel, SecondLineDockPanel);
+            sTabCard.DockPanels.Add(CardViewStruct.SecondLineDockPanel, SecondLineDockPanel);
             sTabCard.StackPanels[CardViewStruct.MainStackPanel].Children.Add(SecondLineDockPanel);
 
             #endregion
@@ -244,10 +244,10 @@ namespace ClientApp.SystemClasses
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(CardViewStruct.LastNameBorder, LastNameBorder);
-            sTabCard.DocPanels[CardViewStruct.SecondLineDockPanel].Children.Add(LastNameBorder);
+            sTabCard.DockPanels[CardViewStruct.SecondLineDockPanel].Children.Add(LastNameBorder);
             //Вспомогательная панель фамилии
             var LastNameDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(CardViewStruct.LastNameDockPanel, LastNameDockPanel);
+            sTabCard.DockPanels.Add(CardViewStruct.LastNameDockPanel, LastNameDockPanel);
             sTabCard.Borders[CardViewStruct.LastNameBorder].Child = LastNameDockPanel;
             //Текстовый блок фамилии
             var LastNameTextBlock = new TextBlock
@@ -260,7 +260,7 @@ namespace ClientApp.SystemClasses
                 Margin = new Thickness(5, 0, 0, 0)
             };
             sTabCard.TextBlocks.Add(CardViewStruct.LastNameTextBlock, LastNameTextBlock);
-            sTabCard.DocPanels[CardViewStruct.LastNameDockPanel].Children.Add(LastNameTextBlock);
+            sTabCard.DockPanels[CardViewStruct.LastNameDockPanel].Children.Add(LastNameTextBlock);
             //Контрол блока фамилии
             var LastNameTextBox = new TextBox
             {
@@ -274,7 +274,7 @@ namespace ClientApp.SystemClasses
                 IsReadOnly = true
             };
             sTabCard.TextBoxes.Add(CardViewStruct.LastNameTextBox, LastNameTextBox);
-            sTabCard.DocPanels[CardViewStruct.LastNameDockPanel].Children.Add(LastNameTextBox);
+            sTabCard.DockPanels[CardViewStruct.LastNameDockPanel].Children.Add(LastNameTextBox);
 
             #endregion
 
@@ -290,10 +290,10 @@ namespace ClientApp.SystemClasses
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(CardViewStruct.FirstNameBorder, FirstNameBorder);
-            sTabCard.DocPanels[CardViewStruct.SecondLineDockPanel].Children.Add(FirstNameBorder);
+            sTabCard.DockPanels[CardViewStruct.SecondLineDockPanel].Children.Add(FirstNameBorder);
             //Вспомогательная панель имени
             var FirstNameDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(CardViewStruct.FirstNameDockPanel, FirstNameDockPanel);
+            sTabCard.DockPanels.Add(CardViewStruct.FirstNameDockPanel, FirstNameDockPanel);
             sTabCard.Borders[CardViewStruct.FirstNameBorder].Child = FirstNameDockPanel;
             //Текстовый блок имени
             var FirstNameTextBlock = new TextBlock
@@ -306,7 +306,7 @@ namespace ClientApp.SystemClasses
                 Margin = new Thickness(5, 0, 0, 0)
             };
             sTabCard.TextBlocks.Add(CardViewStruct.FirstNameTextBlock, FirstNameTextBlock);
-            sTabCard.DocPanels[CardViewStruct.FirstNameDockPanel].Children.Add(FirstNameTextBlock);
+            sTabCard.DockPanels[CardViewStruct.FirstNameDockPanel].Children.Add(FirstNameTextBlock);
             //Контрол блока имени
             var FirstNameTextBox = new TextBox
             {
@@ -320,7 +320,7 @@ namespace ClientApp.SystemClasses
                 IsReadOnly = true
             };
             sTabCard.TextBoxes.Add(CardViewStruct.FirstNameTextBox, FirstNameTextBox);
-            sTabCard.DocPanels[CardViewStruct.FirstNameDockPanel].Children.Add(FirstNameTextBox);
+            sTabCard.DockPanels[CardViewStruct.FirstNameDockPanel].Children.Add(FirstNameTextBox);
 
             #endregion
 
@@ -338,10 +338,10 @@ namespace ClientApp.SystemClasses
                     HorizontalAlignment = HorizontalAlignment.Right
                 };
                 sTabCard.Borders.Add(CardViewStruct.NewStateBorder, NewStateBorder);
-                sTabCard.DocPanels[CardViewStruct.SecondLineDockPanel].Children.Add(NewStateBorder);
+                sTabCard.DockPanels[CardViewStruct.SecondLineDockPanel].Children.Add(NewStateBorder);
                 //Вспомогательная панель нового состояния
                 var NewStateDockPanel = new DockPanel();
-                sTabCard.DocPanels.Add(CardViewStruct.NewStateDockPanel, NewStateDockPanel);
+                sTabCard.DockPanels.Add(CardViewStruct.NewStateDockPanel, NewStateDockPanel);
                 sTabCard.Borders[CardViewStruct.NewStateBorder].Child = NewStateDockPanel;
                 //Текстовый блок нового состояния
                 var NewStateTextBlock = new TextBlock
@@ -354,7 +354,7 @@ namespace ClientApp.SystemClasses
                     Margin = new Thickness(5, 0, 0, 0)
                 };
                 sTabCard.TextBlocks.Add(CardViewStruct.NewStateTextBlock, NewStateTextBlock);
-                sTabCard.DocPanels[CardViewStruct.NewStateDockPanel].Children.Add(NewStateTextBlock);
+                sTabCard.DockPanels[CardViewStruct.NewStateDockPanel].Children.Add(NewStateTextBlock);
                 //Контрол блока нового состояния
                 var NewStateComboBox = new ComboBox()
                 {
@@ -376,7 +376,7 @@ namespace ClientApp.SystemClasses
                     }
                 };
                 sTabCard.ComboBoxes.Add(CardViewStruct.NewStateComboBox, NewStateComboBox);
-                sTabCard.DocPanels[CardViewStruct.NewStateDockPanel].Children.Add(NewStateComboBox);
+                sTabCard.DockPanels[CardViewStruct.NewStateDockPanel].Children.Add(NewStateComboBox);
                 //Вкладки для комбобокса
                 foreach (var item in sTabCard.Card.AllStates.States)
                 {
@@ -522,7 +522,7 @@ namespace ClientApp.SystemClasses
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(CardViewStruct.FifthDockPanel, FifthDockPanel);
+            sTabCard.DockPanels.Add(CardViewStruct.FifthDockPanel, FifthDockPanel);
             sTabCard.StackPanels[CardViewStruct.MainStackPanel].Children.Add(FifthDockPanel);
 
             #endregion
@@ -538,7 +538,7 @@ namespace ClientApp.SystemClasses
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(CardViewStruct.FilesBorder, FilesBorder);
-            sTabCard.DocPanels[CardViewStruct.FifthDockPanel].Children.Add(FilesBorder);
+            sTabCard.DockPanels[CardViewStruct.FifthDockPanel].Children.Add(FilesBorder);
             //Вспомогательная панель даты
             var FileStackPanel = new StackPanel();
             sTabCard.StackPanels.Add(CardViewStruct.FileStackPanel, FileStackPanel);
@@ -711,14 +711,14 @@ namespace ClientApp.SystemClasses
                     VerticalAlignment = VerticalAlignment.Bottom
                 };
                 sTabCard.Borders.Add(CardViewStruct.CompletedBorder, CompletedBorder);
-                sTabCard.DocPanels[CardViewStruct.FifthDockPanel].Children.Add(CompletedBorder);
+                sTabCard.DockPanels[CardViewStruct.FifthDockPanel].Children.Add(CompletedBorder);
                 //Вспомогательная панель
                 var CompletedStackPanel = new StackPanel();
                 sTabCard.StackPanels.Add(CardViewStruct.CompletedStackPanel, CompletedStackPanel);
                 sTabCard.Borders[CardViewStruct.CompletedBorder].Child = CompletedStackPanel;
                 //Вспомогательная панель
                 var CompleteDateDockPanel = new DockPanel();
-                sTabCard.DocPanels.Add(CardViewStruct.CompleteDateDockPanel, CompleteDateDockPanel);
+                sTabCard.DockPanels.Add(CardViewStruct.CompleteDateDockPanel, CompleteDateDockPanel);
                 sTabCard.StackPanels[CardViewStruct.CompletedStackPanel].Children.Add(CompleteDateDockPanel);
                 //Текстовый блок Дата выполнения
                 var CompletedDateTextBlock = new TextBlock
@@ -731,7 +731,7 @@ namespace ClientApp.SystemClasses
                     Margin = new Thickness(5, 0, 0, 0)
                 };
                 sTabCard.TextBlocks.Add(CardViewStruct.CompletedDateTextBlock, CompletedDateTextBlock);
-                sTabCard.DocPanels[CardViewStruct.CompleteDateDockPanel].Children.Add(CompletedDateTextBlock);
+                sTabCard.DockPanels[CardViewStruct.CompleteDateDockPanel].Children.Add(CompletedDateTextBlock);
                 //Контрол блока даты выполнения
                 var CompletedDateTextBox = new TextBox
                 {
@@ -745,10 +745,10 @@ namespace ClientApp.SystemClasses
                     IsReadOnly = true
                 };
                 sTabCard.TextBoxes.Add(CardViewStruct.CompletedDateTextBox, CompletedDateTextBox);
-                sTabCard.DocPanels[CardViewStruct.CompleteDateDockPanel].Children.Add(CompletedDateTextBox);
+                sTabCard.DockPanels[CardViewStruct.CompleteDateDockPanel].Children.Add(CompletedDateTextBox);
                 //Вспомогательная панель
                 var CompleteByDockPanel = new DockPanel();
-                sTabCard.DocPanels.Add(CardViewStruct.CompleteByDockPanel, CompleteByDockPanel);
+                sTabCard.DockPanels.Add(CardViewStruct.CompleteByDockPanel, CompleteByDockPanel);
                 sTabCard.StackPanels[CardViewStruct.CompletedStackPanel].Children.Add(CompleteByDockPanel);
                 //Текстовый блок Дата выполнения
                 var CompletedByTextBlock = new TextBlock
@@ -761,7 +761,7 @@ namespace ClientApp.SystemClasses
                     Margin = new Thickness(5, 0, 0, 0)
                 };
                 sTabCard.TextBlocks.Add(CardViewStruct.CompletedByTextBlock, CompletedByTextBlock);
-                sTabCard.DocPanels[CardViewStruct.CompleteByDockPanel].Children.Add(CompletedByTextBlock);
+                sTabCard.DockPanels[CardViewStruct.CompleteByDockPanel].Children.Add(CompletedByTextBlock);
                 //Контрол блока даты выполнения
                 var CompletedByTextBox = new TextBox
                 {
@@ -775,7 +775,7 @@ namespace ClientApp.SystemClasses
                     IsReadOnly = true
                 };
                 sTabCard.TextBoxes.Add(CardViewStruct.CompletedByTextBox, CompletedByTextBox);
-                sTabCard.DocPanels[CardViewStruct.CompleteByDockPanel].Children.Add(CompletedByTextBox);
+                sTabCard.DockPanels[CardViewStruct.CompleteByDockPanel].Children.Add(CompletedByTextBox);
             }
 
 
@@ -794,7 +794,7 @@ namespace ClientApp.SystemClasses
                 VerticalAlignment = VerticalAlignment.Bottom
             };
             sTabCard.Borders.Add(CardViewStruct.ButtonsBorder, ButtonsBorder);
-            sTabCard.DocPanels[CardViewStruct.FifthDockPanel].Children.Add(ButtonsBorder);
+            sTabCard.DockPanels[CardViewStruct.FifthDockPanel].Children.Add(ButtonsBorder);
             //Вспомогательная панель
             var ButtonsStackPanel = new StackPanel();
             sTabCard.StackPanels.Add(CardViewStruct.ButtonsStackPanel, ButtonsStackPanel);

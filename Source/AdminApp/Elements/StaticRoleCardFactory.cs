@@ -97,7 +97,7 @@ namespace AdminApp.Elements
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(StaticRoleCardViewStruct.ThirdLineDockPanel, ThirdLineDockPanel);
+            sTabCard.DockPanels.Add(StaticRoleCardViewStruct.ThirdLineDockPanel, ThirdLineDockPanel);
             sTabCard.StackPanels[StaticRoleCardViewStruct.MainStackPanel].Children.Add(ThirdLineDockPanel);
 
             #endregion
@@ -114,7 +114,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.Borders.Add(StaticRoleCardViewStruct.ThirdLineBorder, ThirdLineBorder);
-            sTabCard.DocPanels[StaticRoleCardViewStruct.ThirdLineDockPanel].Children.Add(ThirdLineBorder);
+            sTabCard.DockPanels[StaticRoleCardViewStruct.ThirdLineDockPanel].Children.Add(ThirdLineBorder);
             //Вспомогательная панель
             var ThirdLineStackPanel = new StackPanel();
             sTabCard.StackPanels.Add(StaticRoleCardViewStruct.ThirdLineStackPanel, ThirdLineStackPanel);
@@ -270,10 +270,10 @@ namespace AdminApp.Elements
             sTabCard.Buttons.Remove(StaticRoleCardViewStruct.SaveButton);
             sTabCard.Borders[StaticRoleCardViewStruct.ThirdLineBorder].Child = null;
             sTabCard.StackPanels.Remove(StaticRoleCardViewStruct.ThirdLineStackPanel);
-            sTabCard.DocPanels[StaticRoleCardViewStruct.ThirdLineDockPanel].Children.Remove(sTabCard.Borders[StaticRoleCardViewStruct.ThirdLineBorder]);
+            sTabCard.DockPanels[StaticRoleCardViewStruct.ThirdLineDockPanel].Children.Remove(sTabCard.Borders[StaticRoleCardViewStruct.ThirdLineBorder]);
             sTabCard.Borders.Remove(StaticRoleCardViewStruct.ThirdLineBorder);
-            sTabCard.StackPanels[StaticRoleCardViewStruct.MainStackPanel].Children.Remove(sTabCard.DocPanels[StaticRoleCardViewStruct.ThirdLineDockPanel]);
-            sTabCard.DocPanels.Remove(StaticRoleCardViewStruct.ThirdLineDockPanel);
+            sTabCard.StackPanels[StaticRoleCardViewStruct.MainStackPanel].Children.Remove(sTabCard.DockPanels[StaticRoleCardViewStruct.ThirdLineDockPanel]);
+            sTabCard.DockPanels.Remove(StaticRoleCardViewStruct.ThirdLineDockPanel);
             FillThirdLine(sTabCard);
         }
 
@@ -296,7 +296,7 @@ namespace AdminApp.Elements
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(StaticRoleCardViewStruct.FirstLineDockPanel, FirstLineDockPanel);
+            sTabCard.DockPanels.Add(StaticRoleCardViewStruct.FirstLineDockPanel, FirstLineDockPanel);
             sTabCard.StackPanels[StaticRoleCardViewStruct.MainStackPanel].Children.Add(FirstLineDockPanel);
 
             #endregion
@@ -313,10 +313,10 @@ namespace AdminApp.Elements
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(StaticRoleCardViewStruct.NameBorder, NameBorder);
-            sTabCard.DocPanels[StaticRoleCardViewStruct.FirstLineDockPanel].Children.Add(NameBorder);
+            sTabCard.DockPanels[StaticRoleCardViewStruct.FirstLineDockPanel].Children.Add(NameBorder);
             //Вспомогательная панель
             var NameDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(StaticRoleCardViewStruct.NameDockPanel, NameDockPanel);
+            sTabCard.DockPanels.Add(StaticRoleCardViewStruct.NameDockPanel, NameDockPanel);
             sTabCard.Borders[StaticRoleCardViewStruct.NameBorder].Child = NameDockPanel;
             //Текстовый блок
             var NameTextBlock = new TextBlock
@@ -328,7 +328,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.TextBlocks.Add(StaticRoleCardViewStruct.NameTextBlock, NameTextBlock);
-            sTabCard.DocPanels[StaticRoleCardViewStruct.NameDockPanel].Children.Add(NameTextBlock);
+            sTabCard.DockPanels[StaticRoleCardViewStruct.NameDockPanel].Children.Add(NameTextBlock);
             //Контрол блока 
             var NameTextBox = new TextBox
             {
@@ -347,7 +347,7 @@ namespace AdminApp.Elements
                 NameTextBox_LostKeyboardFocus(sTabCard);
             };
             sTabCard.TextBoxes.Add(StaticRoleCardViewStruct.NameTextBox, NameTextBox);
-            sTabCard.DocPanels[StaticRoleCardViewStruct.NameDockPanel].Children.Add(NameTextBox);
+            sTabCard.DockPanels[StaticRoleCardViewStruct.NameDockPanel].Children.Add(NameTextBox);
 
             #endregion
 
@@ -363,10 +363,10 @@ namespace AdminApp.Elements
                 HorizontalAlignment = HorizontalAlignment.Right
             };
             sTabCard.Borders.Add(StaticRoleCardViewStruct.CaptionBorder, CaptionBorder);
-            sTabCard.DocPanels[StaticRoleCardViewStruct.FirstLineDockPanel].Children.Add(CaptionBorder);
+            sTabCard.DockPanels[StaticRoleCardViewStruct.FirstLineDockPanel].Children.Add(CaptionBorder);
             //Вспомогательная панель 
             var CaptionDockPanel = new DockPanel();
-            sTabCard.DocPanels.Add(StaticRoleCardViewStruct.CaptionDockPanel, CaptionDockPanel);
+            sTabCard.DockPanels.Add(StaticRoleCardViewStruct.CaptionDockPanel, CaptionDockPanel);
             sTabCard.Borders[StaticRoleCardViewStruct.CaptionBorder].Child = CaptionDockPanel;
             //Текстовый блок
             var CaptionTextBlock = new TextBlock
@@ -378,7 +378,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.TextBlocks.Add(StaticRoleCardViewStruct.CaptionTextBlock, CaptionTextBlock);
-            sTabCard.DocPanels[StaticRoleCardViewStruct.CaptionDockPanel].Children.Add(CaptionTextBlock);
+            sTabCard.DockPanels[StaticRoleCardViewStruct.CaptionDockPanel].Children.Add(CaptionTextBlock);
             //Контрол блока 
             var CaptionTextBox = new TextBox
             {
@@ -398,7 +398,7 @@ namespace AdminApp.Elements
                     sTabCard.TextBoxes[StaticRoleCardViewStruct.CaptionTextBox].Text.Trim();
             };
             sTabCard.TextBoxes.Add(StaticRoleCardViewStruct.CaptionTextBox, CaptionTextBox);
-            sTabCard.DocPanels[StaticRoleCardViewStruct.CaptionDockPanel].Children.Add(CaptionTextBox);
+            sTabCard.DockPanels[StaticRoleCardViewStruct.CaptionDockPanel].Children.Add(CaptionTextBox);
 
             #endregion
         }
@@ -411,7 +411,7 @@ namespace AdminApp.Elements
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(StaticRoleCardViewStruct.SecondLineDockPanel, SecondLineDockPanel);
+            sTabCard.DockPanels.Add(StaticRoleCardViewStruct.SecondLineDockPanel, SecondLineDockPanel);
             sTabCard.StackPanels[StaticRoleCardViewStruct.MainStackPanel].Children.Add(SecondLineDockPanel);
 
             #endregion
@@ -427,7 +427,7 @@ namespace AdminApp.Elements
                 HorizontalAlignment = HorizontalAlignment.Left
             };
             sTabCard.Borders.Add(StaticRoleCardViewStruct.RolesBorder, RolesBorder);
-            sTabCard.DocPanels[StaticRoleCardViewStruct.SecondLineDockPanel].Children.Add(RolesBorder);
+            sTabCard.DockPanels[StaticRoleCardViewStruct.SecondLineDockPanel].Children.Add(RolesBorder);
             //Вспомогательная панель 
             var RolesStackPanel = new StackPanel();
             sTabCard.StackPanels.Add(StaticRoleCardViewStruct.RolesStackPanel, RolesStackPanel);
@@ -647,7 +647,7 @@ namespace AdminApp.Elements
             {
                 Margin = new Thickness(5, 0, 5, 10)
             };
-            sTabCard.DocPanels.Add(StaticRoleCardViewStruct.ThirdLineDockPanel, ThirdLineDockPanel);
+            sTabCard.DockPanels.Add(StaticRoleCardViewStruct.ThirdLineDockPanel, ThirdLineDockPanel);
             sTabCard.StackPanels[StaticRoleCardViewStruct.MainStackPanel].Children.Add(ThirdLineDockPanel);
 
             #endregion
@@ -664,7 +664,7 @@ namespace AdminApp.Elements
                 Margin = new Thickness(5, 0, 5, 0)
             };
             sTabCard.Borders.Add(StaticRoleCardViewStruct.ThirdLineBorder, ThirdLineBorder);
-            sTabCard.DocPanels[StaticRoleCardViewStruct.ThirdLineDockPanel].Children.Add(ThirdLineBorder);
+            sTabCard.DockPanels[StaticRoleCardViewStruct.ThirdLineDockPanel].Children.Add(ThirdLineBorder);
             //Вспомогательная панель
             var ThirdLineStackPanel = new StackPanel();
             sTabCard.StackPanels.Add(StaticRoleCardViewStruct.ThirdLineStackPanel, ThirdLineStackPanel);
