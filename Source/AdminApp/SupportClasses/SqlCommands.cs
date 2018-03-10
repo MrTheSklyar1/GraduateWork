@@ -2,9 +2,18 @@
 {
     public static class SqlCommands
     {
+        public const string LoadRole =
+            @"select ID, Name from Roles where ID=@ID";
+
+        public const string LoadDocTypeCard =
+            @"select ID, Name, Caption, TagWords, RoleTypeID, isEditingNow from DocTypes where ID=@ID";
+
         public const string SetInfoToGridPersonalRoles =
             @"select t.ID, t.Login, isnull(t.TelegramID,'') as TelegramID, t.FirstName, t.LastName, d.Caption from PersonalRoles t 
             inner join WorkingType d on t.WorkingTypeID=d.ID order by t.Login";
+
+        public const string SetInfoToGridAllRoles =
+            @"select t.ID, t.Name from Roles t order by t.Name";
 
         public const string SetInfoToGridStaticRoles =
             @"select t.ID, t.Caption from StaticRoles t 

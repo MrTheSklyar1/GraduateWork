@@ -34,11 +34,12 @@ namespace AdminApp.SystemClasses
             public static Dictionary<Guid, STabCard> TabCards = new Dictionary<Guid, STabCard>();
             public static Guid ChosenIDForStaticRole = Guid.Empty;
             public static Window ViewChoose = null;
+            public static Guid ChosenIDForDocType = Guid.Empty;
             public static bool SetCaptionToGrid(Window window, KeyValuePair<string, STabItem> item)
             {
                 try
                 {
-                    if (item.Key == StaticTypes.StaticRoleTab || item.Key == StaticTypes.DocTypeTab)
+                    if (item.Key == StaticTypes.StaticRoleTab || item.Key == StaticTypes.DocTypeTab || item.Key=="AllRoles")
                     {
                         item.Value.DataGrid.Columns[1].Header =
                             (String)window.FindResource("m_column_Caption");

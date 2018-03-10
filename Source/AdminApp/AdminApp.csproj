@@ -58,13 +58,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BaseClasses\BaseElement.cs" />
+    <Compile Include="ChoseFromAllRolesView.xaml.cs">
+      <DependentUpon>ChoseFromAllRolesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ChosePersonalRoleView.xaml.cs">
       <DependentUpon>ChosePersonalRoleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\AllWorkingTypes.cs" />
+    <Compile Include="Elements\DocTypeCard.cs" />
     <Compile Include="Elements\PersonalRoleCardFactory.cs" />
     <Compile Include="Elements\PersonalRoleCard.cs" />
     <Compile Include="Elements\PersonalRoleControl.cs" />
+    <Compile Include="Elements\RoleCard.cs" />
     <Compile Include="Elements\STabCard.cs" />
     <Compile Include="Elements\STabItem.cs" />
     <Compile Include="Elements\StaticRoleCard.cs" />
@@ -78,6 +83,10 @@
     <Compile Include="SupportClasses\StaticRoleCardViewStruct.cs" />
     <Compile Include="SupportClasses\XMLWorker.cs" />
     <Compile Include="SystemClasses\SystemSingleton.cs" />
+    <Page Include="ChoseFromAllRolesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ChosePersonalRoleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

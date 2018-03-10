@@ -14,6 +14,7 @@
     <v:String x:Key="m_menu_Open">Open</v:String>
     <v:String x:Key="m_menu_CreateNew">Create new</v:String>
     <v:String x:Key="m_menu_ChoseRole">Personal Role View</v:String>
+    <v:String x:Key="m_menu_ChoseRoleDoc">Role View</v:String>
     <!--Вкладка Логин основные элементы-->
     <v:String x:Key="m_tab_LogIn">Log In</v:String>
     <v:String x:Key="m_tab_LogIn_LogInText">Use your Login and Password to access the system</v:String>
@@ -32,6 +33,7 @@
     <v:String x:Key="m_tab_LogIn_NoConnection">No connection</v:String>
     <!--Вкладки-->
     <v:String x:Key="m_tab_PersonalRole">Personal Roles</v:String>
+    <v:String x:Key="m_tab_Role">Roles</v:String>
     <v:String x:Key="m_tab_StaticRole">Static Roles</v:String>
     <v:String x:Key="m_tab_DocType">Document Types</v:String>
     <!--Столбцы personal role-->
@@ -79,6 +81,7 @@
     <v:String x:Key="m_UserNotFound">Personal role not found</v:String>
     <v:String x:Key="m_WorkingTypeNotFound">Working Type not found</v:String>
     <v:String x:Key="m_RoleNotFound">Role not found</v:String>
+    <v:String x:Key="m_DocTypeNotFound">Document type not found</v:String>
     <v:String x:Key="m_TypeNotFound">Document type not found</v:String>
     <v:String x:Key="m_CardNotCreated">Card not created</v:String>
     <v:String x:Key="m_CardViewNotCreated">Card view not created</v:String>

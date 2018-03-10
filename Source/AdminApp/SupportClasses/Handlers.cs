@@ -93,6 +93,16 @@ namespace AdminApp.SupportClasses
                 SystemSingleton.CurrentSession.ViewChoose.Close();
             }
         }
+        //TODO: обработчик
+        public static void RowRolesRoleView_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is DataGridRow row)
+            {
+                SystemSingleton.CurrentSession.ChosenIDForDocType =
+                    Guid.Parse(((DataRowView)row.Item).Row.ItemArray[0].ToString());
+                SystemSingleton.CurrentSession.ViewChoose.Close();
+            }
+        }
         public static void RowStaticRole_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (sender is DataGridRow row)
