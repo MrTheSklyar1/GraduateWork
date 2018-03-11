@@ -20,6 +20,7 @@ namespace AdminApp.Elements
         public bool isEditingNow;
 
         public RoleCard RoleCard;
+        public Guid NewRoleCard;
 
         public DocTypeCard()
         {
@@ -28,6 +29,7 @@ namespace AdminApp.Elements
             Caption = "";
             TagWords = "";
             RoleTypeID = Guid.Empty;
+            NewRoleCard = Guid.Empty;;
             isEditingNow = false;
             RoleCard = new RoleCard(RoleTypeID);
             HasValue = true;
@@ -55,6 +57,7 @@ namespace AdminApp.Elements
                                 Caption = reader.GetString(2);
                                 TagWords = reader.GetString(3);
                                 RoleTypeID = reader.GetGuid(4);
+                                NewRoleCard = RoleTypeID;
                                 isEditingNow = reader.GetBoolean(5);
                                 HasValue = true;
                                 RoleCard = new RoleCard(RoleTypeID);

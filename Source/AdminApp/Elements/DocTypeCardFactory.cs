@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +35,7 @@ namespace AdminApp.Elements
                     FillFirstLine(result);
                     FillSecondLine(result);
                     FillThirdLine(result);
-                    //FillFourthLine(result);
+                    FillFourthLine(result);
                 }
                 catch (Exception ex)
                 {
@@ -70,7 +72,7 @@ namespace AdminApp.Elements
                     FillFirstLine(result);
                     FillSecondLine(result);
                     FillThirdLine(result);
-                    //SetButtonsNew(result);
+                    SetButtonsNew(result);
                 }
                 catch (Exception ex)
                 {
@@ -93,7 +95,7 @@ namespace AdminApp.Elements
             string temp = sTabCard.TextBoxes[DocTypeCardViewStruct.NameTextBox].Text;
             for (int i = 0; i < temp.Length; i++)
             {
-                if (!Char.IsLetter(temp[i]))
+                if (!Char.IsLetterOrDigit(temp[i]))
                 {
                     temp = temp.Remove(i, 1);
                     i--;
@@ -116,7 +118,230 @@ namespace AdminApp.Elements
             sTabCard.StackPanels[DocTypeCardViewStruct.MainStackPanel].Children
                 .Remove(sTabCard.Borders[DocTypeCardViewStruct.FourthLineBorder]);
             sTabCard.Borders.Remove(DocTypeCardViewStruct.FourthLineBorder);
-            //FillFourthLine(sTabCard);
+            FillFourthLine(sTabCard);
+        }
+
+        private static void FillFourthLine(STabCard sTabCard)
+        {
+            #region Контрол кнопок
+
+            //Border
+            var FourthLineBorder = new Border
+            {
+                CornerRadius = new CornerRadius(6),
+                BorderBrush = new SolidColorBrush(Colors.LightGray),
+                BorderThickness = new Thickness(2),
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Margin = new Thickness(5, 0, 5, 0)
+            };
+            sTabCard.Borders.Add(DocTypeCardViewStruct.FourthLineBorder, FourthLineBorder);
+            sTabCard.StackPanels[DocTypeCardViewStruct.MainStackPanel].Children.Add(FourthLineBorder);
+            //Вспомогательная панель
+            var FourthLineStackPanel = new StackPanel();
+            sTabCard.StackPanels.Add(DocTypeCardViewStruct.FourthLineStackPanel, FourthLineStackPanel);
+            sTabCard.Borders[DocTypeCardViewStruct.FourthLineBorder].Child = FourthLineStackPanel;
+            if (!((DocTypeCard)sTabCard.Card).isEditingNow)
+            {
+                //Кнопка сохранить
+                var SaveButton = new Button
+                {
+                    Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_SaveCard"),
+                    Width = 145,
+                    Height = 25,
+                    FontSize = 14,
+                    Margin = new Thickness(5)
+                };
+                SaveButton.Click += (sender, args) =>
+                {
+                    NameTextBox_LostKeyboardFocus(sTabCard);
+                    MessageBoxResult dialogResult = MessageBoxResult.No;
+                    try
+                    {
+                        int num = 0;
+                        string commandtext = PrepareSaveCommandWithoutWhere(sTabCard,ref num);
+                        if (commandtext == "")
+                        {
+                            return;
+                        }
+                        if (num>0)
+                        {
+                            dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureSavingCard"),
+                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
+                                MessageBoxButton.YesNo);
+                        }
+                        if (dialogResult == MessageBoxResult.Yes)
+                        {
+                            commandtext += "where ID='" + ((DocTypeCard)sTabCard.Card).ID.Value.ToString() + "';";
+                            using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                            {
+                                SystemSingleton.Configuration.SqlConnections.Add(con);
+                                con.Open();
+                                SqlTransaction transaction = con.BeginTransaction();
+                                SqlCommand command = con.CreateCommand();
+                                command.Transaction = transaction;
+                                try
+                                {
+                                    command.CommandText = commandtext;
+                                    EnvironmentHelper.SendLogSQL(command.CommandText);
+                                    command.ExecuteNonQuery();
+                                    transaction.Commit();
+                                    con.Close();
+                                }
+                                catch (Exception ex)
+                                {
+                                    EnvironmentHelper.SendDialogBox(
+                                        (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                            "m_CantSaveTransaction") + " \n\n " + ex.Message,
+                                        "SQL Error"
+                                    );
+                                    transaction.Rollback();
+                                    con.Close();
+                                    return;
+                                }
+                            }
+                            sTabCard.Card = new StaticRoleCard(((DocTypeCard)sTabCard.Card).ID.Value);
+                            ((DocTypeCard)sTabCard.Card).isEditingNow = false;
+                            EnvironmentHelper.UpdateView();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+                    }
+
+                };
+                sTabCard.Buttons.Add(DocTypeCardViewStruct.SaveButton, SaveButton);
+                sTabCard.StackPanels[DocTypeCardViewStruct.FourthLineStackPanel].Children.Add(SaveButton);
+                //Кнопка delete
+                var DeleteButton = new Button
+                {
+                    Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_DeleteCard"),
+                    Width = 145,
+                    Height = 25,
+                    FontSize = 14,
+                    Margin = new Thickness(5)
+                };
+                DeleteButton.Click += (sender, args) =>
+                {
+                    if (CheckDelete(((DocTypeCard)sTabCard.Card).ID.Value))
+                    {
+                        var dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_DeleteTaskQ"),
+                        (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
+                        MessageBoxButton.YesNo);
+                        if (dialogResult == MessageBoxResult.Yes)
+                        {
+                            try
+                            {
+                                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                                {
+                                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                                    using (var command = new SqlCommand(SqlCommands.DeleteDocType, con))
+                                    {
+                                        command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                                        command.Parameters["@ID"].Value = ((DocTypeCard)sTabCard.Card).ID.Value;
+                                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                                        con.Open();
+                                        int colms = command.ExecuteNonQuery();
+                                        con.Close();
+                                        if (colms == 0)
+                                        {
+                                            EnvironmentHelper.SendDialogBox(
+                                                (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                                    "m_CantDeleteCard") + "\n\n" + ((DocTypeCard)sTabCard.Card).ID.Value.ToString(),
+                                                "SQL Error"
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+                            }
+                            SystemSingleton.Configuration.tabControl.Items.Remove(sTabCard.TabItem);
+                            SystemSingleton.CurrentSession.TabCards.Remove(((DocTypeCard)sTabCard.Card).ID.Value);
+                            EnvironmentHelper.UpdateView();
+                        }
+                    }
+                    else
+                    {
+                        EnvironmentHelper.SendDialogBox(
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                "m_CantDeleteCardTasksCardReview") + "\n\n" + ((DocTypeCard)sTabCard.Card).ID.Value.ToString(),
+                            "Card Error"
+                        );
+                    }
+                };
+                sTabCard.Buttons.Add(DocTypeCardViewStruct.DeleteButton, DeleteButton);
+                sTabCard.StackPanels[DocTypeCardViewStruct.FourthLineStackPanel].Children.Add(DeleteButton);
+            }
+            //Кнопка закрыть
+            var CloseButton = new Button
+            {
+                Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_CloseCard"),
+                Width = 145,
+                Height = 25,
+                FontSize = 14,
+                Margin = new Thickness(5)
+            };
+            CloseButton.Click += (sender, args) =>
+            {
+                if (((DocTypeCard)sTabCard.Card).isEditingNow)
+                {
+                    SystemSingleton.Configuration.tabControl.Items.Remove(sTabCard.TabItem);
+                    SystemSingleton.CurrentSession.TabCards.Remove(((DocTypeCard)sTabCard.Card).ID.Value);
+                }
+                else
+                {
+                    MessageBoxResult dialogResult = MessageBoxResult.No;
+                    int num = 0;
+                    PrepareSaveCommandWithoutWhere(sTabCard, ref num);
+                    if (num>0)
+                    {
+                        dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureClosingCard"),
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
+                            MessageBoxButton.YesNo);
+                        if (dialogResult == MessageBoxResult.No)
+                        {
+                            return;
+                        }
+                    }
+                    SystemSingleton.Configuration.tabControl.Items.Remove(sTabCard.TabItem);
+                    SystemSingleton.CurrentSession.TabCards.Remove(((DocTypeCard)sTabCard.Card).ID.Value);
+                    try
+                    {
+                        using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                        {
+                            SystemSingleton.Configuration.SqlConnections.Add(con);
+                            using (var command = new SqlCommand(SqlCommands.SetStopEditingToDocType, con))
+                            {
+                                command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                                command.Parameters["@ID"].Value = ((DocTypeCard)sTabCard.Card).ID.Value;
+                                EnvironmentHelper.SendLogSQL(command.CommandText);
+                                con.Open();
+                                int colms = command.ExecuteNonQuery();
+                                con.Close();
+                                if (colms == 0)
+                                {
+                                    EnvironmentHelper.SendDialogBox(
+                                        (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                            "m_CantSetEditing") + "\n\n" + ((DocTypeCard)sTabCard.Card).ID.Value.ToString(),
+                                        "SQL Error"
+                                    );
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+                    }
+                }
+            };
+            sTabCard.Buttons.Add(DocTypeCardViewStruct.CloseButton, CloseButton);
+            sTabCard.StackPanels[DocTypeCardViewStruct.FourthLineStackPanel].Children.Add(CloseButton);
+
+            #endregion
         }
 
         private static void FillMainStackPanelToTab(STabCard sTabCard)
@@ -370,7 +595,7 @@ namespace AdminApp.Elements
                 {
                     ((DocTypeCard)sTabCard.Card).RoleCard = new RoleCard(SystemSingleton.CurrentSession.ChosenIDForDocType);
                     if(((DocTypeCard)sTabCard.Card).RoleCard.HasValue)
-                    ((DocTypeCard) sTabCard.Card).RoleTypeID = ((DocTypeCard) sTabCard.Card).RoleCard.ID.Value;
+                    ((DocTypeCard) sTabCard.Card).NewRoleCard = ((DocTypeCard) sTabCard.Card).RoleCard.ID.Value;
                     sTabCard.TextBoxes[DocTypeCardViewStruct.ThirdLineTextBox].Text =
                         ((DocTypeCard) sTabCard.Card).RoleCard.Name;
                     SystemSingleton.CurrentSession.ChosenIDForStaticRole = Guid.Empty;
@@ -379,6 +604,284 @@ namespace AdminApp.Elements
             sTabCard.Buttons.Add(DocTypeCardViewStruct.ThirdLineButton, ThirdLineButton);
             sTabCard.DockPanels[DocTypeCardViewStruct.ThirdLineDockPanel].Children.Add(ThirdLineButton);
             #endregion
+        }
+
+        private static void SetButtonsNew(STabCard sTabCard)
+        {
+            #region Контрол кнопок
+
+            //Border
+            var FourthLineBorder = new Border
+            {
+                CornerRadius = new CornerRadius(6),
+                BorderBrush = new SolidColorBrush(Colors.LightGray),
+                BorderThickness = new Thickness(2),
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Margin = new Thickness(5, 0, 5, 0)
+            };
+            sTabCard.Borders.Add(DocTypeCardViewStruct.FourthLineBorder, FourthLineBorder);
+            sTabCard.StackPanels[DocTypeCardViewStruct.MainStackPanel].Children.Add(FourthLineBorder);
+            //Вспомогательная панель
+            var FourthLineStackPanel = new StackPanel();
+            sTabCard.StackPanels.Add(DocTypeCardViewStruct.FourthLineStackPanel, FourthLineStackPanel);
+            sTabCard.Borders[DocTypeCardViewStruct.FourthLineStackPanel].Child = FourthLineStackPanel;
+            //Кнопка сохранить
+            var SaveButton = new Button
+            {
+                Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_SaveCard"),
+                Width = 145,
+                Height = 25,
+                FontSize = 14,
+                Margin = new Thickness(5)
+            };
+            SaveButton.Click += (sender, args) =>
+            {
+                NameTextBox_LostKeyboardFocus(sTabCard);
+                MessageBoxResult dialogResult = MessageBoxResult.No;
+                try
+                {
+                    int commandInt = 0;
+                    string commandtext = PrepareInsertCommand(sTabCard, ref commandInt);
+                    if (commandtext == "")
+                    {
+                        EnvironmentHelper.SendDialogBox(
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                "m_NullToSave"), "Fileds Info");
+                        return;
+                    }
+                    if (commandInt > 3)
+                    {
+                        dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureSavingCard"),
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
+                            MessageBoxButton.YesNo);
+                    }
+                    if (dialogResult == MessageBoxResult.Yes)
+                    {
+                        using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                        {
+                            SystemSingleton.Configuration.SqlConnections.Add(con);
+                            con.Open();
+                            SqlTransaction transaction = con.BeginTransaction();
+                            SqlCommand command = con.CreateCommand();
+                            command.Transaction = transaction;
+                            try
+                            {
+                                command.CommandText = commandtext;
+                                EnvironmentHelper.SendLogSQL(command.CommandText);
+                                command.ExecuteNonQuery();
+                                transaction.Commit();
+                                con.Close();
+                            }
+                            catch (Exception ex)
+                            {
+                                EnvironmentHelper.SendDialogBox(
+                                    (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                                        "m_CantSaveTransaction") + " \n\n " + ex.Message,
+                                    "SQL Error"
+                                );
+                                transaction.Rollback();
+                                con.Close();
+                                return;
+                            }
+                        }
+                        sTabCard.Card = new DocTypeCard(((DocTypeCard)sTabCard.Card).ID.Value);
+                        sTabCard.isNew = false;
+                        ((DocTypeCard)sTabCard.Card).isEditingNow = false;
+                        EnvironmentHelper.UpdateView();
+                        RebuildView(sTabCard);
+                        sTabCard.TabItem.Header = ((DocTypeCard)sTabCard.Card).Caption;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+                }
+
+            };
+            sTabCard.Buttons.Add(DocTypeCardViewStruct.SaveButton, SaveButton);
+            sTabCard.StackPanels[DocTypeCardViewStruct.FourthLineStackPanel].Children.Add(SaveButton);
+            //Кнопка закрыть
+            var CloseButton = new Button
+            {
+                Content = (string)SystemSingleton.Configuration.mainWindow.FindResource("c_CloseCard"),
+                Width = 145,
+                Height = 25,
+                FontSize = 14,
+                Margin = new Thickness(5)
+            };
+            CloseButton.Click += (sender, args) =>
+            {
+                if (((DocTypeCard)sTabCard.Card).isEditingNow)
+                {
+                    SystemSingleton.Configuration.tabControl.Items.Remove(sTabCard.TabItem);
+                    SystemSingleton.CurrentSession.TabCards.Remove(((DocTypeCard)sTabCard.Card).ID.Value);
+                }
+                else
+                {
+                    MessageBoxResult dialogResult = MessageBoxResult.No;
+                    int commandInt = 0;
+                    PrepareInsertCommand(sTabCard, ref commandInt);
+                    if (commandInt > 0)
+                    {
+                        dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureClosingCard"),
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
+                            MessageBoxButton.YesNo);
+                        if (dialogResult == MessageBoxResult.No)
+                        {
+                            return;
+                        }
+                    }
+                    SystemSingleton.Configuration.tabControl.Items.Remove(sTabCard.TabItem);
+                    SystemSingleton.CurrentSession.TabCards.Remove(((DocTypeCard)sTabCard.Card).ID.Value);
+                }
+            };
+            sTabCard.Buttons.Add(DocTypeCardViewStruct.CloseButton, CloseButton);
+            sTabCard.StackPanels[DocTypeCardViewStruct.FourthLineStackPanel].Children.Add(CloseButton);
+
+            #endregion
+        }
+
+        private static bool CheckNULL(STabCard sTabCard)
+        {
+            if (sTabCard.TextBoxes[DocTypeCardViewStruct.NameTextBox].Text == "" ||
+                sTabCard.TextBoxes[DocTypeCardViewStruct.CaptionTextBox].Text == "" ||
+                sTabCard.TextBoxes[DocTypeCardViewStruct.SecondLineTextBox].Text == "" ||
+                sTabCard.TextBoxes[DocTypeCardViewStruct.ThirdLineTextBox].Text == "")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static string PrepareInsertCommand(STabCard sTabCard, ref int num)
+        {
+            num = 0;
+            if (CheckNULL(sTabCard))
+            {
+                EnvironmentHelper.SendDialogBox(
+                    (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                        "m_NullFieldsDoc"), "Fileds Info");
+                return "";
+            }
+            string commandtext = "insert into DocTypes (ID, ";
+            string commandvalues = "values ('" + ((DocTypeCard)sTabCard.Card).ID.Value.ToString() + "', ";
+            string futureNewName = ((DocTypeCard)sTabCard.Card).Name;
+            string futureNewCaption = ((DocTypeCard)sTabCard.Card).Caption;
+            string futureNewTags = ((DocTypeCard) sTabCard.Card).TagWords;
+            Guid futureNewRole = ((DocTypeCard) sTabCard.Card).RoleTypeID;
+            if (sTabCard.TextBoxes[DocTypeCardViewStruct.NameTextBox].Text != futureNewName)
+            {
+                futureNewName = sTabCard.TextBoxes[DocTypeCardViewStruct.NameTextBox].Text;
+                commandtext += "Name, ";
+                commandvalues += "'" + futureNewName + "', ";
+                num++;
+            }
+            if (sTabCard.TextBoxes[DocTypeCardViewStruct.CaptionTextBox].Text != futureNewCaption)
+            {
+                futureNewCaption = sTabCard.TextBoxes[DocTypeCardViewStruct.CaptionTextBox].Text;
+                commandtext += "Caption, ";
+                commandvalues += "'" + futureNewCaption + "', ";
+                num++;
+            }
+            if (sTabCard.TextBoxes[DocTypeCardViewStruct.SecondLineTextBox].Text != futureNewTags)
+            {
+                futureNewTags = sTabCard.TextBoxes[DocTypeCardViewStruct.SecondLineTextBox].Text;
+                commandtext += "TagWords, ";
+                commandvalues += "'" + futureNewTags + "', ";
+                num++;
+            }
+            if (((DocTypeCard)sTabCard.Card).NewRoleCard != futureNewRole)
+            {
+                futureNewRole = ((DocTypeCard)sTabCard.Card).NewRoleCard;
+                commandtext += "RoleTypeID, ";
+                commandvalues += "'" + futureNewRole + "', ";
+                num++;
+            }
+            commandtext += "isEditingNow) ";
+            commandvalues += "1);";
+            return commandtext + commandvalues;
+        }
+        private static bool CheckDelete(Guid ID)
+        {
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.CheckDeleteDocType, con))
+                    {
+                        command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@ID"].Value = ID;
+                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                        con.Open();
+                        int colms = Convert.ToInt32(command.ExecuteScalar());
+                        con.Close();
+                        if (colms == 0)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendErrorDialogBox(ex.Message, "SQL Error", ex.StackTrace);
+                return false;
+            }
+        }
+        private static string PrepareSaveCommandWithoutWhere(STabCard sTabCard, ref int num)
+        {
+            num = 0;
+            if (CheckNULL(sTabCard))
+            {
+                EnvironmentHelper.SendDialogBox(
+                    (string)SystemSingleton.Configuration.mainWindow.FindResource(
+                        "m_NullFieldsDoc"), "Fileds Info");
+                return "";
+            }
+
+            string commandtext = "update DocTypes set ";
+            string futureNewName = ((DocTypeCard)sTabCard.Card).Name;
+            string futureNewCaption = ((DocTypeCard)sTabCard.Card).Caption;
+            string futureNewTags = ((DocTypeCard)sTabCard.Card).TagWords;
+            Guid futureNewRole = ((DocTypeCard)sTabCard.Card).RoleTypeID;
+            if (sTabCard.TextBoxes[DocTypeCardViewStruct.NameTextBox].Text != futureNewName)
+            {
+                futureNewName = sTabCard.TextBoxes[DocTypeCardViewStruct.NameTextBox].Text;
+                commandtext += "Name='" + futureNewName + "', ";
+                num++;
+            }
+
+            if (sTabCard.TextBoxes[DocTypeCardViewStruct.CaptionTextBox].Text != futureNewCaption)
+            {
+                futureNewCaption = sTabCard.TextBoxes[DocTypeCardViewStruct.CaptionTextBox].Text;
+                commandtext += "Caption='" + futureNewCaption + "', ";
+                num++;
+            }
+
+            if (sTabCard.TextBoxes[DocTypeCardViewStruct.SecondLineTextBox].Text != futureNewTags)
+            {
+                futureNewTags = sTabCard.TextBoxes[DocTypeCardViewStruct.SecondLineTextBox].Text;
+                commandtext += "TagWords='" + futureNewTags + "', ";
+                num++;
+            }
+
+            if (((DocTypeCard)sTabCard.Card).NewRoleCard != futureNewRole)
+            {
+                futureNewRole = ((DocTypeCard)sTabCard.Card).NewRoleCard;
+                commandtext += "RoleTypeID='" + futureNewRole + "', ";
+                num++;
+            }
+
+            if (commandtext[commandtext.Length - 2] == ',') commandtext = commandtext.Remove(commandtext.Length - 2, 1);
+            return commandtext;
         }
     }
 }

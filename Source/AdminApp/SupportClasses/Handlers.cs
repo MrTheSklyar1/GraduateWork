@@ -93,7 +93,6 @@ namespace AdminApp.SupportClasses
                 SystemSingleton.CurrentSession.ViewChoose.Close();
             }
         }
-        //TODO: обработчик
         public static void RowRolesRoleView_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (sender is DataGridRow row)

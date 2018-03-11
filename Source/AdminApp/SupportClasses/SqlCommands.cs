@@ -31,11 +31,17 @@
         public const string DeleteStaticRole =
             @"delete from RoleUsers where RoleID=@ID; delete from StaticRoles where ID=@ID; delete from Roles where ID=@ID;";
 
+        public const string DeleteDocType =
+            @"delete from DocTypes where ID=@ID;";
+
         public const string CheckDeletePersonalRole =
             @"select count(*) from Tasks where ToRoleID=@ID";
 
         public const string CheckDeleteStaticRole =
             @"select count(*) from Tasks where ToRoleID=@ID";
+
+        public const string CheckDeleteDocType =
+            @"select count(*) from Tasks where DocType=@ID";
 
         public const string LoginCommand =
             @"select ID, PassWord, isnull(TelegramID, 0), FirstName, LastName, FullName, isAdmin from PersonalRoles where Login=@LoginText";

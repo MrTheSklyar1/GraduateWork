@@ -57,7 +57,22 @@ namespace AdminApp.SupportClasses
                     }
                     break;
                 case 2://DocTypes
-                    MessageBox.Show("DTN");
+                    var tempdoc = DocTypeCardFactory.CreateTab();
+                    if (tempdoc != null)
+                    {
+                        if (SystemSingleton.CurrentSession.TabCards.ContainsKey(((DocTypeCard)tempdoc.Card).ID.Value))
+                        {
+                            EnvironmentHelper.SendDialogBox(
+                                (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AlreadyOpened"),
+                                "Attention"
+                            );
+                        }
+                        else
+                        {
+                            SystemSingleton.CurrentSession.TabCards.Add(((DocTypeCard)tempdoc.Card).ID.Value, tempdoc);
+                            SystemSingleton.Configuration.tabControl.Items.Add(tempdoc.TabItem);
+                        }
+                    }
                     break;
             }
         }
