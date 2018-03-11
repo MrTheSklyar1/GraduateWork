@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AdminApp.BaseClasses;
 using AdminApp.SupportClasses;
 using AdminApp.SystemClasses;
@@ -22,14 +18,14 @@ namespace AdminApp.Elements
         public bool isAdmin;
         public Guid WorkingTypeID;
         public bool isEditingNow;
-        
+
 
         public AllWorkingTypes AllWorkingTypes = new AllWorkingTypes();
         public WorkingType WorkingType;
 
         public PersonalRoleCard()
         {
-            ID=Guid.NewGuid();
+            ID = Guid.NewGuid();
             WorkingType = new WorkingType();
             WorkingTypeID = WorkingType.ID.Value;
             Login = "";

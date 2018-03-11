@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -21,11 +17,11 @@ namespace AdminApp.Elements
             result.Card = new DocTypeCard(RoleID);
             result.CardType = StaticTypes.DocType;
             result.isNew = false;
-            if (((DocTypeCard) result.Card).HasValue)
+            if (((DocTypeCard)result.Card).HasValue)
             {
                 result.TabItem = new TabItem
                 {
-                    Header = ((DocTypeCard) result.Card).Caption,
+                    Header = ((DocTypeCard)result.Card).Caption,
                     FontSize = 15,
                     Height = 40
                 };
@@ -58,11 +54,11 @@ namespace AdminApp.Elements
             result.Card = new DocTypeCard();
             result.CardType = StaticTypes.DocType;
             result.isNew = true;
-            if (((DocTypeCard) result.Card).HasValue)
+            if (((DocTypeCard)result.Card).HasValue)
             {
                 result.TabItem = new TabItem
                 {
-                    Header = (string) SystemSingleton.Configuration.mainWindow.FindResource("m_NewCard"),
+                    Header = (string)SystemSingleton.Configuration.mainWindow.FindResource("m_NewCard"),
                     FontSize = 15,
                     Height = 40
                 };
@@ -76,7 +72,7 @@ namespace AdminApp.Elements
                 }
                 catch (Exception ex)
                 {
-                    EnvironmentHelper.Error(((DocTypeCard) result.Card).ID.Value);
+                    EnvironmentHelper.Error(((DocTypeCard)result.Card).ID.Value);
                     return null;
                 }
 
@@ -84,14 +80,14 @@ namespace AdminApp.Elements
             }
             else
             {
-                EnvironmentHelper.Error(((DocTypeCard) result.Card).ID.Value);
+                EnvironmentHelper.Error(((DocTypeCard)result.Card).ID.Value);
                 return null;
             }
         }
 
         private static void NameTextBox_LostKeyboardFocus(STabCard sTabCard)
         {
-            if (((DocTypeCard) sTabCard.Card).isEditingNow) return;
+            if (((DocTypeCard)sTabCard.Card).isEditingNow) return;
             string temp = sTabCard.TextBoxes[DocTypeCardViewStruct.NameTextBox].Text;
             for (int i = 0; i < temp.Length; i++)
             {
@@ -158,12 +154,12 @@ namespace AdminApp.Elements
                     try
                     {
                         int num = 0;
-                        string commandtext = PrepareSaveCommandWithoutWhere(sTabCard,ref num);
+                        string commandtext = PrepareSaveCommandWithoutWhere(sTabCard, ref num);
                         if (commandtext == "")
                         {
                             return;
                         }
-                        if (num>0)
+                        if (num > 0)
                         {
                             dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureSavingCard"),
                                 (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
@@ -199,7 +195,7 @@ namespace AdminApp.Elements
                                     return;
                                 }
                             }
-                            sTabCard.Card = new StaticRoleCard(((DocTypeCard)sTabCard.Card).ID.Value);
+                            sTabCard.Card = new DocTypeCard(((DocTypeCard)sTabCard.Card).ID.Value);
                             ((DocTypeCard)sTabCard.Card).isEditingNow = false;
                             EnvironmentHelper.UpdateView();
                         }
@@ -296,7 +292,7 @@ namespace AdminApp.Elements
                     MessageBoxResult dialogResult = MessageBoxResult.No;
                     int num = 0;
                     PrepareSaveCommandWithoutWhere(sTabCard, ref num);
-                    if (num>0)
+                    if (num > 0)
                     {
                         dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureClosingCard"),
                             (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
@@ -388,7 +384,7 @@ namespace AdminApp.Elements
             //Текстовый блок
             var NameTextBlock = new TextBlock
             {
-                Text = (string) SystemSingleton.Configuration.mainWindow.FindResource("m_NameRole"),
+                Text = (string)SystemSingleton.Configuration.mainWindow.FindResource("m_NameRole"),
                 VerticalAlignment = VerticalAlignment.Center,
                 TextAlignment = TextAlignment.Left,
                 FontSize = 14,
@@ -399,7 +395,7 @@ namespace AdminApp.Elements
             //Контрол блока 
             var NameTextBox = new TextBox
             {
-                Text = ((DocTypeCard) sTabCard.Card).Name,
+                Text = ((DocTypeCard)sTabCard.Card).Name,
                 VerticalContentAlignment = VerticalAlignment.Center,
                 TextAlignment = TextAlignment.Left,
                 MinWidth = 150,
@@ -407,7 +403,7 @@ namespace AdminApp.Elements
                 FontSize = 14,
                 Height = 40,
                 MaxLength = 50,
-                IsReadOnly = ((DocTypeCard) sTabCard.Card).isEditingNow
+                IsReadOnly = ((DocTypeCard)sTabCard.Card).isEditingNow
             };
             NameTextBox.LostKeyboardFocus += (sender, args) => { NameTextBox_LostKeyboardFocus(sTabCard); };
             sTabCard.TextBoxes.Add(DocTypeCardViewStruct.NameTextBox, NameTextBox);
@@ -435,7 +431,7 @@ namespace AdminApp.Elements
             //Текстовый блок
             var CaptionTextBlock = new TextBlock
             {
-                Text = (string) SystemSingleton.Configuration.mainWindow.FindResource("m_CaptionStatic"),
+                Text = (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CaptionStatic"),
                 VerticalAlignment = VerticalAlignment.Center,
                 TextAlignment = TextAlignment.Left,
                 FontSize = 14,
@@ -446,7 +442,7 @@ namespace AdminApp.Elements
             //Контрол блока 
             var CaptionTextBox = new TextBox
             {
-                Text = ((DocTypeCard) sTabCard.Card).Caption,
+                Text = ((DocTypeCard)sTabCard.Card).Caption,
                 VerticalContentAlignment = VerticalAlignment.Center,
                 TextAlignment = TextAlignment.Left,
                 MinWidth = 150,
@@ -454,7 +450,7 @@ namespace AdminApp.Elements
                 FontSize = 14,
                 Height = 40,
                 MaxLength = 50,
-                IsReadOnly = ((DocTypeCard) sTabCard.Card).isEditingNow
+                IsReadOnly = ((DocTypeCard)sTabCard.Card).isEditingNow
             };
             CaptionTextBox.LostKeyboardFocus += (sender, args) =>
             {
@@ -560,7 +556,7 @@ namespace AdminApp.Elements
             //Контрол блока 
             var ThirdLineTextBox = new TextBox
             {
-                Text = ((DocTypeCard)sTabCard.Card).RoleCard!=null ? ((DocTypeCard)sTabCard.Card).RoleCard.Name : "",
+                Text = ((DocTypeCard)sTabCard.Card).RoleCard.Name ?? "",
                 VerticalContentAlignment = VerticalAlignment.Center,
                 TextAlignment = TextAlignment.Left,
                 MinWidth = 50,
@@ -594,10 +590,10 @@ namespace AdminApp.Elements
                 else
                 {
                     ((DocTypeCard)sTabCard.Card).RoleCard = new RoleCard(SystemSingleton.CurrentSession.ChosenIDForDocType);
-                    if(((DocTypeCard)sTabCard.Card).RoleCard.HasValue)
-                    ((DocTypeCard) sTabCard.Card).NewRoleCard = ((DocTypeCard) sTabCard.Card).RoleCard.ID.Value;
+                    if (((DocTypeCard)sTabCard.Card).RoleCard.HasValue)
+                        ((DocTypeCard)sTabCard.Card).NewRoleCard = ((DocTypeCard)sTabCard.Card).RoleCard.ID.Value;
                     sTabCard.TextBoxes[DocTypeCardViewStruct.ThirdLineTextBox].Text =
-                        ((DocTypeCard) sTabCard.Card).RoleCard.Name;
+                        ((DocTypeCard)sTabCard.Card).RoleCard.Name;
                     SystemSingleton.CurrentSession.ChosenIDForStaticRole = Guid.Empty;
                 }
             };
@@ -624,7 +620,7 @@ namespace AdminApp.Elements
             //Вспомогательная панель
             var FourthLineStackPanel = new StackPanel();
             sTabCard.StackPanels.Add(DocTypeCardViewStruct.FourthLineStackPanel, FourthLineStackPanel);
-            sTabCard.Borders[DocTypeCardViewStruct.FourthLineStackPanel].Child = FourthLineStackPanel;
+            sTabCard.Borders[DocTypeCardViewStruct.FourthLineBorder].Child = FourthLineStackPanel;
             //Кнопка сохранить
             var SaveButton = new Button
             {
@@ -770,8 +766,8 @@ namespace AdminApp.Elements
             string commandvalues = "values ('" + ((DocTypeCard)sTabCard.Card).ID.Value.ToString() + "', ";
             string futureNewName = ((DocTypeCard)sTabCard.Card).Name;
             string futureNewCaption = ((DocTypeCard)sTabCard.Card).Caption;
-            string futureNewTags = ((DocTypeCard) sTabCard.Card).TagWords;
-            Guid futureNewRole = ((DocTypeCard) sTabCard.Card).RoleTypeID;
+            string futureNewTags = ((DocTypeCard)sTabCard.Card).TagWords;
+            Guid futureNewRole = ((DocTypeCard)sTabCard.Card).RoleTypeID;
             if (sTabCard.TextBoxes[DocTypeCardViewStruct.NameTextBox].Text != futureNewName)
             {
                 futureNewName = sTabCard.TextBoxes[DocTypeCardViewStruct.NameTextBox].Text;

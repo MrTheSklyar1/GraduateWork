@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using AdminApp.SupportClasses;
 using AdminApp.SystemClasses;
-using Microsoft.Win32;
 
 namespace AdminApp.Elements
 {
@@ -627,16 +619,16 @@ namespace AdminApp.Elements
         private static void PersonalRoleDelete(Guid idValue, STabCard sTabCard)
         {
             ((StaticRoleCard)sTabCard.Card).DeletedPersons.Add(idValue);
-            if (((StaticRoleCard) sTabCard.Card).NewPersonalRoles.ContainsKey(idValue))
+            if (((StaticRoleCard)sTabCard.Card).NewPersonalRoles.ContainsKey(idValue))
             {
-                ((StaticRoleCard) sTabCard.Card).NewPersonalRoles.Remove(idValue);
+                ((StaticRoleCard)sTabCard.Card).NewPersonalRoles.Remove(idValue);
                 ((StaticRoleCard)sTabCard.Card).NewPersonalControls.Remove(idValue);
             }
-            else if(((StaticRoleCard)sTabCard.Card).PersonalRoleCards.ContainsKey(idValue))
+            else if (((StaticRoleCard)sTabCard.Card).PersonalRoleCards.ContainsKey(idValue))
             {
                 ((StaticRoleCard)sTabCard.Card).PersonalControls.Remove(idValue);
             }
-            
+
         }
 
         private static void FillThirdLine(STabCard sTabCard)
@@ -913,7 +905,7 @@ namespace AdminApp.Elements
                         con.Open();
                         int colms = Convert.ToInt32(command.ExecuteScalar());
                         con.Close();
-                        if (colms == 0 && ID!=new Guid("9efcd5cd-bf54-47f3-95e3-2953cb235941"))
+                        if (colms == 0 && ID != new Guid("9efcd5cd-bf54-47f3-95e3-2953cb235941"))
                         {
                             return true;
                         }

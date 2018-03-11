@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AdminApp.BaseClasses;
 using AdminApp.SupportClasses;
 using AdminApp.SystemClasses;
@@ -18,7 +15,7 @@ namespace AdminApp.Elements
         public bool isEditingNow;
         public bool rolesChanged;
 
-        public Dictionary<Guid,PersonalRoleCard> PersonalRoleCards = new Dictionary<Guid, PersonalRoleCard>();
+        public Dictionary<Guid, PersonalRoleCard> PersonalRoleCards = new Dictionary<Guid, PersonalRoleCard>();
         public Dictionary<Guid, PersonalRoleControl> PersonalControls = new Dictionary<Guid, PersonalRoleControl>();
         public List<Guid> DeletedPersons = new List<Guid>();
         public Dictionary<Guid, PersonalRoleCard> NewPersonalRoles = new Dictionary<Guid, PersonalRoleCard>();

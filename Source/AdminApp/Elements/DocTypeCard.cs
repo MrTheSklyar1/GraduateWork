@@ -2,12 +2,8 @@
 using AdminApp.SupportClasses;
 using AdminApp.SystemClasses;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdminApp.Elements
 {
@@ -29,7 +25,7 @@ namespace AdminApp.Elements
             Caption = "";
             TagWords = "";
             RoleTypeID = Guid.Empty;
-            NewRoleCard = Guid.Empty;;
+            NewRoleCard = Guid.Empty; ;
             isEditingNow = false;
             RoleCard = new RoleCard(RoleTypeID);
             HasValue = true;

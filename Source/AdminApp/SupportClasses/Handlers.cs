@@ -1,11 +1,7 @@
 ﻿using AdminApp.SystemClasses;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,7 +15,7 @@ namespace AdminApp.SupportClasses
         {
             if (sender is DataGridRow row)
             {
-                if (Guid.Parse(((DataRowView) row.Item).Row.ItemArray[0].ToString()) ==
+                if (Guid.Parse(((DataRowView)row.Item).Row.ItemArray[0].ToString()) ==
                     SystemSingleton.CurrentSession.ID)
                 {
                     EnvironmentHelper.SendDialogBox(
@@ -89,7 +85,7 @@ namespace AdminApp.SupportClasses
             if (sender is DataGridRow row)
             {
                 SystemSingleton.CurrentSession.ChosenIDForStaticRole =
-                    Guid.Parse(((DataRowView) row.Item).Row.ItemArray[0].ToString());
+                    Guid.Parse(((DataRowView)row.Item).Row.ItemArray[0].ToString());
                 SystemSingleton.CurrentSession.ViewChoose.Close();
             }
         }

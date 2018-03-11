@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -48,7 +45,7 @@ namespace AdminApp.Elements
                         FillFifthLine(result);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     EnvironmentHelper.Error(PersonalID);
                     return null;
@@ -199,7 +196,7 @@ namespace AdminApp.Elements
                         ((PersonalRoleCard)sTabCard.Card).isEditingNow = false;
                         EnvironmentHelper.UpdateView();
                         RebuildView(sTabCard);
-                        sTabCard.TabItem.Header = ((PersonalRoleCard) sTabCard.Card).FullName;
+                        sTabCard.TabItem.Header = ((PersonalRoleCard)sTabCard.Card).FullName;
                     }
 
                 }
@@ -888,7 +885,7 @@ namespace AdminApp.Elements
                                     return;
                                 }
                             }
-                            sTabCard.Card = new PersonalRoleCard(((PersonalRoleCard) sTabCard.Card).ID.Value);
+                            sTabCard.Card = new PersonalRoleCard(((PersonalRoleCard)sTabCard.Card).ID.Value);
                             EnvironmentHelper.UpdateView();
                         }
 
@@ -1119,10 +1116,11 @@ namespace AdminApp.Elements
             }
 
             if (sTabCard.TextBoxes[PersonalRoleCardViewStruct.TelegramTextBox].Text ==
-                (string) SystemSingleton.Configuration.mainWindow.FindResource("c_TelegramIDNULL"))
+                (string)SystemSingleton.Configuration.mainWindow.FindResource("c_TelegramIDNULL"))
             {
                 tempTelegramID = -1;
-            }else if (sTabCard.TextBoxes[PersonalRoleCardViewStruct.TelegramTextBox].Text!="")
+            }
+            else if (sTabCard.TextBoxes[PersonalRoleCardViewStruct.TelegramTextBox].Text != "")
             {
                 try
                 {
@@ -1143,7 +1141,7 @@ namespace AdminApp.Elements
                 tempTelegramID = 0;
             }
 
-            
+
             string commandtext = "update PersonalRoles set ";
             string futureNewLogin = ((PersonalRoleCard)sTabCard.Card).Login;
             string futureNewPassword = ((PersonalRoleCard)sTabCard.Card).PassWord;
@@ -1172,7 +1170,7 @@ namespace AdminApp.Elements
                 futureNewTelegramID = tempTelegramID;
                 commandtext += "TelegramID=" + futureNewTelegramID.Value + ", ";
             }
-            else if(tempTelegramID == 0)
+            else if (tempTelegramID == 0)
             {
                 commandtext += "TelegramID=NULL, ";
             }
@@ -1234,7 +1232,7 @@ namespace AdminApp.Elements
             }
 
             bool newPassword = false;
-            if (sTabCard.PasswordBoxes[PersonalRoleCardViewStruct.PasswordPasswordBox].Password!="")
+            if (sTabCard.PasswordBoxes[PersonalRoleCardViewStruct.PasswordPasswordBox].Password != "")
             {
                 newPassword = true;
                 if (temppassword != temprepeatpassword)
@@ -1274,7 +1272,7 @@ namespace AdminApp.Elements
 
 
             string commandtext = "insert into PersonalRoles (ID, ";
-            string commandvalues = "values ('"+ ((PersonalRoleCard)sTabCard.Card).ID.Value.ToString()+"', ";
+            string commandvalues = "values ('" + ((PersonalRoleCard)sTabCard.Card).ID.Value.ToString() + "', ";
             string futureNewLogin = ((PersonalRoleCard)sTabCard.Card).Login;
             string futureNewPassword = ((PersonalRoleCard)sTabCard.Card).PassWord;
             long? futureNewTelegramID = ((PersonalRoleCard)sTabCard.Card).TelegramID.HasValue
@@ -1287,7 +1285,7 @@ namespace AdminApp.Elements
             if (sTabCard.TextBoxes[PersonalRoleCardViewStruct.LoginTextBox].Text != futureNewLogin)
             {
                 futureNewLogin = sTabCard.TextBoxes[PersonalRoleCardViewStruct.LoginTextBox].Text;
-                if(!CheckLogin(futureNewLogin)) return "";
+                if (!CheckLogin(futureNewLogin)) return "";
                 commandtext += "Login, ";
                 commandvalues += "'" + futureNewLogin + "', ";
                 num++;
@@ -1330,7 +1328,7 @@ namespace AdminApp.Elements
                 num++;
             }
 
-            if (SelectedType.ID.Value!=Guid.Empty)
+            if (SelectedType.ID.Value != Guid.Empty)
             {
                 futureNewWorkingTypeID = SelectedType.ID.Value;
                 commandtext += "WorkingTypeID, ";
@@ -1356,11 +1354,11 @@ namespace AdminApp.Elements
             }
             commandtext += "isEditingNow) ";
             commandvalues += "1);";
-            string insertroles = "insert into Roles values ('"+ ((PersonalRoleCard)sTabCard.Card).ID.Value.ToString() + "', '"+ sTabCard.TextBoxes[PersonalRoleCardViewStruct.FullNameTextBox].Text + "');";
-            string inserttostatic = "insert into RoleUsers values ('fffee627-a5a6-4345-bc55-8fba3709dc48', '"+ ((PersonalRoleCard)sTabCard.Card).ID.Value.ToString() + "');";
+            string insertroles = "insert into Roles values ('" + ((PersonalRoleCard)sTabCard.Card).ID.Value.ToString() + "', '" + sTabCard.TextBoxes[PersonalRoleCardViewStruct.FullNameTextBox].Text + "');";
+            string inserttostatic = "insert into RoleUsers values ('fffee627-a5a6-4345-bc55-8fba3709dc48', '" + ((PersonalRoleCard)sTabCard.Card).ID.Value.ToString() + "');";
             sTabCard.PasswordBoxes[PersonalRoleCardViewStruct.PasswordPasswordBox].Password = temppassword;
             sTabCard.PasswordBoxes[PersonalRoleCardViewStruct.RepeatPasswordPasswordBox].Password = temppassword;
-            return insertroles+commandtext+commandvalues+inserttostatic;
+            return insertroles + commandtext + commandvalues + inserttostatic;
         }
 
         private static bool CheckLogin(string login)
@@ -1391,7 +1389,7 @@ namespace AdminApp.Elements
                         {
                             return true;
                         }
-                        
+
                     }
                 }
             }
