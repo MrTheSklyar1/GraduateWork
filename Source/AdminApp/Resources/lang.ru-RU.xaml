@@ -122,6 +122,7 @@
     <v:String x:Key="m_NullToSave">Ошибка при сохранении</v:String>
     <v:String x:Key="m_NullFieldsDoc">Все поля обязательны для заполнения</v:String>
     <v:String x:Key="m_NameRole">Имя (На Английском, только буквы)</v:String>
+    <v:String x:Key="m_NameDocType">Имя (На Английском, только буквы и цифры)</v:String>
     <v:String x:Key="m_CaptionStatic">Название</v:String>
     <v:String x:Key="m_AlreadyIn">Роль уже есть в данной статической роли</v:String>
 </ResourceDictionary>

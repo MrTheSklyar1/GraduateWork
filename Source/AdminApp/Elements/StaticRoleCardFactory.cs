@@ -127,7 +127,7 @@ namespace AdminApp.Elements
                 try
                 {
                     int commandInt = 0;
-                    string commandtext = PrepareInsertCommand(sTabCard, ref commandInt);
+                    string commandtext = PrepareInsertCommand(sTabCard, ref commandInt, false);
                     if (commandtext == "")
                     {
                         EnvironmentHelper.SendDialogBox(
@@ -218,7 +218,7 @@ namespace AdminApp.Elements
                 {
                     MessageBoxResult dialogResult = MessageBoxResult.No;
                     int commandInt = 0;
-                    PrepareInsertCommand(sTabCard, ref commandInt);
+                    PrepareInsertCommand(sTabCard, ref commandInt, true);
                     if (commandInt > 0)
                     {
                         dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureClosingCard"),
@@ -678,7 +678,7 @@ namespace AdminApp.Elements
                     MessageBoxResult dialogResult = MessageBoxResult.No;
                     try
                     {
-                        string commandtext = PrepareSaveCommandWithoutWhere(sTabCard);
+                        string commandtext = PrepareSaveCommandWithoutWhere(sTabCard, false);
                         if (commandtext == "")
                         {
                             return;
@@ -842,7 +842,7 @@ namespace AdminApp.Elements
                 else
                 {
                     MessageBoxResult dialogResult = MessageBoxResult.No;
-                    if (PrepareSaveCommandWithoutWhere(sTabCard).Length > 25)
+                    if (PrepareSaveCommandWithoutWhere(sTabCard, true).Length > 25)
                     {
                         dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureClosingCard"),
                             (string)SystemSingleton.Configuration.mainWindow.FindResource("m_AttentionHeader"),
@@ -923,9 +923,9 @@ namespace AdminApp.Elements
             }
         }
 
-        private static string PrepareSaveCommandWithoutWhere(STabCard sTabCard)
+        private static string PrepareSaveCommandWithoutWhere(STabCard sTabCard, bool closing)
         {
-            if (CheckNULL(sTabCard))
+            if (CheckNULL(sTabCard) && !closing)
             {
                 EnvironmentHelper.SendDialogBox(
                     (string)SystemSingleton.Configuration.mainWindow.FindResource(
@@ -951,10 +951,10 @@ namespace AdminApp.Elements
             if (commandtext[commandtext.Length - 2] == ',') commandtext = commandtext.Remove(commandtext.Length - 2, 1);
             return commandtext;
         }
-        private static string PrepareInsertCommand(STabCard sTabCard, ref int num)
+        private static string PrepareInsertCommand(STabCard sTabCard, ref int num, bool closing)
         {
             num = 0;
-            if (CheckNULL(sTabCard))
+            if (CheckNULL(sTabCard) && !closing)
             {
                 EnvironmentHelper.SendDialogBox(
                     (string)SystemSingleton.Configuration.mainWindow.FindResource(

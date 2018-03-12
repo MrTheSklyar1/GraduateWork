@@ -154,7 +154,7 @@ namespace AdminApp.Elements
                     try
                     {
                         int num = 0;
-                        string commandtext = PrepareSaveCommandWithoutWhere(sTabCard, ref num);
+                        string commandtext = PrepareSaveCommandWithoutWhere(sTabCard, ref num, false);
                         if (commandtext == "")
                         {
                             return;
@@ -291,7 +291,7 @@ namespace AdminApp.Elements
                 {
                     MessageBoxResult dialogResult = MessageBoxResult.No;
                     int num = 0;
-                    PrepareSaveCommandWithoutWhere(sTabCard, ref num);
+                    PrepareSaveCommandWithoutWhere(sTabCard, ref num, true);
                     if (num > 0)
                     {
                         dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureClosingCard"),
@@ -384,7 +384,7 @@ namespace AdminApp.Elements
             //Текстовый блок
             var NameTextBlock = new TextBlock
             {
-                Text = (string)SystemSingleton.Configuration.mainWindow.FindResource("m_NameRole"),
+                Text = (string)SystemSingleton.Configuration.mainWindow.FindResource("m_NameDocType"),
                 VerticalAlignment = VerticalAlignment.Center,
                 TextAlignment = TextAlignment.Left,
                 FontSize = 14,
@@ -637,7 +637,7 @@ namespace AdminApp.Elements
                 try
                 {
                     int commandInt = 0;
-                    string commandtext = PrepareInsertCommand(sTabCard, ref commandInt);
+                    string commandtext = PrepareInsertCommand(sTabCard, ref commandInt, false);
                     if (commandtext == "")
                     {
                         EnvironmentHelper.SendDialogBox(
@@ -716,7 +716,7 @@ namespace AdminApp.Elements
                 {
                     MessageBoxResult dialogResult = MessageBoxResult.No;
                     int commandInt = 0;
-                    PrepareInsertCommand(sTabCard, ref commandInt);
+                    PrepareInsertCommand(sTabCard, ref commandInt, true);
                     if (commandInt > 0)
                     {
                         dialogResult = MessageBox.Show((string)SystemSingleton.Configuration.mainWindow.FindResource("m_MakeSureClosingCard"),
@@ -752,10 +752,10 @@ namespace AdminApp.Elements
             }
         }
 
-        private static string PrepareInsertCommand(STabCard sTabCard, ref int num)
+        private static string PrepareInsertCommand(STabCard sTabCard, ref int num, bool closing)
         {
             num = 0;
-            if (CheckNULL(sTabCard))
+            if (CheckNULL(sTabCard) && !closing)
             {
                 EnvironmentHelper.SendDialogBox(
                     (string)SystemSingleton.Configuration.mainWindow.FindResource(
@@ -832,10 +832,10 @@ namespace AdminApp.Elements
                 return false;
             }
         }
-        private static string PrepareSaveCommandWithoutWhere(STabCard sTabCard, ref int num)
+        private static string PrepareSaveCommandWithoutWhere(STabCard sTabCard, ref int num, bool closing)
         {
             num = 0;
-            if (CheckNULL(sTabCard))
+            if (CheckNULL(sTabCard) && !closing)
             {
                 EnvironmentHelper.SendDialogBox(
                     (string)SystemSingleton.Configuration.mainWindow.FindResource(
