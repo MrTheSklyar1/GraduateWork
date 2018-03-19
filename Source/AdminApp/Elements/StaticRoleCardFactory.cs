@@ -32,7 +32,7 @@ namespace AdminApp.Elements
                     FillSecondLine(result);
                     FillThirdLine(result);
                 }
-                catch (Exception ex)
+                catch
                 {
                     EnvironmentHelper.Error(RoleID);
                     return null;
@@ -67,7 +67,7 @@ namespace AdminApp.Elements
                     FillSecondLine(result);
                     SetButtonsNew(result);
                 }
-                catch (Exception ex)
+                catch
                 {
                     EnvironmentHelper.Error(((StaticRoleCard)result.Card).ID.Value);
                     return null;

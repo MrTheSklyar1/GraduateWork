@@ -606,7 +606,7 @@ namespace ClientApp.SystemClasses
                         {
                             Process.Start(SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value);
                         }
-                        catch (Exception ex)
+                        catch
                         {
                             EnvironmentHelper.SendDialogBox((string)SystemSingleton.Configuration.mainWindow.FindResource("m_FileNotFoundInDirectory"), "Directory Error");
                         }
@@ -677,7 +677,7 @@ namespace ClientApp.SystemClasses
                             {
                                 Process.Start(SystemSingleton.Configuration.FilesPath + temp.ID.Value + "\\" + filename);
                             }
-                            catch (Exception ex)
+                            catch
                             {
                                 EnvironmentHelper.SendDialogBox((string)SystemSingleton.Configuration.mainWindow.FindResource("m_FileNotFoundInDirectory"), "Directory Error");
                             }

@@ -143,10 +143,8 @@ ALTER TABLE Files ADD FOREIGN KEY(ID) REFERENCES Tasks(ID);
 
 create table CompleteQueue
 (
-	ID uniqueidentifier NOT NULL,
 	TaskID uniqueidentifier NOT NULL
 );
-ALTER TABLE CompleteQueue ADD PRIMARY KEY(ID);
 ALTER TABLE CompleteQueue ADD FOREIGN KEY(TaskID) REFERENCES Tasks(ID);
 
 use master;

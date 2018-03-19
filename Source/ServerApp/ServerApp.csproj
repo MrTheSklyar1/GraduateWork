@@ -51,8 +51,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Elements\Bot.cs" />
+    <Compile Include="Elements\Menu.cs" />
+    <Compile Include="LanguageWorker\CurrentLanguage.cs" />
+    <Compile Include="LanguageWorker\XMLLanguageConditions.cs" />
+    <Compile Include="SupportClasses\MenuFormer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SupportClasses\EnvironmentHelper.cs" />
+    <Compile Include="SupportClasses\XmlWorker.cs" />
+    <Compile Include="SystemClasses\SystemSingleton.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -61,5 +69,6 @@
   <ItemGroup>
     <Content Include="server.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

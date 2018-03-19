@@ -251,7 +251,7 @@ namespace ClientApp.Elements
                 Directory.Delete(SystemSingleton.Configuration.FilesPath + FileID + "\\", true);
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 EnvironmentHelper.SendDialogBox((string)SystemSingleton.Configuration.mainWindow.FindResource("m_DirectoryToDeleteNotFound"), "Directory Error");
                 return false;
@@ -264,7 +264,7 @@ namespace ClientApp.Elements
                 Directory.Delete(SystemSingleton.Configuration.FilesPath + FileID + "\\", true);
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }

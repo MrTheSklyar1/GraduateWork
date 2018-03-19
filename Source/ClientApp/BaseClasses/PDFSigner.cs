@@ -68,7 +68,7 @@ namespace ClientApp.BaseClasses
                 st.Close();
                 return true;
             }
-            catch (Exception ex)
+            catch 
             {
                 EnvironmentHelper.SendDialogBox(
                     (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CantSaveFile"),

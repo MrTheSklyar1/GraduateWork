@@ -45,7 +45,7 @@ namespace AdminApp.Elements
                         FillFifthLine(result);
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     EnvironmentHelper.Error(PersonalID);
                     return null;
@@ -88,7 +88,7 @@ namespace AdminApp.Elements
                         FillFifthLine(result);
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     EnvironmentHelper.Error(((PersonalRoleCard)result.Card).ID.Value);
                     return null;

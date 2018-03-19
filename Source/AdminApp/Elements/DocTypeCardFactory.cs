@@ -33,7 +33,7 @@ namespace AdminApp.Elements
                     FillThirdLine(result);
                     FillFourthLine(result);
                 }
-                catch (Exception ex)
+                catch
                 {
                     EnvironmentHelper.Error(RoleID);
                     return null;
@@ -70,7 +70,7 @@ namespace AdminApp.Elements
                     FillThirdLine(result);
                     SetButtonsNew(result);
                 }
-                catch (Exception ex)
+                catch
                 {
                     EnvironmentHelper.Error(((DocTypeCard)result.Card).ID.Value);
                     return null;

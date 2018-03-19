@@ -123,18 +123,17 @@ namespace AdminApp
                     App.Language = lang;
                 }
             }
-
         }
         private void LanguageChanged(object sender, EventArgs e)
         {
             CultureInfo currLang = App.Language;
-
-            //Отмечаем нужный пункт смены языка как выбранный язык
             foreach (MenuItem i in menuLanguage.Items)
             {
                 i.IsChecked = i.Tag is CultureInfo ci && ci.Equals(currLang);
             }
-            BottomBarLabel.Content = SystemSingleton.BotomTab.CurrentBottomBarLabelContent == "" ? "" : (String)FindResource(SystemSingleton.BotomTab.CurrentBottomBarLabelContent);
+            BottomBarLabel.Content = SystemSingleton.BotomTab.CurrentBottomBarLabelContent == 
+                                     "" ? "" : 
+                (string)FindResource(SystemSingleton.BotomTab.CurrentBottomBarLabelContent);
             BottomBarLabel.Foreground = SystemSingleton.BotomTab.CurrentBottomBarLabelBrush;
         }
         private void LogOff(object sender, RoutedEventArgs e)
