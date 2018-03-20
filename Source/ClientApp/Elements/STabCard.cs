@@ -116,6 +116,12 @@ namespace ClientApp.Elements
                                         EnvironmentHelper.SendLogSQL(command.CommandText);
                                         command.ExecuteNonQuery();
                                         command.Parameters.Clear();
+                                        command.CommandText = SqlCommands.AddToCompleteQueueCommand;
+                                        command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                                        command.Parameters["@ID"].Value = Card.Task.ID.Value;
+                                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                                        command.ExecuteNonQuery();
+                                        command.Parameters.Clear();
                                     }
                                 }
                             }

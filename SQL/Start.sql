@@ -11,7 +11,7 @@ create table Roles
 );
 
 ALTER TABLE Roles ADD PRIMARY KEY (ID);
-
+CREATE INDEX ix_RoleID ON Roles(ID);
 insert into Roles values (@AdminID, 'Admin A.');
 insert into Roles values (@PersonalRoleID, 'Personal Role');
 insert into Roles values (@CardReviewerRoleID, 'Card Reviewer Role');
@@ -46,7 +46,8 @@ create table PersonalRoles
 	WorkingTypeID uniqueidentifier NOT NULL,
 	isEditingNow bit NOT NULL
 );
-
+CREATE INDEX ix_PersonalRoleID ON PersonalRoles(ID);
+CREATE INDEX ix_TelegramID ON PersonalRoles(TelegramID);
 ALTER TABLE PersonalRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 ALTER TABLE PersonalRoles ADD FOREIGN KEY(WorkingTypeID) REFERENCES WorkingType(ID);
 
@@ -61,7 +62,7 @@ create table StaticRoles
 );
 
 ALTER TABLE StaticRoles ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
-
+CREATE INDEX ix_StaticRoleID ON StaticRoles(ID);
 insert into StaticRoles values (@PersonalRoleID, 'PersonalRole', 'Personal Role', 0);
 insert into StaticRoles values (@CardReviewerRoleID, 'CardReviewerRole', 'Card Reviewer Role', 0);
 
@@ -70,6 +71,8 @@ create table RoleUsers
 	RoleID	uniqueidentifier NOT NULL,
 	PersonID uniqueidentifier NOT NULL
 );
+CREATE INDEX ix_RoleUsersRoleID ON RoleUsers(RoleID);
+CREATE INDEX ix_RoleUsersPersonID ON RoleUsers(PersonID);
 ALTER TABLE RoleUsers ADD FOREIGN KEY(RoleID) REFERENCES Roles(ID);
 ALTER TABLE RoleUsers ADD FOREIGN KEY(PersonID) REFERENCES Roles(ID);
 
@@ -85,7 +88,7 @@ create table DocTypes
 	RoleTypeID uniqueidentifier NOT NULL,
 	isEditingNow bit NOT NULL
 );
-
+CREATE INDEX ix_DocTypesID ON DocTypes(ID);
 ALTER TABLE DocTypes ADD PRIMARY KEY (ID);
 ALTER TABLE DocTypes ADD FOREIGN KEY(RoleTypeID) REFERENCES  Roles(ID);
 
@@ -124,7 +127,8 @@ create table Tasks
 	CompleteDate datetime NULL,
 	isEditingNow bit NOT NULL
 );
-
+CREATE INDEX ix_MainNumber ON Tasks(MainNumber);
+CREATE INDEX ix_TasksID ON Tasks(ID);
 ALTER TABLE Tasks ADD PRIMARY KEY(ID);
 ALTER TABLE Tasks ADD FOREIGN KEY(FromPersonalID) REFERENCES  Roles(ID);
 ALTER TABLE Tasks ADD FOREIGN KEY(ToRoleID) REFERENCES Roles(ID);
@@ -138,6 +142,7 @@ create table Files
 	FileID uniqueidentifier NOT NULL,
 	Name nvarchar(MAX) NOT NULL
 );
+CREATE INDEX ix_FileID ON Files(FileID);
 ALTER TABLE Files ADD PRIMARY KEY(FileID);
 ALTER TABLE Files ADD FOREIGN KEY(ID) REFERENCES Tasks(ID);
 
@@ -145,6 +150,23 @@ create table CompleteQueue
 (
 	TaskID uniqueidentifier NOT NULL
 );
+CREATE INDEX ix_TaskID ON CompleteQueue(TaskID);
 ALTER TABLE CompleteQueue ADD FOREIGN KEY(TaskID) REFERENCES Tasks(ID);
+
+create table BotStat
+(
+	ID uniqueidentifier NOT NULL,
+	State int NOT NULL,
+	ChoosenDocType uniqueidentifier NULL,
+	DocumentTypesPage int NULL,
+	ChoosenRole uniqueidentifier NULL,
+	PersonalRolesPage int NULL,
+	CurrentTasksPage int NULL,
+	HistoryPage int NULL
+);
+CREATE INDEX ix_BotStatID ON BotStat(ID);
+ALTER TABLE BotStat ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
+ALTER TABLE BotStat ADD FOREIGN KEY(ChoosenDocType) REFERENCES DocTypes(ID);
+ALTER TABLE BotStat ADD FOREIGN KEY(ChoosenRole) REFERENCES Roles(ID);
 
 use master;

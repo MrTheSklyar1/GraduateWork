@@ -31,5 +31,6 @@ insert into Tasks values (@TaskID6, '2018-03-0006', @AdminID, 'Admin A.', @Admin
 insert into Files values (@TaskID6, 'eb8cb0a4-fc1d-4bdc-988f-dfe702178cf4', 'Test1.pdf');
 insert into Files values (@TaskID6, 'eb8cb9a4-fc1d-4bdc-988f-dfe702178cf4', 'Test3.pdf');
 insert into Files values (@TaskID, 'eb8cb0a4-fc1d-4bdc-988f-dfe702178884', 'Test2.pdf');
+insert into BotStat values (@AdminID, 1, null, null, null, null, null, null);
 
 use master;
