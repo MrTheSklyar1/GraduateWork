@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ServerApp.Elements;
 using ServerApp.LanguageWorker;
 using ServerApp.SupportClasses;
 using ServerApp.SystemClasses;
@@ -63,7 +64,7 @@ namespace ServerApp
         {
             try
             {
-                //TODO: бот
+                SystemSingleton.Configuration.Bot = new TBot();
             }
             catch (Telegram.Bot.Exceptions.ApiRequestException ex)
             {

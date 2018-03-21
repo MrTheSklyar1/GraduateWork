@@ -157,12 +157,13 @@ create table BotStat
 (
 	ID uniqueidentifier NOT NULL,
 	State int NOT NULL,
-	ChoosenDocType uniqueidentifier NULL,
-	DocumentTypesPage int NULL,
-	ChoosenRole uniqueidentifier NULL,
-	PersonalRolesPage int NULL,
-	CurrentTasksPage int NULL,
-	HistoryPage int NULL
+	InputtedLogin nvarchar(MAX) NOT NULL,
+	ChoosenDocType uniqueidentifier  NULL,
+	DocumentTypesPage int NOT NULL,
+	ChoosenRole uniqueidentifier  NULL,
+	PersonalRolesPage int NOT NULL,
+	CurrentTasksPage int NOT NULL,
+	HistoryPage int NOT NULL
 );
 CREATE INDEX ix_BotStatID ON BotStat(ID);
 ALTER TABLE BotStat ADD FOREIGN KEY(ID) REFERENCES Roles(ID);

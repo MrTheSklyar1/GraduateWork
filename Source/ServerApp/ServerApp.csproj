@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Elements\BaseElement.cs" />
-    <Compile Include="Elements\Bot.cs" />
+    <Compile Include="Elements\TBot.cs" />
     <Compile Include="Elements\CurrentSession.cs" />
     <Compile Include="Elements\Menu.cs" />
     <Compile Include="LanguageWorker\CurrentLanguage.cs" />

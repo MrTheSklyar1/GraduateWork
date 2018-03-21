@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ServerApp.Elements;
+using Telegram.Bot;
 
 namespace ServerApp.SystemClasses
 {
@@ -19,7 +20,7 @@ namespace ServerApp.SystemClasses
             public static string ApiKey { get; set; }
             public static string LangInfo { get; set; }
             public static List<SqlConnection> SqlConnections { get; set; }
-            public static Bot Bot { get; set; }
+            public static TBot Bot { get; set; }
         }
     }
 }
