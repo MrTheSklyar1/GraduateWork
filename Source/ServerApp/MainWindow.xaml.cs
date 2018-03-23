@@ -1,45 +1,50 @@
-﻿using System;
+﻿using ServerApp.Elements;
+using ServerApp.SupportClasses;
+using ServerApp.SystemClasses;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using ServerApp.Elements;
-using ServerApp.LanguageWorker;
-using ServerApp.SupportClasses;
-using ServerApp.SystemClasses;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace ServerApp
 {
-    class Program
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
     {
-        private static readonly BackgroundWorker workerConnectionToBase = new BackgroundWorker();
-        private static readonly BackgroundWorker workerBot = new BackgroundWorker();
-        public static void Main(string[] args)
+        public MainWindow()
         {
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(Closed);
+            InitializeComponent();
             SystemSingleton.Configuration.SqlConnections = new List<SqlConnection>();
             if (!XMLConfiguration.Load("settings.xml"))
             {
                 EnvironmentHelper.SendFatalLog("Broken Settings File");
             }
-            if (!XMLLanguageConditions.Load("lang."+SystemSingleton.Configuration.LangInfo+".xml"))
-            {
-                EnvironmentHelper.SendFatalLog("Broken Language File");
-            }
+            //if (!XMLLanguageConditions.Load("lang." + SystemSingleton.Configuration.LangInfo + ".xml"))
+            //{
+            //    EnvironmentHelper.SendFatalLog("Broken Language File");
+            //}
             workerConnectionToBase.DoWork += WorkerConnectionToBaseOnDoWork;
             workerConnectionToBase.RunWorkerAsync();
             workerBot.DoWork += WorkerBotOnDoWork;
         }
+        private static readonly BackgroundWorker workerConnectionToBase = new BackgroundWorker();
+        private static readonly BackgroundWorker workerBot = new BackgroundWorker();
 
-        private static void Closed(object sender, EventArgs e)
-        {
-            EnvironmentHelper.CloseAllConnections();
-        }
-        private static void WorkerConnectionToBaseOnDoWork(object sender, DoWorkEventArgs e)
+        private async void WorkerConnectionToBaseOnDoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
@@ -60,7 +65,7 @@ namespace ServerApp
                 EnvironmentHelper.SendFatalLog(ex.Message);
             }
         }
-        private static void WorkerBotOnDoWork(object sender, DoWorkEventArgs e)
+        private async void WorkerBotOnDoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
@@ -70,6 +75,11 @@ namespace ServerApp
             {
                 EnvironmentHelper.SendFatalLog(ex.Message);
             }
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            EnvironmentHelper.CloseAllConnections();
         }
     }
 }
