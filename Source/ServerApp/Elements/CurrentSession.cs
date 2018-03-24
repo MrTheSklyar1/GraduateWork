@@ -43,9 +43,9 @@ namespace ServerApp.Elements
                                 TelegramID = id;
                                 ID = reader.GetGuid(0);
                                 State = reader.GetInt32(1);
-                                ChoosenDocType = reader.GetGuid(2);
+                                ChoosenDocType = reader.IsDBNull(2) ? (Guid?) null : reader.GetGuid(2);
                                 DocumentTypesPage = reader.GetInt32(3);
-                                ChoosenRole = reader.GetGuid(4);
+                                ChoosenRole = reader.IsDBNull(4) ? (Guid?)null : reader.GetGuid(2);
                                 PersonalRolesPage = reader.GetInt32(5);
                                 CurrentTasksPage = reader.GetInt32(6);
                                 HistoryPage = reader.GetInt32(7);
@@ -68,7 +68,7 @@ namespace ServerApp.Elements
             }
         }
 
-        public bool Login(string password, string login, bool checkuser)
+        public bool Login(string password, string login, bool checkuser, long telegramID)
         {
             if (State != 0 ) return false;
             var hash = "";
@@ -121,6 +121,32 @@ namespace ServerApp.Elements
             }
             else
             {
+                try
+                {
+                    using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                    {
+                        string tempCommand = @"update BotStat set State=1 where ID = '" + ID.Value + "'";
+
+                        SystemSingleton.Configuration.SqlConnections.Add(con);
+                        con.Open();
+                        using (var command = new SqlCommand(tempCommand, con))
+                        {
+                            EnvironmentHelper.SendLogSQL(command.CommandText);
+                            command.ExecuteNonQuery();
+                        }
+                        tempCommand = @"update PersonalRoles set TelegramID="+ telegramID + " where ID = '" + ID.Value + "'";
+                        using (var command = new SqlCommand(tempCommand, con))
+                        {
+                            EnvironmentHelper.SendLogSQL(command.CommandText);
+                            command.ExecuteNonQuery();
+                        }
+                        con.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+                }
                 EnvironmentHelper.SendLog("Log In - " + login);
                 return true;
             }

@@ -8,6 +8,7 @@ using ServerApp.SupportClasses;
 using ServerApp.SystemClasses;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace ServerApp.Elements
@@ -49,7 +50,6 @@ namespace ServerApp.Elements
                         Thread.Sleep((int)conAttempts * 100);
                         continue;
                     }
-                    conAttempts = 1;
                     break;
                 }
                 foreach (var update in updates)
@@ -66,53 +66,120 @@ namespace ServerApp.Elements
             var Session = new CurrentSession(update.Message.From.Id);
             if (Session.HasValue && Session.State > 0)
             {
-
+                //TODO: логика взаимодействия после входа
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id, "Ыыыыыы", Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
+            }
+            else if (Session.HasValue && Session.State == 0)
+            {
+                if (SystemSingleton.Configuration.Waiters.ContainsKey(update.Message.From.Id))
+                {
+                    var waiter = SystemSingleton.Configuration.Waiters[update.Message.From.Id];
+                    switch (waiter.State)
+                    {
+                        case LoginWaitersState.WaitForPassword:
+                            if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoToStart"))
+                            {
+                                SystemSingleton.Configuration.Waiters.Remove(update.Message.From.Id);
+                                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_StartPage"));
+                                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_StartPage"),
+                                    Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.LogInKeyBoard());
+                            }
+                            else
+                            {
+                                if (Session.Login(update.Message.Text, waiter.Login, false, update.Message.From.Id))
+                                {
+                                    SystemSingleton.Configuration.Waiters.Remove(update.Message.From.Id);
+                                    //TODO: клавиатура
+                                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_LoginOK"));
+                                    await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                                        (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_LoginOK"),
+                                        Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
+                                }
+                                else
+                                {
+                                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_IncorrectPassword"));
+                                    await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                                        (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_IncorrectPassword"),
+                                        Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.GoBackFromPasswordKeyBoard());
+                                }
+                            }
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+                else
+                {
+                    SystemSingleton.Configuration.Waiters.Add(
+                        update.Message.From.Id,
+                        new Waiter
+                        {
+                            Login = EnvironmentHelper.GetLogin(update.Message.From.Id),
+                            TelegramID = update.Message.From.Id,
+                            State = LoginWaitersState.WaitForPassword
+                        });
+                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + EnvironmentHelper.GetLogin(update.Message.From.Id) + " " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_EnterPass"));
+                    await Bot.SendTextMessageAsync(update.Message.Chat.Id, EnvironmentHelper.GetLogin(update.Message.From.Id) +" "+ (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_EnterPass"), Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
+                }
             }
             else
             {
                 if (SystemSingleton.Configuration.Waiters.ContainsKey(update.Message.From.Id))
                 {
                     var waiter = SystemSingleton.Configuration.Waiters[update.Message.From.Id];
-                    if(waiter.State == LoginWaitersState.WaitForLogin)
+                    switch (waiter.State)
                     {
-                        
-                        if(Session.Login("", update.Message.Text, true))
-                        {
-                            waiter.Login = update.Message.Text;
-                            waiter.State = LoginWaitersState.WaitForPassword;
-                            EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_EnterPass"));
-                            await Bot.SendTextMessageAsync(update.Message.Chat.Id, (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_EnterPass"), Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
-                        }
-                        else
-                        {
-                            EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_IncorrectLogin"));
-                            await Bot.SendTextMessageAsync(update.Message.Chat.Id, (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_IncorrectLogin"), Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
-                        }
-
-                    }
-                    else if(waiter.State == LoginWaitersState.WaitForPassword)
-                    {
-                        if(update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoToStart"))
-                        {
-                            SystemSingleton.Configuration.Waiters.Remove(update.Message.From.Id);
-                            EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_StartPage"));
-                            await Bot.SendTextMessageAsync(update.Message.Chat.Id, (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_StartPage"), Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.LogInKeyBoard());
-                        }
-                        else
-                        {
-                            if (Session.Login(update.Message.Text, waiter.Login, false))
+                        case LoginWaitersState.WaitForLogin:
+                            if(Session.Login("", update.Message.Text, true, 0))
                             {
-                                SystemSingleton.Configuration.Waiters.Remove(update.Message.From.Id);
-                                //TODO: клавиатура
-                                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_LoginOK"));
-                                await Bot.SendTextMessageAsync(update.Message.Chat.Id, (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_LoginOK"), Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
+                                waiter.Login = update.Message.Text;
+                                waiter.State = LoginWaitersState.WaitForPassword;
+                                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_EnterPass"));
+                                await Bot.SendTextMessageAsync(update.Message.Chat.Id, 
+                                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_EnterPass"), 
+                                    Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
                             }
                             else
                             {
-                                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_IncorrectPassword"));
-                                await Bot.SendTextMessageAsync(update.Message.Chat.Id, (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_IncorrectPassword"), Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.GoBackFromPasswordKeyBoard());
+                                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_IncorrectLogin"));
+                                await Bot.SendTextMessageAsync(update.Message.Chat.Id, 
+                                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_IncorrectLogin"), 
+                                    Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
                             }
-                        }
+                            break;
+                        case LoginWaitersState.WaitForPassword:
+                            if(update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoToStart"))
+                            {
+                                SystemSingleton.Configuration.Waiters.Remove(update.Message.From.Id);
+                                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_StartPage"));
+                                await Bot.SendTextMessageAsync(update.Message.Chat.Id, 
+                                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_StartPage"), 
+                                    Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.LogInKeyBoard());
+                            }
+                            else
+                            {
+                                if (Session.Login(update.Message.Text, waiter.Login, false, update.Message.From.Id))
+                                {
+                                    SystemSingleton.Configuration.Waiters.Remove(update.Message.From.Id);
+                                    //TODO: клавиатура
+                                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_LoginOK"));
+                                    await Bot.DeleteMessageAsync(update.Message.Chat.Id, update.Message.MessageId);
+                                    await Bot.SendTextMessageAsync(update.Message.Chat.Id, 
+                                        (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_LoginOK"), 
+                                        Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
+                                }
+                                else
+                                {
+                                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_IncorrectPassword"));
+                                    await Bot.SendTextMessageAsync(update.Message.Chat.Id, 
+                                        (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_IncorrectPassword"), 
+                                        Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.GoBackFromPasswordKeyBoard());
+                                }
+                            }
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                 }
                 else

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
@@ -58,6 +59,7 @@ namespace ServerApp.SupportClasses
                 }));
             }
             CloseAllConnections();
+            SystemSingleton.WaitersWorker.SaveWaiters();
             Environment.Exit(1);
         }
         public static void SendLogSQL(string log)
@@ -69,6 +71,38 @@ namespace ServerApp.SupportClasses
                     sw.WriteLine(DateTime.UtcNow + " -- " + log);
                 }
             }
+        }
+
+        public static string GetLogin(long fromId)
+        {
+            string Login = "";
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.GetLoginCommand, con))
+                    {
+                        command.Parameters.Add("@ID", SqlDbType.BigInt);
+                        command.Parameters["@ID"].Value = fromId;
+                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                        con.Open();
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                Login = reader.GetString(0);
+                            }
+                        }
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+            }
+            return Login;
         }
     }
 }

@@ -33,32 +33,70 @@ namespace ServerApp.SystemClasses
         {
             public static void SaveWaiters()
             {
-                if (Configuration.Waiters.Count > 0)
+                if (Configuration.Waiters.Count == 0) return;
+                try
                 {
-                    try
+                    using (StreamWriter sw = File.CreateText("waiters.list"))
                     {
-                        using (StreamWriter sw = File.CreateText("waiters.list"))
+                        foreach (var item in Configuration.Waiters)
                         {
-                            foreach (var item in Configuration.Waiters)
-                            {
-                                sw.WriteLine(item.Key + "|" + item.Value.TelegramID + "|" + item.Value.Login);
-                            }
-                        }
-                        using (var md5Hash = MD5.Create())
-                        {
-                            var data = md5Hash.ComputeHash(File.ReadAllBytes("waiters.list"));
-                            var sBuilder = new StringBuilder();
-                            foreach (var item in data)
-                            {
-                                sBuilder.Append(item.ToString("x2"));
-                            }
-                            File.WriteAllText("waiters.hash", sBuilder.ToString());
+                            sw.WriteLine(item.Key + "|" + item.Value.Login);
                         }
                     }
-                    catch (Exception ex)
+                    using (var md5Hash = MD5.Create())
                     {
-                        EnvironmentHelper.SendLog(ex.Message);
+                        var data = md5Hash.ComputeHash(File.ReadAllBytes("waiters.list"));
+                        var sBuilder = new StringBuilder();
+                        foreach (var item in data)
+                        {
+                            sBuilder.Append(item.ToString("x2"));
+                        }
+                        File.WriteAllText("waiters.hash", sBuilder.ToString());
                     }
+                }
+                catch (Exception ex)
+                {
+                    EnvironmentHelper.SendLog(ex.Message);
+                }
+            }
+
+            public static void LoadWaiters()
+            {
+                Configuration.Waiters = new Dictionary<long, Waiter>();
+                if (File.Exists("waiters.hash") && File.Exists("waiters.list"))
+                {
+                    var sBuilder = new StringBuilder();
+                    using (var md5Hash = MD5.Create())
+                    {
+                        var data = md5Hash.ComputeHash(File.ReadAllBytes("waiters.list"));
+                        sBuilder = new StringBuilder();
+                        foreach (var item in data)
+                        {
+                            sBuilder.Append(item.ToString("x2"));
+                        }
+                    }
+                    if (sBuilder.ToString() == File.ReadAllText("waiters.hash"))
+                    {
+                        string[] lines = File.ReadAllLines("waiters.list");
+                        foreach (var item in lines)
+                        {
+                            string[] parsed = item.Split(new char[] {'|'}, StringSplitOptions.None);
+                            Configuration.Waiters.Add(Convert.ToInt64(parsed[0]), new Waiter
+                            {
+                                TelegramID = Convert.ToInt64(parsed[0]),
+                                Login = parsed[1],
+                                State = parsed[1]!=String.Empty?LoginWaitersState.WaitForPassword:LoginWaitersState.WaitForLogin
+                            });
+                        }
+                    }
+                    else
+                    {
+                        EnvironmentHelper.SendLog("File waiters corrupt, waiters will be null");
+                    }
+                }
+                else
+                {
+                    EnvironmentHelper.SendLog("File waiters not exists, waiters will be empty");
                 }
             }
         }

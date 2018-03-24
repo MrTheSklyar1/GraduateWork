@@ -38,7 +38,7 @@ namespace ServerApp
                 EnvironmentHelper.SendFatalLog("Broken Settings File");
             }
             App.Language = new CultureInfo(SystemSingleton.Configuration.Language);
-            SystemSingleton.Configuration.Waiters = new Dictionary<long, Waiter>();
+            SystemSingleton.WaitersWorker.LoadWaiters();
             workerConnectionToBase.DoWork += WorkerConnectionToBaseOnDoWork;
             workerConnectionToBase.RunWorkerAsync();
             workerBot.DoWork += WorkerBotOnDoWork;
@@ -82,6 +82,7 @@ namespace ServerApp
         private void Window_Closed(object sender, EventArgs e)
         {
             EnvironmentHelper.CloseAllConnections();
+            SystemSingleton.WaitersWorker.SaveWaiters();
         }
 
         private void About_OnClick(object sender, RoutedEventArgs e)
