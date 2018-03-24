@@ -17,7 +17,7 @@ namespace ServerApp.Elements
                 Keyboard = new[] {
                     new[]
                     {
-                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotM_LogIn")),
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_LogIn")),
                     },
                 },
                 OneTimeKeyboard = false,

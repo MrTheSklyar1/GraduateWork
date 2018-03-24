@@ -21,7 +21,14 @@ namespace ServerApp.Elements
         }
         private async void MainLoop()
         {
-            await Bot.SetWebhookAsync("");
+            try
+            {
+                await Bot.SetWebhookAsync("");
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendFatalLog("No connection on startup");
+            }
             int offset = 0;
             while (true)
             {
@@ -44,24 +51,25 @@ namespace ServerApp.Elements
                     conAttempts = 1;
                     break;
                 }
-                ResolveUpdates(updates);
+                foreach (var update in updates)
+                {
+                    ResolveUpdate(update);
+                    offset = update.Id + 1;
+                }
             }
         }
 
-        private async void ResolveUpdates(Update[] updates)
+        private async void ResolveUpdate(Update update)
         {
-            foreach (var update in updates)
+            EnvironmentHelper.SendLog("from -- " + update.Message.From.Id + " -- " + update.Message.Text);
+            var Session = new CurrentSession(update.Message.From.Id);
+            if (Session.HasValue && Session.State > 0)
             {
-                EnvironmentHelper.SendLog("from -- "+update.Message.From.Id + " -- " + update.Message.Text);
-                var Session = new CurrentSession(update.Message.From.Id);
-                if (Session.HasValue && Session.State>0)
-                {
 
-                }
-                else
-                {
-                    await Bot.SendTextMessageAsync(update.Message.Chat.Id, (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_TelegramIdNotFound"), Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.LogInKeyBoard());
-                }
+            }
+            else
+            {
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id, (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_TelegramIdNotFound"), Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.LogInKeyBoard());
             }
         }
     }

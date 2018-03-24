@@ -19,7 +19,7 @@ namespace ServerApp.SystemClasses
             public static bool ConsoleLog { get; set; }
             public static string FilesPath { get; set; }
             public static string ApiKey { get; set; }
-            public static string LangInfo { get; set; }
+            public static string Language { get; set; }
             public static List<SqlConnection> SqlConnections { get; set; }
             public static TBot Bot { get; set; }
             public static TextBox ConsoleBox { get; set; }

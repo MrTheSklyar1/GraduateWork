@@ -43,12 +43,12 @@ namespace ServerApp.Elements
                                 TelegramID = id;
                                 ID = reader.GetGuid(0);
                                 State = reader.GetInt32(1);
-                                ChoosenDocType = reader.GetGuid(3);
-                                DocumentTypesPage = reader.GetInt32(4);
-                                ChoosenRole = reader.GetGuid(5);
-                                PersonalRolesPage = reader.GetInt32(6);
-                                CurrentTasksPage = reader.GetInt32(7);
-                                HistoryPage = reader.GetInt32(8);
+                                ChoosenDocType = reader.GetGuid(2);
+                                DocumentTypesPage = reader.GetInt32(3);
+                                ChoosenRole = reader.GetGuid(4);
+                                PersonalRolesPage = reader.GetInt32(5);
+                                CurrentTasksPage = reader.GetInt32(6);
+                                HistoryPage = reader.GetInt32(7);
                                 HasValue = true;
                             }
                             else

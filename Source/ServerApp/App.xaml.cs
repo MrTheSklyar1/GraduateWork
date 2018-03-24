@@ -14,23 +14,9 @@ namespace ServerApp
     /// </summary>
     public partial class App : Application
     {
-        private static List<CultureInfo> m_Languages = new List<CultureInfo>();
-        public static event EventHandler LanguageChanged;
-        public static List<CultureInfo> Languages
-        {
-            get
-            {
-                return m_Languages;
-            }
-        }
         public App()
         {
             InitializeComponent();
-            App.LanguageChanged += App_LanguageChanged;
-
-            m_Languages.Clear();
-            m_Languages.Add(new CultureInfo("en-US")); //Нейтральная культура для этого проекта
-            m_Languages.Add(new CultureInfo("ru-RU"));
 
             Language = ServerApp.Properties.Settings.Default.DefaultLanguage;
         }
@@ -68,7 +54,6 @@ namespace ServerApp
                 {
                     Application.Current.Resources.MergedDictionaries.Add(dict);
                 }
-                LanguageChanged(Application.Current, new EventArgs());
             }
         }
         private void App_LanguageChanged(Object sender, EventArgs e)
