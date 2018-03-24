@@ -68,7 +68,7 @@ namespace ServerApp.Elements
             }
         }
 
-        public bool Login(string password, Guid UserID)
+        public bool Login(string password, string login, bool checkuser)
         {
             if (State != 0 ) return false;
             var hash = "";
@@ -90,16 +90,16 @@ namespace ServerApp.Elements
                     SystemSingleton.Configuration.SqlConnections.Add(con);
                     using (var command = new SqlCommand(SqlCommands.LoginCommand, con))
                     {
-                        command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
-                        command.Parameters["@ID"].Value = UserID;
+                        command.Parameters.Add("@Login", SqlDbType.NVarChar);
+                        command.Parameters["@Login"].Value = login;
                         EnvironmentHelper.SendLogSQL(command.CommandText);
                         con.Open();
                         using (var reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                ID = UserID;
-                                hashfromsql = reader.GetString(0);
+                                ID = reader.GetGuid(0);
+                                hashfromsql = reader.GetString(1);
                             }
                         }
                         con.Close();
@@ -110,14 +110,18 @@ namespace ServerApp.Elements
             {
                 EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
             }
+            if (checkuser)
+            {
+                return ID.HasValue;
+            }
             if (hash != hashfromsql)
             {
-                EnvironmentHelper.SendLog("Login failed, user: " + ID);
+                EnvironmentHelper.SendLog("Login failed, user: " + login);
                 return false;
             }
             else
             {
-                EnvironmentHelper.SendLog("Log In - " + ID);
+                EnvironmentHelper.SendLog("Log In - " + login);
                 return true;
             }
         }

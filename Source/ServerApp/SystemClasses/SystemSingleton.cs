@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using ServerApp.Elements;
+using ServerApp.SupportClasses;
 using Telegram.Bot;
 
 namespace ServerApp.SystemClasses
@@ -24,6 +27,40 @@ namespace ServerApp.SystemClasses
             public static TBot Bot { get; set; }
             public static TextBox ConsoleBox { get; set; }
             public static MainWindow Window { get; set; }
+            public static Dictionary<long, Waiter> Waiters { get; set; }
+        }
+        public static class WaitersWorker
+        {
+            public static void SaveWaiters()
+            {
+                if (Configuration.Waiters.Count > 0)
+                {
+                    try
+                    {
+                        using (StreamWriter sw = File.CreateText("waiters.list"))
+                        {
+                            foreach (var item in Configuration.Waiters)
+                            {
+                                sw.WriteLine(item.Key + "|" + item.Value.TelegramID + "|" + item.Value.Login);
+                            }
+                        }
+                        using (var md5Hash = MD5.Create())
+                        {
+                            var data = md5Hash.ComputeHash(File.ReadAllBytes("waiters.list"));
+                            var sBuilder = new StringBuilder();
+                            foreach (var item in data)
+                            {
+                                sBuilder.Append(item.ToString("x2"));
+                            }
+                            File.WriteAllText("waiters.hash", sBuilder.ToString());
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        EnvironmentHelper.SendLog(ex.Message);
+                    }
+                }
+            }
         }
     }
 }

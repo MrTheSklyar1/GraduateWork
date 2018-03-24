@@ -3,7 +3,14 @@
                     xmlns:v="clr-namespace:System;assembly=mscorlib">
     <v:String x:Key="m_app_Header">Серверное приложение</v:String>
     <v:String x:Key="m_menu_About">О программе</v:String>
-    <v:String x:Key="m_BotB_LogIn" x:Uid="0">Войти</v:String>
-    <v:String x:Key="m_BotB_LogOff" x:Uid="1">Выйти</v:String>
+    <v:String x:Key="m_BotB_LogIn">Войти</v:String>
+    <v:String x:Key="m_BotB_LogOff">Выйти</v:String>
+    <v:String x:Key="m_BotB_GoToStart">Возврат на стартовую страницу</v:String>
     <v:String x:Key="m_BotM_TelegramIdNotFound">Ваш TelegramID не найден, вам нужно войти в систему</v:String>
+    <v:String x:Key="m_BotM_EnterLogin">Введите имя пользователя</v:String>
+    <v:String x:Key="m_BotM_EnterPass">Введите пароль</v:String>
+    <v:String x:Key="m_BotM_IncorrectLogin">Пользователь не найден, попробуйте еще</v:String>
+    <v:String x:Key="m_BotM_IncorrectPassword">Пароль не подходит, попробуйте еще</v:String>
+    <v:String x:Key="m_BotM_LoginOK">Успешный вход</v:String>
+    <v:String x:Key="m_BotM_StartPage">Стартовая страница</v:String>
 </ResourceDictionary>

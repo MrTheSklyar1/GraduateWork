@@ -24,5 +24,27 @@ namespace ServerApp.Elements
                 ResizeKeyboard = true
             };
         }
+        public static ReplyKeyboardMarkup GoBackFromPasswordKeyBoard()
+        {
+            return new ReplyKeyboardMarkup
+            {
+                Keyboard = new[] {
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoToStart")),
+                    },
+                },
+                OneTimeKeyboard = false,
+                ResizeKeyboard = true
+            };
+        }
+
+        public static ReplyKeyboardRemove RemoveKeyBoard()
+        {
+            return new ReplyKeyboardRemove
+            {
+                RemoveKeyboard = true
+            };
+        }
     }
 }

@@ -12,7 +12,7 @@
 	            pr.TelegramID=@ID";
 
         public const string LoginCommand =
-            @"select PassWord from PersonalRoles with(nolock) where ID=@ID";
+            @"select ID, PassWord from PersonalRoles with(nolock) where Login=@Login";
 
     }
 }

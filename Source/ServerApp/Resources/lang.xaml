@@ -3,7 +3,14 @@
                     xmlns:v="clr-namespace:System;assembly=mscorlib">
     <v:String x:Key="m_app_Header">Server App</v:String>
     <v:String x:Key="m_menu_About">About</v:String>
-    <v:String x:Key="m_BotB_LogIn" x:Uid="0">LogIn</v:String>
-    <v:String x:Key="m_BotB_LogOff" x:Uid="1">LogOff</v:String>
+    <v:String x:Key="m_BotB_LogIn">LogIn</v:String>
+    <v:String x:Key="m_BotB_LogOff">LogOff</v:String>
+    <v:String x:Key="m_BotB_GoToStart">Go to start page</v:String>
     <v:String x:Key="m_BotM_TelegramIdNotFound">Your TelegramID not found, please login</v:String>
+    <v:String x:Key="m_BotM_EnterLogin">Enter username</v:String>
+    <v:String x:Key="m_BotM_EnterPass">Enter password</v:String>
+    <v:String x:Key="m_BotM_IncorrectLogin">User not found, try again</v:String>
+    <v:String x:Key="m_BotM_IncorrectPassword">Password is incorrect, try again</v:String>
+    <v:String x:Key="m_BotM_LoginOK">Login OK</v:String>
+    <v:String x:Key="m_BotM_StartPage">Start Page</v:String>
 </ResourceDictionary>

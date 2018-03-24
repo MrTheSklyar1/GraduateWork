@@ -38,6 +38,7 @@ namespace ServerApp
                 EnvironmentHelper.SendFatalLog("Broken Settings File");
             }
             App.Language = new CultureInfo(SystemSingleton.Configuration.Language);
+            SystemSingleton.Configuration.Waiters = new Dictionary<long, Waiter>();
             workerConnectionToBase.DoWork += WorkerConnectionToBaseOnDoWork;
             workerConnectionToBase.RunWorkerAsync();
             workerBot.DoWork += WorkerBotOnDoWork;

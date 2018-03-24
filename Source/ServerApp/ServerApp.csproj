@@ -79,7 +79,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Elements\TBot.cs" />
+    <Compile Include="Elements\Waiter.cs" />
     <Compile Include="SupportClasses\EnvironmentHelper.cs" />
+    <Compile Include="SupportClasses\LoginWaitersState.cs" />
     <Compile Include="SupportClasses\MenuFormer.cs" />
     <Compile Include="SupportClasses\SqlCommands.cs" />
     <Compile Include="SupportClasses\XmlWorker.cs" />
