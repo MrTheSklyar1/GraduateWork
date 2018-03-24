@@ -157,7 +157,6 @@ create table BotStat
 (
 	ID uniqueidentifier NOT NULL,
 	State int NOT NULL,
-	TypedLogin nvarchar(MAX) NOT NULL,
 	ChoosenDocType uniqueidentifier  NULL,
 	DocumentTypesPage int NOT NULL,
 	ChoosenRole uniqueidentifier  NULL,
@@ -169,5 +168,5 @@ CREATE INDEX ix_BotStatID ON BotStat(ID);
 ALTER TABLE BotStat ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 ALTER TABLE BotStat ADD FOREIGN KEY(ChoosenDocType) REFERENCES DocTypes(ID);
 ALTER TABLE BotStat ADD FOREIGN KEY(ChoosenRole) REFERENCES Roles(ID);
-insert into BotStat values (@AdminID, 0, '', null, 1, null, 1, 1, 1);
+insert into BotStat values (@AdminID, 0, null, 1, null, 1, 1, 1);
 use master;
