@@ -1155,7 +1155,10 @@ namespace AdminApp.Elements
             if (sTabCard.TextBoxes[PersonalRoleCardViewStruct.LoginTextBox].Text != futureNewLogin)
             {
                 futureNewLogin = sTabCard.TextBoxes[PersonalRoleCardViewStruct.LoginTextBox].Text;
-                if (!CheckLogin(futureNewLogin)) return "";
+                if (!CheckLogin(futureNewLogin))
+                {
+                    return "";
+                }
                 commandtext += "Login='" + futureNewLogin + "', ";
             }
 
@@ -1356,9 +1359,11 @@ namespace AdminApp.Elements
             commandvalues += "1);";
             string insertroles = "insert into Roles values ('" + ((PersonalRoleCard)sTabCard.Card).ID.Value.ToString() + "', '" + sTabCard.TextBoxes[PersonalRoleCardViewStruct.FullNameTextBox].Text + "');";
             string inserttostatic = "insert into RoleUsers values ('fffee627-a5a6-4345-bc55-8fba3709dc48', '" + ((PersonalRoleCard)sTabCard.Card).ID.Value.ToString() + "');";
+            string insertBotStat = "";
+            insertBotStat = "insert into BotStat values (" + ((PersonalRoleCard)sTabCard.Card).ID.Value + ", 0, null, 1, null, 1, 1, 1)";
             sTabCard.PasswordBoxes[PersonalRoleCardViewStruct.PasswordPasswordBox].Password = temppassword;
             sTabCard.PasswordBoxes[PersonalRoleCardViewStruct.RepeatPasswordPasswordBox].Password = temppassword;
-            return insertroles + commandtext + commandvalues + inserttostatic;
+            return insertroles + commandtext + commandvalues + inserttostatic + insertBotStat;
         }
 
         private static bool CheckLogin(string login)

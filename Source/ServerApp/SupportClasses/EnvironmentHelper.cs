@@ -6,7 +6,10 @@ using System.Linq;
 using System.Net.Mime;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using ServerApp.SystemClasses;
 
 namespace ServerApp.SupportClasses
@@ -30,7 +33,12 @@ namespace ServerApp.SupportClasses
             }
             if (SystemSingleton.Configuration.ConsoleLog)
             {
-                Console.WriteLine(logMessage);
+                Application.Current.Dispatcher.BeginInvoke(new ThreadStart(delegate
+                {
+                    if(SystemSingleton.Configuration.ConsoleBox.LineCount>10000) SystemSingleton.Configuration.ConsoleBox.Clear();
+                    SystemSingleton.Configuration.ConsoleBox.Text += "\n" + logMessage;
+                    SystemSingleton.Configuration.ConsoleBox.ScrollToEnd();
+                }));
             }
         }
         public static void SendFatalLog(string log)
@@ -42,7 +50,12 @@ namespace ServerApp.SupportClasses
             }
             if (SystemSingleton.Configuration.ConsoleLog)
             {
-                Console.WriteLine(logMessage);
+                Application.Current.Dispatcher.BeginInvoke(new ThreadStart(delegate
+                {
+                    if (SystemSingleton.Configuration.ConsoleBox.LineCount > 10000) SystemSingleton.Configuration.ConsoleBox.Clear();
+                    SystemSingleton.Configuration.ConsoleBox.Text += "\n" + logMessage;
+                    SystemSingleton.Configuration.ConsoleBox.ScrollToEnd();
+                }));
             }
             CloseAllConnections();
             Environment.Exit(1);

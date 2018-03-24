@@ -169,5 +169,5 @@ CREATE INDEX ix_BotStatID ON BotStat(ID);
 ALTER TABLE BotStat ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 ALTER TABLE BotStat ADD FOREIGN KEY(ChoosenDocType) REFERENCES DocTypes(ID);
 ALTER TABLE BotStat ADD FOREIGN KEY(ChoosenRole) REFERENCES Roles(ID);
-
+insert into BotStat values (@AdminID, 0, null, null, null, null, null, null, null);
 use master;

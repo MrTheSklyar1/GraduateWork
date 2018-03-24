@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,15 +30,25 @@ namespace ServerApp
         public MainWindow()
         {
             InitializeComponent();
+            SystemSingleton.Configuration.ConsoleBox = ConsoleBox;
+            SystemSingleton.Configuration.Window = this;
             SystemSingleton.Configuration.SqlConnections = new List<SqlConnection>();
+            App.LanguageChanged += LanguageChanged;
+            CultureInfo currLang = App.Language;
+            menuLanguage.Items.Clear();
+            foreach (var lang in App.Languages)
+            {
+                MenuItem menuLang = new MenuItem();
+                menuLang.Header = lang.DisplayName;
+                menuLang.Tag = lang;
+                menuLang.IsChecked = lang.Equals(currLang);
+                menuLang.Click += ChangeLanguageClick;
+                menuLanguage.Items.Add(menuLang);
+            }
             if (!XMLConfiguration.Load("settings.xml"))
             {
                 EnvironmentHelper.SendFatalLog("Broken Settings File");
             }
-            //if (!XMLLanguageConditions.Load("lang." + SystemSingleton.Configuration.LangInfo + ".xml"))
-            //{
-            //    EnvironmentHelper.SendFatalLog("Broken Language File");
-            //}
             workerConnectionToBase.DoWork += WorkerConnectionToBaseOnDoWork;
             workerConnectionToBase.RunWorkerAsync();
             workerBot.DoWork += WorkerBotOnDoWork;
@@ -80,6 +92,31 @@ namespace ServerApp
         private void Window_Closed(object sender, EventArgs e)
         {
             EnvironmentHelper.CloseAllConnections();
+        }
+
+        private void About_OnClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("ServerApp - " + Assembly.GetEntryAssembly().GetName().Version.ToString() + "\n\nCreatedBy - Sklyarov Nikita\n\nOrganisation - MAI", (string)FindResource("m_menu_About"), MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private void LanguageChanged(object sender, EventArgs e)
+        {
+            CultureInfo currLang = App.Language;
+
+            //Отмечаем нужный пункт смены языка как выбранный язык
+            foreach (MenuItem i in menuLanguage.Items)
+            {
+                i.IsChecked = i.Tag is CultureInfo ci && ci.Equals(currLang);
+            }
+        }
+        private void ChangeLanguageClick(object sender, EventArgs e)
+        {
+            if (sender is MenuItem mi)
+            {
+                if (mi.Tag is CultureInfo lang)
+                {
+                    App.Language = lang;
+                }
+            }
         }
     }
 }

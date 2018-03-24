@@ -16,7 +16,7 @@ namespace ServerApp.Elements
         public TelegramBotClient Bot;
         public TBot()
         {
-            Bot = new Telegram.Bot.TelegramBotClient(SystemSingleton.Configuration.ApiKey);
+            Bot = new TelegramBotClient(SystemSingleton.Configuration.ApiKey);
             MainLoop();
         }
         private async void MainLoop()
@@ -52,7 +52,16 @@ namespace ServerApp.Elements
         {
             foreach (var update in updates)
             {
+                EnvironmentHelper.SendLog("from -- "+update.Message.From.Id + " -- " + update.Message.Text);
+                var Session = new CurrentSession(update.Message.From.Id);
+                if (Session.HasValue && Session.State>0)
+                {
 
+                }
+                else
+                {
+                    await Bot.SendTextMessageAsync(update.Message.Chat.Id, (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_TelegramIdNotFound"), Telegram.Bot.Types.Enums.ParseMode.Default, false, false, 0, Menu.LogInKeyBoard());
+                }
             }
         }
     }

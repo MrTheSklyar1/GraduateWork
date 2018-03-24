@@ -16,7 +16,6 @@ namespace ServerApp.Elements
     {
         public long TelegramID;
         public int State;
-        public string InputtedLogin;
         public Guid? ChoosenDocType;
         public int DocumentTypesPage;
         public Guid? ChoosenRole;
@@ -44,7 +43,6 @@ namespace ServerApp.Elements
                                 TelegramID = id;
                                 ID = reader.GetGuid(0);
                                 State = reader.GetInt32(1);
-                                InputtedLogin = reader.GetString(2);
                                 ChoosenDocType = reader.GetGuid(3);
                                 DocumentTypesPage = reader.GetInt32(4);
                                 ChoosenRole = reader.GetGuid(5);
@@ -70,9 +68,9 @@ namespace ServerApp.Elements
             }
         }
 
-        public bool Login(string password)
+        public bool Login(string password, Guid UserID)
         {
-            if (State != 0 || InputtedLogin == "") return false;
+            if (State != 0 ) return false;
             var hash = "";
             var hashfromsql = "";
             using (var md5Hash = MD5.Create())
@@ -92,17 +90,16 @@ namespace ServerApp.Elements
                     SystemSingleton.Configuration.SqlConnections.Add(con);
                     using (var command = new SqlCommand(SqlCommands.LoginCommand, con))
                     {
-                        command.Parameters.Add("@LoginText", SqlDbType.NVarChar);
-                        command.Parameters["@LoginText"].Value = InputtedLogin;
+                        command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@ID"].Value = UserID;
                         EnvironmentHelper.SendLogSQL(command.CommandText);
                         con.Open();
                         using (var reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                ID = reader.GetGuid(0);
-                                hashfromsql = reader.GetString(1);
-                                TelegramID = reader.GetInt64(2);
+                                ID = UserID;
+                                hashfromsql = reader.GetString(0);
                             }
                         }
                         con.Close();
@@ -115,13 +112,12 @@ namespace ServerApp.Elements
             }
             if (hash != hashfromsql)
             {
-                EnvironmentHelper.SendLog("Login failed, user: " + InputtedLogin);
-                InputtedLogin = "";
+                EnvironmentHelper.SendLog("Login failed, user: " + ID);
                 return false;
             }
             else
             {
-                EnvironmentHelper.SendLog("Log In - " + InputtedLogin);
+                EnvironmentHelper.SendLog("Log In - " + ID);
                 return true;
             }
         }

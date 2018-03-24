@@ -13,7 +13,6 @@ namespace ServerApp.SupportClasses
         public bool ConsoleLog { get; set; }
         public string FilesPath { get; set; }
         public string ApiKey { get; set; }
-        public string LangInfo { get; set; }
     }
 
     public class XMLConfigurationBase
@@ -36,15 +35,13 @@ namespace ServerApp.SupportClasses
                 config.ConsoleLog = false;
                 config.FilesPath = @"C:\Users\Public\Documents\";
                 config.ApiKey = @"584074175:AAG7t7EphRspNnUfShb5BD1Z8N9dFFWvjCA";
-                config.LangInfo = @"en-US";
                 config.Save("settings.xml");
                 return false;
             }
 
             if (result?.ConnectionString != null &&
                 result.FilesPath != null &&
-                result.ApiKey != null &&
-                result.LangInfo != null)
+                result.ApiKey != null)
             {
                 SystemSingleton.Configuration.ConnectionString = result.ConnectionString;
                 SystemSingleton.Configuration.SQLLog = result.SQLLog;
@@ -58,7 +55,6 @@ namespace ServerApp.SupportClasses
                     SystemSingleton.Configuration.FilesPath = result.FilesPath + "AppTaskFiles\\";
                 }
                 SystemSingleton.Configuration.ApiKey = result.ApiKey;
-                SystemSingleton.Configuration.LangInfo = result.LangInfo;
                 return true;
             }
             else

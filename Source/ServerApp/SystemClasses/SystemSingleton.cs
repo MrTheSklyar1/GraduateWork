@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using ServerApp.Elements;
 using Telegram.Bot;
 
@@ -21,6 +22,8 @@ namespace ServerApp.SystemClasses
             public static string LangInfo { get; set; }
             public static List<SqlConnection> SqlConnections { get; set; }
             public static TBot Bot { get; set; }
+            public static TextBox ConsoleBox { get; set; }
+            public static MainWindow Window { get; set; }
         }
     }
 }

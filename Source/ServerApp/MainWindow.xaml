@@ -5,8 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ServerApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Closed="Window_Closed">
+        Title="{DynamicResource m_app_Header}" Height="450" Width="800" Closed="Window_Closed">
     <Window.Content>
-        <TextBox TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" Background="Black" Foreground="White" FontSize="14" AcceptsReturn="True" AcceptsTab="True" AutoWordSelection="True" IsReadOnly="True"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Name="ConsoleBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" Background="Black" Foreground="White" FontSize="14" AcceptsReturn="True" AcceptsTab="True" AutoWordSelection="True" IsReadOnly="True"/>
+            <DockPanel Grid.Row="1">
+                <Menu Background="{x:Null}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="15">
+                    <MenuItem Name="menuLanguage" Header="{DynamicResource m_menu_Language}" />
+                    <MenuItem Name="About" Header="{DynamicResource m_menu_About}" Visibility="Visible" Click="About_OnClick"/>
+                </Menu>
+            </DockPanel>
+        </Grid>
     </Window.Content>
 </Window>
