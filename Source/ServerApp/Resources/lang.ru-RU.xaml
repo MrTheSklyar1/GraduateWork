@@ -5,7 +5,13 @@
     <v:String x:Key="m_menu_About">О программе</v:String>
     <v:String x:Key="m_BotB_LogIn">Войти</v:String>
     <v:String x:Key="m_BotB_LogOff">Выйти</v:String>
+    <v:String x:Key="m_BotB_ReqDoc">Запросить документ</v:String>
+    <v:String x:Key="m_BotB_History">История выполненных задач</v:String>
+    <v:String x:Key="m_BotB_CurrentTasks">Отчет по текущим задачам</v:String>
     <v:String x:Key="m_BotB_GoToStart">Возврат на стартовую страницу</v:String>
+    <v:String x:Key="m_BotB_GoToMainMenu">Вернуться в главное меню</v:String>
+    <v:String x:Key="m_BotB_Manually">Самостоятельно</v:String>
+    <v:String x:Key="m_BotB_FromList">Выбрать из списка</v:String>
     <v:String x:Key="m_BotM_TelegramIdNotFound">Ваш TelegramID не найден, вам нужно войти в систему</v:String>
     <v:String x:Key="m_BotM_EnterLogin">Введите имя пользователя</v:String>
     <v:String x:Key="m_BotM_EnterPass">Введите пароль</v:String>
@@ -13,4 +19,10 @@
     <v:String x:Key="m_BotM_IncorrectPassword">Пароль не подходит, попробуйте еще</v:String>
     <v:String x:Key="m_BotM_LoginOK">Успешный вход</v:String>
     <v:String x:Key="m_BotM_StartPage">Стартовая страница</v:String>
+    <v:String x:Key="m_BotM_ReturnPassword">Для входа, введите пароль</v:String>
+    <v:String x:Key="m_BotM_ChoseInputVariant">Выберете вариант ввода</v:String>
+    <v:String x:Key="m_BotM_InputTag">Введите название типа документа</v:String>
+    <v:String x:Key="m_BotM_MainMenu">Главное меню</v:String>
+    <v:String x:Key="m_BotM_NotCorrectMSG">Введено некорректное сообщение для текущего состояния сессии, воспользуйтесь кнопками или рекомендациями из сообщений выше</v:String>
+    
 </ResourceDictionary>

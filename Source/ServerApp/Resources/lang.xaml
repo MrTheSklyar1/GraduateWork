@@ -6,6 +6,10 @@
     <v:String x:Key="m_BotB_LogIn">LogIn</v:String>
     <v:String x:Key="m_BotB_LogOff">LogOff</v:String>
     <v:String x:Key="m_BotB_GoToStart">Go to start page</v:String>
+    <v:String x:Key="m_BotB_ReqDoc">Request document</v:String>
+    <v:String x:Key="m_BotB_History">Task history</v:String>
+    <v:String x:Key="m_BotB_CurrentTasks">Current tasks</v:String>
+    <v:String x:Key="m_BotB_GoToMainMenu">Go to main menu</v:String>
     <v:String x:Key="m_BotM_TelegramIdNotFound">Your TelegramID not found, please login</v:String>
     <v:String x:Key="m_BotM_EnterLogin">Enter username</v:String>
     <v:String x:Key="m_BotM_EnterPass">Enter password</v:String>
@@ -13,4 +17,9 @@
     <v:String x:Key="m_BotM_IncorrectPassword">Password is incorrect, try again</v:String>
     <v:String x:Key="m_BotM_LoginOK">Login OK</v:String>
     <v:String x:Key="m_BotM_StartPage">Start Page</v:String>
+    <v:String x:Key="m_BotM_ReturnPassword">Enter password for return main menu</v:String>
+    <v:String x:Key="m_BotM_ChoseInputVariant">Choose input variant</v:String>
+    <v:String x:Key="m_BotM_InputTag">Input document type name</v:String>
+    <v:String x:Key="m_BotM_MainMenu">Main menu</v:String>
+    <v:String x:Key="m_BotM_NotCorrectMSG">Message is incorrect for current session state, chose one of the buttons or read and forward messages above</v:String>
 </ResourceDictionary>

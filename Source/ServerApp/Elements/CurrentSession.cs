@@ -119,37 +119,34 @@ namespace ServerApp.Elements
                 EnvironmentHelper.SendLog("Login failed, user: " + login);
                 return false;
             }
-            else
+            try
             {
-                try
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
-                    using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
-                    {
-                        string tempCommand = @"update BotStat set State=1 where ID = '" + ID.Value + "'";
+                    string tempCommand = @"update BotStat set State=1 where ID = '" + ID.Value + "'";
 
-                        SystemSingleton.Configuration.SqlConnections.Add(con);
-                        con.Open();
-                        using (var command = new SqlCommand(tempCommand, con))
-                        {
-                            EnvironmentHelper.SendLogSQL(command.CommandText);
-                            command.ExecuteNonQuery();
-                        }
-                        tempCommand = @"update PersonalRoles set TelegramID="+ telegramID + " where ID = '" + ID.Value + "'";
-                        using (var command = new SqlCommand(tempCommand, con))
-                        {
-                            EnvironmentHelper.SendLogSQL(command.CommandText);
-                            command.ExecuteNonQuery();
-                        }
-                        con.Close();
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    con.Open();
+                    using (var command = new SqlCommand(tempCommand, con))
+                    {
+                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                        command.ExecuteNonQuery();
                     }
+                    tempCommand = @"update PersonalRoles set TelegramID="+ telegramID + " where ID = '" + ID.Value + "'";
+                    using (var command = new SqlCommand(tempCommand, con))
+                    {
+                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                        command.ExecuteNonQuery();
+                    }
+                    con.Close();
                 }
-                catch (Exception ex)
-                {
-                    EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
-                }
-                EnvironmentHelper.SendLog("Log In - " + login);
-                return true;
             }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+            }
+            EnvironmentHelper.SendLog("Log In - " + login);
+            return true;
         }
 
         public void CloseSession()

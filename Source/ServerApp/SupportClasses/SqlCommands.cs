@@ -17,5 +17,10 @@
         public const string GetLoginCommand =
             @"select Login from PersonalRoles with(nolock) where TelegramID=@ID";
 
+        public const string LoadDocumentTypesCommand =
+            @"select ID from DocTypes with(nolock)";
+
+        public const string LoadDocumentTagsCommand =
+            @"select TagWords from DocTypes with(nolock) where ID=@ID";
     }
 }

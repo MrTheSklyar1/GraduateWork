@@ -46,5 +46,53 @@ namespace ServerApp.Elements
                 RemoveKeyboard = true
             };
         }
+        public static ReplyKeyboardMarkup MainMenuKeyBoard()
+        {
+            return new ReplyKeyboardMarkup
+            {
+                Keyboard = new[] {
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_ReqDoc")),
+                    },
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_CurrentTasks")),
+                    },
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_History")),
+                    },
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_LogOff")),
+                    },
+                },
+                OneTimeKeyboard = false,
+                ResizeKeyboard = true
+            };
+        }
+        public static ReplyKeyboardMarkup InputTypeKeyBoard()
+        {
+            return new ReplyKeyboardMarkup
+            {
+                Keyboard = new[] {
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_FromList")),
+                    },
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_Manually")),
+                    },
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoToMainMenu")),
+                    },
+                },
+                OneTimeKeyboard = false,
+                ResizeKeyboard = true
+            };
+        }
     }
 }
