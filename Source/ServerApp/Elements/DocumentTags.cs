@@ -21,7 +21,7 @@ namespace ServerApp.Elements
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
                     SystemSingleton.Configuration.SqlConnections.Add(con);
-                    using (var command = new SqlCommand(SqlCommands.LoadDocumentTypesCommand, con))
+                    using (var command = new SqlCommand(SqlCommands.LoadDocumentTagsCommand, con))
                     {
                         command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
                         command.Parameters["@ID"].Value = DocID;

@@ -94,5 +94,91 @@ namespace ServerApp.Elements
                 ResizeKeyboard = true
             };
         }
+
+        public static ReplyKeyboardMarkup GoBackKeyBoard()
+        {
+            return new ReplyKeyboardMarkup
+            {
+                Keyboard = new[] {
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack")),
+                    },
+                },
+                OneTimeKeyboard = false,
+                ResizeKeyboard = true
+            };
+        }
+
+        public static ReplyKeyboardMarkup HistoryKeyBoard(int page)
+        {
+            throw new NotImplementedException();
+            return new ReplyKeyboardMarkup
+            {
+                Keyboard = new[] {
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack")),
+                    },
+                },
+                OneTimeKeyboard = false,
+                ResizeKeyboard = true
+            };
+        }
+
+        public static ReplyKeyboardMarkup CurrentTasksKeyBoard(int page)
+        {
+            throw new NotImplementedException();
+            return new ReplyKeyboardMarkup
+            {
+                Keyboard = new[] {
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack")),
+                    },
+                },
+                OneTimeKeyboard = false,
+                ResizeKeyboard = true
+            };
+        }
+
+        public static ReplyKeyboardMarkup DocTypesKeyBoard(int page)
+        {
+            throw new NotImplementedException();
+            return new ReplyKeyboardMarkup
+            {
+                Keyboard = new[] {
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack")),
+                    },
+                },
+                OneTimeKeyboard = false,
+                ResizeKeyboard = true
+            };
+        }
+
+        public static ReplyKeyboardMarkup AllOrConcreteRoleKeyBoard()
+        {
+            return new ReplyKeyboardMarkup
+            {
+                Keyboard = new[] {
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_ToAll")),
+                    },
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_ToConcrete")),
+                    },
+                    new[]
+                    {
+                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack")),
+                    },
+                },
+                OneTimeKeyboard = false,
+                ResizeKeyboard = true
+            };
+        }
     }
 }

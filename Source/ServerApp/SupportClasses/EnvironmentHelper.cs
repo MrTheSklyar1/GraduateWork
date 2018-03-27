@@ -60,6 +60,7 @@ namespace ServerApp.SupportClasses
             }
             CloseAllConnections();
             SystemSingleton.WaitersWorker.SaveWaiters();
+            MessageBox.Show("Error: \n\n"+ logMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             Environment.Exit(1);
         }
         public static void SendLogSQL(string log)
@@ -103,6 +104,32 @@ namespace ServerApp.SupportClasses
                 EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
             }
             return Login;
+        }
+
+        internal static bool IsDocContainsStaticRole(Guid key)
+        {
+            int strings = 0;
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.FindDocStaticRoleCommand, con))
+                    {
+                        command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@ID"].Value = key;
+                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                        con.Open();
+                        strings = Convert.ToInt32(command.ExecuteScalar());
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+            }
+            return strings>0;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ServerApp.Elements
 {
     public class DocumentTypes
     {
-        Dictionary<Guid, DocumentTags> Types = new Dictionary<Guid, DocumentTags>();
+        public Dictionary<Guid, DocumentTags> Types = new Dictionary<Guid, DocumentTags>();
         public bool HasValue { get; }
         public DocumentTypes()
         {

@@ -84,16 +84,22 @@ namespace ServerApp.Elements
                         ResolveStateFourth(update, Session);
                         break;
                     case 5:
+                        ResolveStateFive(update, Session);
                         break;
                     case 6:
+                        ResolveStateSix(update, Session);
                         break;
                     case 7:
+                        ResolveStateSeven(update, Session);
                         break;
                     case 8:
+                        ResolveStateEight(update, Session);
                         break;
                     case 9:
+                        ResolveStateNine(update, Session);
                         break;
                     case 10:
+                        ResolveStateTen(update, Session);
                         break;
                     default:
                         throw new Exception("Status error, user " + Session.ID);
@@ -210,6 +216,9 @@ namespace ServerApp.Elements
             else if (update.Message.Text == (string) SystemSingleton.Configuration.Window.FindResource("m_BotB_ReqDoc"))
             {
                 session.State = 2;
+                session.DocumentTypesPage = 1;
+                session.ChoosenRole = null;
+                session.ChoosenDocType = null;
                 session.CloseSession();
                 EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ChoseInputVariant"));
                 await Bot.SendTextMessageAsync(update.Message.Chat.Id,
@@ -219,22 +228,22 @@ namespace ServerApp.Elements
             else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_History"))
             {
                 session.State = 10;
+                session.HistoryPage = 1;
                 session.CloseSession();
-                //TODO: заменить надпись
-                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NotCorrectMSG"));
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_HistoryChoose"));
                 await Bot.SendTextMessageAsync(update.Message.Chat.Id,
-                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NotCorrectMSG"),
-                    ParseMode.Default, false, false, 0, Menu.MainMenuKeyBoard());
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_HistoryChoose"),
+                    ParseMode.Default, false, false, 0, Menu.HistoryKeyBoard(session.HistoryPage));
             }
             else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_CurrentTasks"))
             {
                 session.State = 9;
+                session.CurrentTasksPage = 1;
                 session.CloseSession();
-                //TODO: заменить надпись
-                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NotCorrectMSG"));
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentTasksChoose"));
                 await Bot.SendTextMessageAsync(update.Message.Chat.Id,
-                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NotCorrectMSG"),
-                    ParseMode.Default, false, false, 0, Menu.MainMenuKeyBoard());
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentTasksChoose"),
+                    ParseMode.Default, false, false, 0, Menu.CurrentTasksKeyBoard(session.CurrentTasksPage));
             }
             else
             {
@@ -249,22 +258,48 @@ namespace ServerApp.Elements
         {
             if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_FromList"))
             {
-                //TODO: клавиатура
-                session.State = 3;
-                session.CloseSession();
-                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ReturnPassword"));
-                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
-                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ReturnPassword"),
-                    ParseMode.Default, false, false, 0, null);
+                DocumentTypes documentTypes = new DocumentTypes();
+                if (!documentTypes.HasValue)
+                {
+                    session.State = 1;
+                    session.CloseSession();
+                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NoOneDocType"));
+                    await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                        (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NoOneDocType"),
+                        ParseMode.Default, false, false, 0, Menu.MainMenuKeyBoard());
+                }
+                else
+                {
+                    session.State = 3;
+                    session.DocumentTypesPage = 1;
+                    session.CloseSession();
+                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypesChoose"));
+                    await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                        (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypesChoose"),
+                        ParseMode.Default, false, false, 0, Menu.DocTypesKeyBoard(session.DocumentTypesPage));
+                }
             }
             else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_Manually"))
             {
-                session.State = 4;
-                session.CloseSession();
-                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_InputTag"));
-                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
-                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_InputTag"),
-                    ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
+                DocumentTypes documentTypes = new DocumentTypes();
+                if (!documentTypes.HasValue)
+                {
+                    session.State = 1;
+                    session.CloseSession();
+                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NoOneDocType"));
+                    await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                        (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NoOneDocType"),
+                        ParseMode.Default, false, false, 0, Menu.MainMenuKeyBoard());
+                }
+                else
+                {
+                    session.State = 4;
+                    session.CloseSession();
+                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_InputTag"));
+                    await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                        (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_InputTag"),
+                        ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
+                }
             }
             else if (update.Message.Text == (string) SystemSingleton.Configuration.Window.FindResource("m_BotB_GoToMainMenu"))
             {
@@ -289,9 +324,87 @@ namespace ServerApp.Elements
             throw new NotImplementedException();
         }
 
-        private void ResolveStateFourth(Update update, CurrentSession session)
+        private async void ResolveStateFourth(Update update, CurrentSession session)
         {
             DocumentTypes documentTypes = new DocumentTypes();
+            if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack"))
+            {
+                session.State = 2;
+                session.DocumentTypesPage = 1;
+                session.ChoosenRole = null;
+                session.ChoosenDocType = null;
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ChoseInputVariant"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ChoseInputVariant"),
+                    ParseMode.Default, false, false, 0, Menu.InputTypeKeyBoard());
+            }
+            else
+            {
+                foreach (var item in documentTypes.Types)
+                {
+                    foreach (var tag in item.Value.Tags)
+                    {
+                        if(tag.ToLower().Contains(update.Message.Text.ToLower()) || update.Message.Text.ToLower().Contains(tag.ToLower()))
+                        {
+                            if (EnvironmentHelper.IsDocContainsStaticRole(item.Key))
+                            {
+                                session.State = 5;
+                                session.ChoosenDocType = item.Key;
+                                session.CloseSession();
+                                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeFounded"));
+                                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeFounded"),
+                                    ParseMode.Default, false, false, 0, Menu.AllOrConcreteRoleKeyBoard());
+                            }
+                            else
+                            {
+                                session.State = 7;
+                                session.ChoosenDocType = item.Key;
+                                session.CloseSession();
+                                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeFoundedComment"));
+                                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeFoundedComment"),
+                                    ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
+                            }
+                            return;
+                        }
+                    }
+                }
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeNotFounded"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeNotFounded"),
+                    ParseMode.Default, false, false, 0, Menu.GoBackKeyBoard());
+            }
+        }
+
+        private async void ResolveStateFive(Update update, CurrentSession session)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async void ResolveStateSix(Update update, CurrentSession session)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async void ResolveStateSeven(Update update, CurrentSession session)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async void ResolveStateEight(Update update, CurrentSession session)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async void ResolveStateNine(Update update, CurrentSession session)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async void ResolveStateTen(Update update, CurrentSession session)
+        {
             throw new NotImplementedException();
         }
 

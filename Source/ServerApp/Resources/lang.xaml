@@ -5,8 +5,13 @@
     <v:String x:Key="m_menu_About">About</v:String>
     <v:String x:Key="m_BotB_LogIn">LogIn</v:String>
     <v:String x:Key="m_BotB_LogOff">LogOff</v:String>
+    <v:String x:Key="m_BotB_GoBack">Go back</v:String>
+    <v:String x:Key="m_BotB_Backward">Backward</v:String>
+    <v:String x:Key="m_BotB_Forward">Forward</v:String>
     <v:String x:Key="m_BotB_GoToStart">Go to start page</v:String>
     <v:String x:Key="m_BotB_ReqDoc">Request document</v:String>
+    <v:String x:Key="m_BotB_ToAll">Send to static role</v:String>
+    <v:String x:Key="m_BotB_ToConcrete">Chose personal role from the static</v:String>
     <v:String x:Key="m_BotB_History">Task history</v:String>
     <v:String x:Key="m_BotB_CurrentTasks">Current tasks</v:String>
     <v:String x:Key="m_BotB_GoToMainMenu">Go to main menu</v:String>
@@ -21,5 +26,12 @@
     <v:String x:Key="m_BotM_ChoseInputVariant">Choose input variant</v:String>
     <v:String x:Key="m_BotM_InputTag">Input document type name</v:String>
     <v:String x:Key="m_BotM_MainMenu">Main menu</v:String>
+    <v:String x:Key="m_BotM_DocTypeFounded">Document type found</v:String>
+    <v:String x:Key="m_BotM_DocTypeFoundedComment">Document type found, leave commentary to performer</v:String>
+    <v:String x:Key="m_BotM_DocTypeNotFounded">Document type not found</v:String>
+    <v:String x:Key="m_BotM_HistoryChoose">Chose task from history to see results</v:String>
+    <v:String x:Key="m_BotM_CurrentTasksChoose">Chose task from history to see state</v:String>
+    <v:String x:Key="m_BotM_DocTypesChoose">Chose document type</v:String>    
+    <v:String x:Key="m_BotM_NoOneDocType">No one document type found, return to main menu</v:String>
     <v:String x:Key="m_BotM_NotCorrectMSG">Message is incorrect for current session state, chose one of the buttons or read and forward messages above</v:String>
 </ResourceDictionary>
