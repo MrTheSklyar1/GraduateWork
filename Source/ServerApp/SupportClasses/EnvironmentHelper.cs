@@ -106,7 +106,7 @@ namespace ServerApp.SupportClasses
             return Login;
         }
 
-        internal static bool IsDocContainsStaticRole(Guid key)
+        public static bool IsDocContainsStaticRole(Guid key)
         {
             int strings = 0;
             try
@@ -130,6 +130,62 @@ namespace ServerApp.SupportClasses
                 EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
             }
             return strings>0;
+        }
+
+        public static List<string> ThreeDocTypesByPage(ref int page, ref int pages)
+        {
+            int rows = 0;
+            List<string> Page = new List<string>();
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.CountDocTypes, con))
+                    {
+                        SendLogSQL(command.CommandText);
+                        con.Open();
+                        rows = Convert.ToInt32(command.ExecuteScalar());
+                        con.Close();
+                    }
+                    pages = (double)rows / 3 > rows / 3 ? rows / 3 + 1 : rows / 3;
+                    if (page == 0)
+                    {
+                        page = pages;
+                    }else if (pages < page)
+                    {
+                        page = 1;
+                    }
+
+                    var start = (page - 1) * 3 + 1;
+                    if (rows > 0)
+                    {
+                        using (var command = new SqlCommand(SqlCommands.SelectThreeDocTypesByPage, con))
+                        {
+                            command.Parameters.Add("@PageStart", SqlDbType.Int);
+                            command.Parameters["@PageStart"].Value = start;
+                            command.Parameters.Add("@PageEnd", SqlDbType.Int);
+                            command.Parameters["@PageEnd"].Value = start + 2;
+                            SendLogSQL(command.CommandText);
+                            con.Open();
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Page.Add(reader.GetString(0));
+                                }
+                            }
+                            con.Close();
+                        }
+                    }
+                    return Page;
+                }
+            }
+            catch (Exception ex)
+            {
+                SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+                return null;
+            }
         }
     }
 }

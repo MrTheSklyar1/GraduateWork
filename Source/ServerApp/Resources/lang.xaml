@@ -33,5 +33,6 @@
     <v:String x:Key="m_BotM_CurrentTasksChoose">Chose task from history to see state</v:String>
     <v:String x:Key="m_BotM_DocTypesChoose">Chose document type</v:String>    
     <v:String x:Key="m_BotM_NoOneDocType">No one document type found, return to main menu</v:String>
+    <v:String x:Key="m_BotM_Page">Page</v:String>
     <v:String x:Key="m_BotM_NotCorrectMSG">Message is incorrect for current session state, chose one of the buttons or read and forward messages above</v:String>
 </ResourceDictionary>

@@ -35,6 +35,7 @@
     <v:String x:Key="m_BotM_CurrentTasksChoose">Для просмотра состояния выберите задачу</v:String>
     <v:String x:Key="m_BotM_DocTypesChoose">Выберите тип документа</v:String>
     <v:String x:Key="m_BotM_NoOneDocType">Типы документов не найдены, возврат в меню</v:String>
+    <v:String x:Key="m_BotM_Page">Страница</v:String>
     <v:String x:Key="m_BotM_NotCorrectMSG">Введено некорректное сообщение для текущего состояния сессии, воспользуйтесь кнопками или рекомендациями из сообщений выше</v:String>
     
 </ResourceDictionary>

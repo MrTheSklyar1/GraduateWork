@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ServerApp.SupportClasses;
 using ServerApp.SystemClasses;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -142,20 +143,96 @@ namespace ServerApp.Elements
             };
         }
 
-        public static ReplyKeyboardMarkup DocTypesKeyBoard(int page)
+        public static ReplyKeyboardMarkup DocTypesKeyBoard(ref int page, ref int pages)
         {
-            throw new NotImplementedException();
-            return new ReplyKeyboardMarkup
+            var Page = EnvironmentHelper.ThreeDocTypesByPage(ref page, ref pages);
+            if (Page == null || Page.Count == 0)
             {
-                Keyboard = new[] {
-                    new[]
-                    {
-                        new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack")),
+                return new ReplyKeyboardMarkup
+                {
+                    Keyboard = new[] {
+                        new[]
+                        {
+                            new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack")),
+                        },
                     },
-                },
-                OneTimeKeyboard = false,
-                ResizeKeyboard = true
-            };
+                    OneTimeKeyboard = false,
+                    ResizeKeyboard = true
+                };
+            }
+            else
+            if (Page.Count == 1)
+            {
+                return new ReplyKeyboardMarkup
+                {
+                    Keyboard = new[] {
+                        new[]
+                        {
+                            new Telegram.Bot.Types.KeyboardButton("<--"),
+                            new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack")),
+                            new Telegram.Bot.Types.KeyboardButton("-->"),
+                        },
+                        new[]
+                        {
+                            new Telegram.Bot.Types.KeyboardButton(Page[0]),
+                        },
+                    },
+                    OneTimeKeyboard = false,
+                    ResizeKeyboard = true
+                };
+            }
+            else if (Page.Count == 2)
+            {
+                return new ReplyKeyboardMarkup
+                {
+                    Keyboard = new[] {
+                        new[]
+                        {
+                            new Telegram.Bot.Types.KeyboardButton("<--"),
+                            new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack")),
+                            new Telegram.Bot.Types.KeyboardButton("-->"),
+                        },
+                        new[]
+                        {
+                            new Telegram.Bot.Types.KeyboardButton(Page[0]),
+                        },
+                        new[]
+                        {
+                            new Telegram.Bot.Types.KeyboardButton(Page[1]),
+                        },
+                    },
+                    OneTimeKeyboard = false,
+                    ResizeKeyboard = true
+                };
+            }
+            else
+            {
+                return new ReplyKeyboardMarkup
+                {
+                    Keyboard = new[] {
+                        new[]
+                        {
+                            new Telegram.Bot.Types.KeyboardButton("<--"),
+                            new Telegram.Bot.Types.KeyboardButton((string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack")),
+                            new Telegram.Bot.Types.KeyboardButton("-->"),
+                        },
+                        new[]
+                        {
+                            new Telegram.Bot.Types.KeyboardButton(Page[0]),
+                        },
+                        new[]
+                        {
+                            new Telegram.Bot.Types.KeyboardButton(Page[1]),
+                        },
+                        new[]
+                        {
+                            new Telegram.Bot.Types.KeyboardButton(Page[2]),
+                        },
+                    },
+                    OneTimeKeyboard = false,
+                    ResizeKeyboard = true
+                };
+            }
         }
 
         public static ReplyKeyboardMarkup AllOrConcreteRoleKeyBoard()

@@ -272,11 +272,14 @@ namespace ServerApp.Elements
                 {
                     session.State = 3;
                     session.DocumentTypesPage = 1;
+                    int pages = 0;
+                    var keyboard = Menu.DocTypesKeyBoard(ref session.DocumentTypesPage,ref pages);
                     session.CloseSession();
                     EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypesChoose"));
                     await Bot.SendTextMessageAsync(update.Message.Chat.Id,
                         (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypesChoose"),
-                        ParseMode.Default, false, false, 0, Menu.DocTypesKeyBoard(session.DocumentTypesPage));
+                        ParseMode.Default, false, false, 0, keyboard);
+                    
                 }
             }
             else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_Manually"))
@@ -319,9 +322,79 @@ namespace ServerApp.Elements
             }
         }
 
-        private void ResolveStateThree(Update update, CurrentSession session)
+        private async void ResolveStateThree(Update update, CurrentSession session)
         {
-            throw new NotImplementedException();
+            DocumentTypes documentTypes = new DocumentTypes();
+            int pages=0;
+            if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack"))
+            {
+                session.State = 2;
+                session.DocumentTypesPage = 1;
+                session.ChoosenRole = null;
+                session.ChoosenDocType = null;
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ChoseInputVariant"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ChoseInputVariant"),
+                    ParseMode.Default, false, false, 0, Menu.InputTypeKeyBoard());
+            }else
+            if (update.Message.Text == "-->")
+            {
+                session.State = 3;
+                session.DocumentTypesPage++;
+                var keyboard = Menu.DocTypesKeyBoard(ref session.DocumentTypesPage, ref pages);
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypesChoose"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") +" "+ session.DocumentTypesPage+"/"+pages,
+                    ParseMode.Default, false, false, 0, keyboard);
+            }
+            else
+            if (update.Message.Text == "<--")
+            {
+                session.State = 3;
+                session.DocumentTypesPage--;
+                var keyboard = Menu.DocTypesKeyBoard(ref session.DocumentTypesPage, ref pages);
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypesChoose"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.DocumentTypesPage + "/" + pages,
+                    ParseMode.Default, false, false, 0, keyboard);
+            }
+            else
+            {
+                foreach (var item in documentTypes.TypesCaptions)
+                {
+                    if (item.Value==update.Message.Text)
+                    {
+                        if (EnvironmentHelper.IsDocContainsStaticRole(item.Key))
+                        {
+                            session.State = 5;
+                            session.ChoosenDocType = item.Key;
+                            session.CloseSession();
+                            EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeFounded"));
+                            await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                                (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeFounded"),
+                                ParseMode.Default, false, false, 0, Menu.AllOrConcreteRoleKeyBoard());
+                        }
+                        else
+                        {
+                            session.State = 7;
+                            session.ChoosenDocType = item.Key;
+                            session.CloseSession();
+                            EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeFoundedComment"));
+                            await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                                (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeFoundedComment"),
+                                ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
+                        }
+                        return;
+                    }
+                }
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeNotFounded"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeNotFounded"),
+                    ParseMode.Default, false, false, 0, Menu.GoBackKeyBoard());
+            }
         }
 
         private async void ResolveStateFourth(Update update, CurrentSession session)

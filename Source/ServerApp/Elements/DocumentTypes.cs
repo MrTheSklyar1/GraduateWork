@@ -13,6 +13,7 @@ namespace ServerApp.Elements
     public class DocumentTypes
     {
         public Dictionary<Guid, DocumentTags> Types = new Dictionary<Guid, DocumentTags>();
+        public Dictionary<Guid, string> TypesCaptions = new Dictionary<Guid, string>();
         public bool HasValue { get; }
         public DocumentTypes()
         {
@@ -31,6 +32,7 @@ namespace ServerApp.Elements
                             {
                                 Guid id = reader.GetGuid(0);
                                 Types.Add(id, new DocumentTags(id));
+                                TypesCaptions.Add(id, reader.GetString(1));
                             }
                             HasValue = Types.Count != 0;
                         }
