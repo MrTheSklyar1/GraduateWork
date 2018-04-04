@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using ServerApp.Elements;
 using ServerApp.SystemClasses;
 
 namespace ServerApp.SupportClasses
@@ -311,6 +312,43 @@ namespace ServerApp.SupportClasses
                 EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
             }
             return guid!=Guid.Empty;
+        }
+
+        public static string PrepareMessageNewTask(CurrentSession session)
+        {
+            string msg = "";
+            string role = "";
+            string doc = "";
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.FindNamesForRoleDoc, con))
+                    {
+                        command.Parameters.Add("@RoleID", SqlDbType.VarChar);
+                        command.Parameters["@RoleID"].Value = session.ChoosenRole;
+                        command.Parameters.Add("@DocTypeID", SqlDbType.VarChar);
+                        command.Parameters["@DocTypeID"].Value = session.ChoosenDocType;
+                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                        con.Open();
+                        using (var reader = command.ExecuteReader())
+                        {
+                            reader.Read();
+                            role = reader.GetString(0);
+                            reader.Read();
+                            doc = reader.GetString(0);
+                        }
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+            }
+            //TODO: доделать формирование сообщения
+            return msg;
         }
     }
 }

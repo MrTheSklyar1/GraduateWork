@@ -22,6 +22,7 @@ namespace ServerApp.Elements
         public int PersonalRolesPage;
         public int CurrentTasksPage;
         public int HistoryPage;
+        public string Commentary;
 
         public CurrentSession(long id)
         {
@@ -49,6 +50,7 @@ namespace ServerApp.Elements
                                 PersonalRolesPage = reader.GetInt32(5);
                                 CurrentTasksPage = reader.GetInt32(6);
                                 HistoryPage = reader.GetInt32(7);
+                                Commentary = reader.IsDBNull(8) ? "" : reader.GetString(8);
                                 HasValue = true;
                             }
                             else
@@ -164,6 +166,7 @@ namespace ServerApp.Elements
                         tempCommand += "PersonalRolesPage=" + PersonalRolesPage+ ",";
                         tempCommand += "CurrentTasksPage=" + CurrentTasksPage+ ",";
                         tempCommand += "HistoryPage=" + HistoryPage;
+                        tempCommand += "Commentary=" + (Commentary != "" ? "'" + Commentary + "'," : "null,");
                         tempCommand += " where ID = '" + ID.Value + "'";
 
                         SystemSingleton.Configuration.SqlConnections.Add(con);

@@ -4,7 +4,7 @@
     {
         public const string LoadUserCommand =
             @"select 
-	            bs.ID, bs.State, bs.ChoosenDocType, bs.DocumentTypesPage, bs.ChoosenRole, bs.PersonalRolesPage, bs.CurrentTasksPage, bs.HistoryPage 
+	            bs.ID, bs.State, bs.ChoosenDocType, bs.DocumentTypesPage, bs.ChoosenRole, bs.PersonalRolesPage, bs.CurrentTasksPage, bs.HistoryPage, bs.Commentary 
             from 
 	            BotStat bs with(nolock) 
 	            inner join PersonalRoles pr with(nolock) on pr.ID=bs.ID
@@ -58,5 +58,10 @@
 
         public const string FindRoleByLatAndFirstName =
             @"select ID from PersonalRoles with(nolock) where LastName + ' ' + FirstName=@text";
+
+        public const string FindNamesForRoleDoc =
+            @"select Name from Roles where ID=@RoleID
+            union
+            select Caption from DocTypes where ID=@DocTypeID";
     }
 }

@@ -560,7 +560,16 @@ namespace ServerApp.Elements
 
         private async void ResolveStateSeven(Update update, CurrentSession session)
         {
-            throw new NotImplementedException();
+            session.State = 8;
+            session.Commentary = update.Message.Text;
+            session.CloseSession();
+            string msg = EnvironmentHelper.PrepareMessageNewTask(session);
+            EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ReadyToSend") + "\n\n" +
+                                      msg);
+            await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ReadyToSend") + "\n\n" +
+                msg,
+                ParseMode.Default, false, false, 0, Menu.ReadyToSend());
         }
 
         private async void ResolveStateEight(Update update, CurrentSession session)

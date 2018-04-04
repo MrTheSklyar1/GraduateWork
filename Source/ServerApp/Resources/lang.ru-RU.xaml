@@ -17,6 +17,8 @@
     <v:String x:Key="m_BotB_GoToMainMenu">Вернуться в главное меню</v:String>
     <v:String x:Key="m_BotB_Manually">Самостоятельно</v:String>
     <v:String x:Key="m_BotB_FromList">Выбрать из списка</v:String>
+    <v:String x:Key="m_BotB_SendTask">Отправить</v:String>
+    <v:String x:Key="m_BotB_DontSendTask">Отменить отправку</v:String>
     <v:String x:Key="m_BotM_TelegramIdNotFound">Ваш TelegramID не найден, вам нужно войти в систему</v:String>
     <v:String x:Key="m_BotM_EnterLogin">Введите имя пользователя</v:String>
     <v:String x:Key="m_BotM_EnterPass">Введите пароль</v:String>
@@ -40,6 +42,7 @@
     <v:String x:Key="m_BotM_DocTypesChoose">Выберите тип документа</v:String>
     <v:String x:Key="m_BotM_NoOneDocType">Типы документов не найдены, возврат в меню</v:String>
     <v:String x:Key="m_BotM_Page">Страница</v:String>
+    <v:String x:Key="m_BotM_ReadyToSend">Задача готова к отправке</v:String>
     <v:String x:Key="m_BotM_NotCorrectMSG">Введено некорректное сообщение для текущего состояния сессии, воспользуйтесь кнопками или рекомендациями из сообщений выше</v:String>
     
 </ResourceDictionary>
