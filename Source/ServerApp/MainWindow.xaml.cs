@@ -33,6 +33,7 @@ namespace ServerApp
             SystemSingleton.Configuration.ConsoleBox = ConsoleBox;
             SystemSingleton.Configuration.Window = this;
             SystemSingleton.Configuration.SqlConnections = new List<SqlConnection>();
+            SystemSingleton.Configuration.Waiters = new Dictionary<long, Waiter>();
             if (!XMLConfiguration.Load("settings.xml"))
             {
                 EnvironmentHelper.SendFatalLog("Broken Settings File");

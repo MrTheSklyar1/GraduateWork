@@ -292,7 +292,7 @@ namespace ServerApp.SupportClasses
                     SystemSingleton.Configuration.SqlConnections.Add(con);
                     using (var command = new SqlCommand(SqlCommands.FindRoleByLatAndFirstName, con))
                     {
-                        command.Parameters.Add("@text", SqlDbType.VarChar);
+                        command.Parameters.Add("@text", SqlDbType.NVarChar);
                         command.Parameters["@text"].Value = messageText;
                         EnvironmentHelper.SendLogSQL(command.CommandText);
                         con.Open();
@@ -319,6 +319,7 @@ namespace ServerApp.SupportClasses
             string msg = "";
             string role = "";
             string doc = "";
+            string from = "";
             try
             {
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
@@ -326,10 +327,12 @@ namespace ServerApp.SupportClasses
                     SystemSingleton.Configuration.SqlConnections.Add(con);
                     using (var command = new SqlCommand(SqlCommands.FindNamesForRoleDoc, con))
                     {
-                        command.Parameters.Add("@RoleID", SqlDbType.VarChar);
+                        command.Parameters.Add("@RoleID", SqlDbType.UniqueIdentifier);
                         command.Parameters["@RoleID"].Value = session.ChoosenRole;
-                        command.Parameters.Add("@DocTypeID", SqlDbType.VarChar);
+                        command.Parameters.Add("@DocTypeID", SqlDbType.UniqueIdentifier);
                         command.Parameters["@DocTypeID"].Value = session.ChoosenDocType;
+                        command.Parameters.Add("@FromID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@FromID"].Value = session.ID.Value;
                         EnvironmentHelper.SendLogSQL(command.CommandText);
                         con.Open();
                         using (var reader = command.ExecuteReader())
@@ -338,6 +341,8 @@ namespace ServerApp.SupportClasses
                             role = reader.GetString(0);
                             reader.Read();
                             doc = reader.GetString(0);
+                            reader.Read();
+                            from = reader.GetString(0);
                         }
                         con.Close();
                     }
@@ -347,7 +352,10 @@ namespace ServerApp.SupportClasses
             {
                 EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
             }
-            //TODO: доделать формирование сообщения
+            msg += (string) SystemSingleton.Configuration.Window.FindResource("m_BotM_ReadyPart1")+" " + from + "\n" +
+                   (string) SystemSingleton.Configuration.Window.FindResource("m_BotM_ReadyPart2") + " " + role + "\n" +
+                   (string) SystemSingleton.Configuration.Window.FindResource("m_BotM_ReadyPart3") + " " + doc + "\n" +
+                   (string) SystemSingleton.Configuration.Window.FindResource("m_BotM_ReadyPart4") + " " + session.Commentary;
             return msg;
         }
     }

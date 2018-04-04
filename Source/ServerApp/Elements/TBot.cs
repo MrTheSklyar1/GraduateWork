@@ -568,13 +568,43 @@ namespace ServerApp.Elements
                                       msg);
             await Bot.SendTextMessageAsync(update.Message.Chat.Id,
                 (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ReadyToSend") + "\n\n" +
-                msg,
-                ParseMode.Default, false, false, 0, Menu.ReadyToSend());
+                msg, ParseMode.Default, false, false, 0, Menu.ReadyToSend());
         }
 
         private async void ResolveStateEight(Update update, CurrentSession session)
         {
-            throw new NotImplementedException();
+            if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_SendTask"))
+            {
+                string taskNumber = session.FormAndSendTask();
+                session.State = 1;
+                session.ChoosenDocType = null;
+                session.ChoosenRole = null;
+                session.Commentary = "";
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + taskNumber + " " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Sended"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    taskNumber +" "+ (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Sended"),
+                    ParseMode.Default, false, false, 0, Menu.MainMenuKeyBoard());
+            }
+            else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_DontSendTask"))
+            {
+                session.State = 1;
+                session.ChoosenDocType = null;
+                session.ChoosenRole = null;
+                session.Commentary = "";
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MainMenu"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MainMenu"),
+                    ParseMode.Default, false, false, 0, Menu.MainMenuKeyBoard());
+            }
+            else
+            {
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NotCorrectMSG"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NotCorrectMSG"),
+                    ParseMode.Default, false, false, 0, Menu.ReadyToSend());
+            }
         }
 
         private async void ResolveStateNine(Update update, CurrentSession session)

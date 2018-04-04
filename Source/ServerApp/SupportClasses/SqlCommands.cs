@@ -61,7 +61,20 @@
 
         public const string FindNamesForRoleDoc =
             @"select Name from Roles where ID=@RoleID
-            union
-            select Caption from DocTypes where ID=@DocTypeID";
+            union all
+            select Caption from DocTypes where ID=@DocTypeID
+            union all
+            select Name from Roles where ID=@FromID";
+
+        public const string FindNamesForRoles =
+            @"select Name from Roles where ID=@RoleID
+            union all
+            select Name from Roles where ID=@FromID";
+
+        public const string FindLastNumber =
+            @"select top 1 Number from Tasks order by MainNumber desc";
+
+        public const string InsertTask =
+            @"insert into Tasks values (NEWID(), @StringNumber, @FromID, @FromName, @ToRoleID, @TORoleCaption, SYSDATETIME(), @DocTypeID, '6a52791d-7e42-42d6-a521-4252f276bb6c',@Commentary, NULL, NULL, NULL, 0);";
     }
 }

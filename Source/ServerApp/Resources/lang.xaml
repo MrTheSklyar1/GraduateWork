@@ -42,4 +42,9 @@
     <v:String x:Key="m_BotM_Page">Page</v:String>
     <v:String x:Key="m_BotM_ReadyToSend">Task ready to send</v:String>
     <v:String x:Key="m_BotM_NotCorrectMSG">Message is incorrect for current session state, chose one of the buttons or read and forward messages above</v:String>
+    <v:String x:Key="m_BotM_ReadyPart1">Task from </v:String>
+    <v:String x:Key="m_BotM_ReadyPart2">to </v:String>
+    <v:String x:Key="m_BotM_ReadyPart3">document type: </v:String>
+    <v:String x:Key="m_BotM_ReadyPart4">commentary: </v:String>
+    <v:String x:Key="m_BotM_Sended">Sended</v:String>
 </ResourceDictionary>
