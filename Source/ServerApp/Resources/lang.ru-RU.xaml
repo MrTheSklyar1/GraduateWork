@@ -26,10 +26,14 @@
     <v:String x:Key="m_BotM_StartPage">Стартовая страница</v:String>
     <v:String x:Key="m_BotM_ReturnPassword">Для входа, введите пароль</v:String>
     <v:String x:Key="m_BotM_ChoseInputVariant">Выберете вариант ввода</v:String>
+    <v:String x:Key="m_BotM_ChoseGoingVariant">Выберете вариант отправки</v:String>
+    <v:String x:Key="m_BotM_PersonalRoleNotFounded">Персональная роль не найдена</v:String>
     <v:String x:Key="m_BotM_InputTag">Введите название типа документа</v:String>
     <v:String x:Key="m_BotM_MainMenu">Главное меню</v:String>
     <v:String x:Key="m_BotM_DocTypeFounded">Тип документа найден</v:String>
     <v:String x:Key="m_BotM_DocTypeFoundedComment">Тип документа найден, оставьте комментарий для исполнителя</v:String>
+    <v:String x:Key="m_BotM_SetComment">Оставьте комментарий для исполнителя</v:String>
+    <v:String x:Key="m_BotM_ChoosePersRole">Выберите персональную роль</v:String>
     <v:String x:Key="m_BotM_DocTypeNotFounded">Тип документа не найден</v:String>
     <v:String x:Key="m_BotM_HistoryChoose">Для просмотра результата выберите задачу</v:String>
     <v:String x:Key="m_BotM_CurrentTasksChoose">Для просмотра состояния выберите задачу</v:String>

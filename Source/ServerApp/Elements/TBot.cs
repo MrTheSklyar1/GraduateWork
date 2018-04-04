@@ -344,7 +344,7 @@ namespace ServerApp.Elements
                 session.DocumentTypesPage++;
                 var keyboard = Menu.DocTypesKeyBoard(ref session.DocumentTypesPage, ref pages);
                 session.CloseSession();
-                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypesChoose"));
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.DocumentTypesPage + "/" + pages);
                 await Bot.SendTextMessageAsync(update.Message.Chat.Id,
                     (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") +" "+ session.DocumentTypesPage+"/"+pages,
                     ParseMode.Default, false, false, 0, keyboard);
@@ -356,7 +356,7 @@ namespace ServerApp.Elements
                 session.DocumentTypesPage--;
                 var keyboard = Menu.DocTypesKeyBoard(ref session.DocumentTypesPage, ref pages);
                 session.CloseSession();
-                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypesChoose"));
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.DocumentTypesPage + "/" + pages);
                 await Bot.SendTextMessageAsync(update.Message.Chat.Id,
                     (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.DocumentTypesPage + "/" + pages,
                     ParseMode.Default, false, false, 0, keyboard);
@@ -424,6 +424,7 @@ namespace ServerApp.Elements
                             {
                                 session.State = 5;
                                 session.ChoosenDocType = item.Key;
+                                session.DocumentTypesPage = 1;
                                 session.CloseSession();
                                 EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeFounded"));
                                 await Bot.SendTextMessageAsync(update.Message.Chat.Id,
@@ -434,6 +435,7 @@ namespace ServerApp.Elements
                             {
                                 session.State = 7;
                                 session.ChoosenDocType = item.Key;
+                                session.DocumentTypesPage = 1;
                                 session.CloseSession();
                                 EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeFoundedComment"));
                                 await Bot.SendTextMessageAsync(update.Message.Chat.Id,
@@ -453,12 +455,107 @@ namespace ServerApp.Elements
 
         private async void ResolveStateFive(Update update, CurrentSession session)
         {
-            throw new NotImplementedException();
+            if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_ToAll"))
+            {
+                session.State = 7;
+                session.ChoosenRole = EnvironmentHelper.GetRoleFromDocType(session.ChoosenDocType.Value);
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_SetComment"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_SetComment"),
+                    ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
+            }
+            else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_ToConcrete"))
+            {
+                session.State = 6;
+                session.ChoosenRole = EnvironmentHelper.GetRoleFromDocType(session.ChoosenDocType.Value);
+                session.PersonalRolesPage = 1;
+                int pages = 0;
+                var keyboard = Menu.PersRolesKeyBoard(ref session.PersonalRolesPage, ref pages, session.ChoosenRole.Value);
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ChoosePersRole"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ChoosePersRole"),
+                    ParseMode.Default, false, false, 0, keyboard);
+            }
+            else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoToMainMenu"))
+            {
+                session.State = 1;
+                session.ChoosenDocType = null;
+                session.ChoosenRole = null;
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MainMenu"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MainMenu"),
+                    ParseMode.Default, false, false, 0, Menu.MainMenuKeyBoard());
+            }
+            else
+            {
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NotCorrectMSG"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NotCorrectMSG"),
+                    ParseMode.Default, false, false, 0, Menu.InputTypeKeyBoard());
+            }
         }
 
         private async void ResolveStateSix(Update update, CurrentSession session)
         {
-            throw new NotImplementedException();
+            int pages = 0;
+            if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack"))
+            {
+                session.State = 5;
+                session.PersonalRolesPage = 1;
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ChoseGoingVariant"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ChoseGoingVariant"),
+                    ParseMode.Default, false, false, 0, Menu.AllOrConcreteRoleKeyBoard());
+            }
+            else
+            if (update.Message.Text == "-->")
+            {
+                session.State = 6;
+                session.PersonalRolesPage++;
+                var keyboard = Menu.PersRolesKeyBoard(ref session.PersonalRolesPage, ref pages, session.ChoosenRole.Value);
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.PersonalRolesPage + "/" + pages);
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.PersonalRolesPage + "/" + pages,
+                    ParseMode.Default, false, false, 0, keyboard);
+            }
+            else
+            if (update.Message.Text == "<--")
+            {
+                session.State = 6;
+                session.PersonalRolesPage--;
+                var keyboard = Menu.PersRolesKeyBoard(ref session.PersonalRolesPage, ref pages, session.ChoosenRole.Value);
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.PersonalRolesPage + "/" + pages);
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.PersonalRolesPage + "/" + pages,
+                    ParseMode.Default, false, false, 0, keyboard);
+            }
+            else
+            {
+                if (EnvironmentHelper.FindRoleByLatAndFirstName(update.Message.Text, out Guid role))
+                {
+                    session.State = 7;
+                    session.ChoosenRole = role;
+                    session.PersonalRolesPage = 1;
+                    session.CloseSession();
+                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_SetComment"));
+                    await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                        (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_SetComment"),
+                        ParseMode.Default, false, false, 0, Menu.RemoveKeyBoard());
+                }
+                else
+                {
+                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_PersonalRoleNotFounded"));
+                    await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                        (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_PersonalRoleNotFounded"),
+                        ParseMode.Default, false, false, 0, Menu.GoBackKeyBoard());
+                }
+            }
         }
 
         private async void ResolveStateSeven(Update update, CurrentSession session)

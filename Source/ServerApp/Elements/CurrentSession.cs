@@ -45,7 +45,7 @@ namespace ServerApp.Elements
                                 State = reader.GetInt32(1);
                                 ChoosenDocType = reader.IsDBNull(2) ? (Guid?) null : reader.GetGuid(2);
                                 DocumentTypesPage = reader.GetInt32(3);
-                                ChoosenRole = reader.IsDBNull(4) ? (Guid?)null : reader.GetGuid(2);
+                                ChoosenRole = reader.IsDBNull(4) ? (Guid?)null : reader.GetGuid(4);
                                 PersonalRolesPage = reader.GetInt32(5);
                                 CurrentTasksPage = reader.GetInt32(6);
                                 HistoryPage = reader.GetInt32(7);

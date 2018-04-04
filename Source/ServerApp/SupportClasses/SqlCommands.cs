@@ -35,7 +35,28 @@
             ) 
             select * from OrderedRecords where RowNumber between @PageStart and @PageEnd";
 
+        public const string SelectThreePersRolesByPage =
+            @"with OrderedRecords as
+            (
+                select LastName + ' ' + FirstName as FullName, 
+                row_number() over (order by (LastName + ' ' + FirstName)) as 'RowNumber'
+                from PersonalRoles pr with(nolock) 
+                inner join RoleUsers ru with(nolock) 
+                on pr.ID=ru.PersonID
+	            where ru.RoleID=@ID
+            ) 
+            select * from OrderedRecords where RowNumber between @PageStart and @PageEnd";
+
         public const string CountDocTypes =
             @"select count(*) from DocTypes with(nolock)";
+
+        public const string CountPersonalRolesFromStatic =
+            @"select count(*) from RoleUsers with(nolock) where RoleID=@ID";
+
+        public const string GetRoleFromDocType =
+            @"select RoleTypeID from DocTypes  with(nolock) where ID=@ID";
+
+        public const string FindRoleByLatAndFirstName =
+            @"select ID from PersonalRoles with(nolock) where LastName + ' ' + FirstName=@text";
     }
 }
