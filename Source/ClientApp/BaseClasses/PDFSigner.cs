@@ -30,7 +30,7 @@ namespace ClientApp.BaseClasses
                     catch
                     {
                         EnvironmentHelper.SendDialogBox(
-                            (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CertPassError") + (i - 1),
+                            (string)SystemSingleton.Configuration.mainWindow.FindResource("m_CertPassError") +" "+ (i - 1),
                             "Certificate/Password Error"
                         );
                         SystemSingleton.CurrentSession.CertPassword = "";
