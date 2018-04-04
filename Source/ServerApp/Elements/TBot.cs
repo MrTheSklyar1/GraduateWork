@@ -16,10 +16,12 @@ namespace ServerApp.Elements
 {
     public class TBot
     {
+        private System.Timers.Timer Timer;
         public TelegramBotClient Bot;
         public TBot()
         {
             Bot = new TelegramBotClient(SystemSingleton.Configuration.ApiKey);
+            Timer = new System.Timers.Timer();
             MainLoop();
         }
         private async void MainLoop()
@@ -33,12 +35,14 @@ namespace ServerApp.Elements
                 EnvironmentHelper.SendFatalLog("No connection on startup");
             }
             int offset = 0;
+            int seconds = 30;
+            Timer.AutoReset = true;
+            Timer.Interval = seconds * 1000;
+            Timer.Elapsed += CheckCompletedTasks;
+            Timer.Enabled = true;
+            Timer.Start();
             while (true)
             {
-                System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-                dispatcherTimer.Tick += new EventHandler(CheckCompletedTasks);
-                dispatcherTimer.Interval = new TimeSpan(0, 5, 0);
-                dispatcherTimer.Start();
                 Update[] updates;
                 decimal conAttempts = 1;
                 decimal allwaitingseconds = 0;
@@ -67,14 +71,63 @@ namespace ServerApp.Elements
 
         private async void CheckCompletedTasks(object sender, EventArgs e)
         {
-            //TODO: отправлять сообщения по готовности
-            
+            decimal conAttempts = 1;
+            decimal allwaitingseconds = 0;
+            while (true)
+            {
+                try
+                {
+                    await Bot.TestApiAsync();
+                }
+                catch (Exception ex)
+                {
+                    allwaitingseconds += (conAttempts / 10);
+                    EnvironmentHelper.SendLog("No connection for the last " + allwaitingseconds + " seconds, attempt = " + conAttempts++);
+                    Thread.Sleep((int)conAttempts * 100);
+                    continue;
+                }
+                break;
+            }
+            List<Guid> taskID = EnvironmentHelper.GetCompletedID();
+            foreach (var task in taskID)
+            {
+                if (EnvironmentHelper.FindResultTask(task, out string infomsg, out Dictionary<Guid, string> files, out long ChatID, out string docNumber))
+                {
+                    EnvironmentHelper.SendLog("to chat id -- " + ChatID + " -- " + infomsg);
+                    await Bot.SendTextMessageAsync(ChatID, infomsg);
+                    foreach (var item in files)
+                    {
+                        if (System.IO.File.Exists(SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value))
+                        {
+                            if (new System.IO.FileInfo(SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value).Length > 50000000)//На всякий случай возьмем 47 Мб
+                            {
+                                EnvironmentHelper.SendLog("to chat id -- " + ChatID + " -- " + item.Value + " " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MoreThan50"));
+                                await Bot.SendTextMessageAsync(ChatID, docNumber+" "+ item.Value + " " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MoreThan50"));
+                            }
+                            else
+                            {
+                                using (var fileStream = new FileStream(SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value, FileMode.Open, FileAccess.Read, FileShare.Read))
+                                {
+                                    EnvironmentHelper.SendLog("to chat id -- " + ChatID + " -- " + item.Value + " sended");
+                                    await Bot.SendDocumentAsync(ChatID,new FileToSend(SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value,fileStream), docNumber);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            EnvironmentHelper.SendLog(item.Key + "\\" + item.Value + " --- not found!");
+                        }
+                    }
+
+                    EnvironmentHelper.DeleteCompletedID(task);
+                }
+            }
         }
 
-        private async void ResolveUpdate(Update update)
+        private void ResolveUpdate(Update update)
         {
             EnvironmentHelper.SendLog("from -- " + update.Message.From.Id + " -- " + update.Message.Text);
-            var Session = new CurrentSession(update.Message.From.Id);
+            var Session = new CurrentSession(update.Message.From.Id, update.Message.Chat.Id);
             if (Session.HasValue)
             {
                 switch (Session.State)
@@ -218,15 +271,17 @@ namespace ServerApp.Elements
             if (update.Message.Text == (string) SystemSingleton.Configuration.Window.FindResource("m_BotB_LogOff"))
             {
                 session.State = 0;
+                session.ChatID = update.Message.Chat.Id;
                 session.CloseSession();
-                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ReturnPassword"));
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_EnterLogin"));
                 await Bot.SendTextMessageAsync(update.Message.Chat.Id,
-                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ReturnPassword"),
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_EnterLogin"),
                     ParseMode.Default, false, false, 0, Menu.GoBackFromPasswordKeyBoard());
             }
             else if (update.Message.Text == (string) SystemSingleton.Configuration.Window.FindResource("m_BotB_ReqDoc"))
             {
                 session.State = 2;
+                session.ChatID = update.Message.Chat.Id;
                 session.DocumentTypesPage = 1;
                 session.ChoosenRole = null;
                 session.ChoosenDocType = null;
@@ -239,6 +294,7 @@ namespace ServerApp.Elements
             else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_History"))
             {
                 session.State = 10;
+                session.ChatID = update.Message.Chat.Id;
                 session.HistoryPage = 1;
                 int pages = 0;
                 var keyboard = Menu.HistoryKeyBoard(ref session.HistoryPage, ref pages, session.ID.Value);
@@ -251,6 +307,7 @@ namespace ServerApp.Elements
             else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_CurrentTasks"))
             {
                 session.State = 9;
+                session.ChatID = update.Message.Chat.Id;
                 session.CurrentTasksPage = 1;
                 int pages = 0;
                 var keyboard = Menu.CurrentTasksKeyBoard(ref session.CurrentTasksPage, ref pages, session.ID.Value);
@@ -277,6 +334,7 @@ namespace ServerApp.Elements
                 if (!documentTypes.HasValue)
                 {
                     session.State = 1;
+                    session.ChatID = update.Message.Chat.Id;
                     session.CloseSession();
                     EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NoOneDocType"));
                     await Bot.SendTextMessageAsync(update.Message.Chat.Id,
@@ -286,6 +344,7 @@ namespace ServerApp.Elements
                 else
                 {
                     session.State = 3;
+                    session.ChatID = update.Message.Chat.Id;
                     session.DocumentTypesPage = 1;
                     int pages = 0;
                     var keyboard = Menu.DocTypesKeyBoard(ref session.DocumentTypesPage,ref pages);
@@ -303,6 +362,7 @@ namespace ServerApp.Elements
                 if (!documentTypes.HasValue)
                 {
                     session.State = 1;
+                    session.ChatID = update.Message.Chat.Id;
                     session.CloseSession();
                     EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_NoOneDocType"));
                     await Bot.SendTextMessageAsync(update.Message.Chat.Id,
@@ -312,6 +372,7 @@ namespace ServerApp.Elements
                 else
                 {
                     session.State = 4;
+                    session.ChatID = update.Message.Chat.Id;
                     session.CloseSession();
                     EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_InputTag"));
                     await Bot.SendTextMessageAsync(update.Message.Chat.Id,
@@ -322,6 +383,7 @@ namespace ServerApp.Elements
             else if (update.Message.Text == (string) SystemSingleton.Configuration.Window.FindResource("m_BotB_GoToMainMenu"))
             {
                 session.State = 1;
+                session.ChatID = update.Message.Chat.Id;
                 session.CloseSession();
                 EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MainMenu"));
                 await Bot.SendTextMessageAsync(update.Message.Chat.Id,
@@ -344,6 +406,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack"))
             {
                 session.State = 2;
+                session.ChatID = update.Message.Chat.Id;
                 session.DocumentTypesPage = 1;
                 session.ChoosenRole = null;
                 session.ChoosenDocType = null;
@@ -356,6 +419,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == "-->")
             {
                 session.State = 3;
+                session.ChatID = update.Message.Chat.Id;
                 session.DocumentTypesPage++;
                 var keyboard = Menu.DocTypesKeyBoard(ref session.DocumentTypesPage, ref pages);
                 session.CloseSession();
@@ -368,6 +432,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == "<--")
             {
                 session.State = 3;
+                session.ChatID = update.Message.Chat.Id;
                 session.DocumentTypesPage--;
                 var keyboard = Menu.DocTypesKeyBoard(ref session.DocumentTypesPage, ref pages);
                 session.CloseSession();
@@ -385,6 +450,7 @@ namespace ServerApp.Elements
                         if (EnvironmentHelper.IsDocContainsStaticRole(item.Key))
                         {
                             session.State = 5;
+                            session.ChatID = update.Message.Chat.Id;
                             session.ChoosenDocType = item.Key;
                             session.CloseSession();
                             EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeFounded"));
@@ -395,6 +461,7 @@ namespace ServerApp.Elements
                         else
                         {
                             session.State = 7;
+                            session.ChatID = update.Message.Chat.Id;
                             session.ChoosenDocType = item.Key;
                             session.CloseSession();
                             EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_DocTypeFoundedComment"));
@@ -418,6 +485,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack"))
             {
                 session.State = 2;
+                session.ChatID = update.Message.Chat.Id;
                 session.DocumentTypesPage = 1;
                 session.ChoosenRole = null;
                 session.ChoosenDocType = null;
@@ -438,6 +506,7 @@ namespace ServerApp.Elements
                             if (EnvironmentHelper.IsDocContainsStaticRole(item.Key))
                             {
                                 session.State = 5;
+                                session.ChatID = update.Message.Chat.Id;
                                 session.ChoosenDocType = item.Key;
                                 session.DocumentTypesPage = 1;
                                 session.CloseSession();
@@ -449,6 +518,7 @@ namespace ServerApp.Elements
                             else
                             {
                                 session.State = 7;
+                                session.ChatID = update.Message.Chat.Id;
                                 session.ChoosenDocType = item.Key;
                                 session.DocumentTypesPage = 1;
                                 session.CloseSession();
@@ -473,6 +543,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_ToAll"))
             {
                 session.State = 7;
+                session.ChatID = update.Message.Chat.Id;
                 session.ChoosenRole = EnvironmentHelper.GetRoleFromDocType(session.ChoosenDocType.Value);
                 session.CloseSession();
                 EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_SetComment"));
@@ -483,6 +554,7 @@ namespace ServerApp.Elements
             else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_ToConcrete"))
             {
                 session.State = 6;
+                session.ChatID = update.Message.Chat.Id;
                 session.ChoosenRole = EnvironmentHelper.GetRoleFromDocType(session.ChoosenDocType.Value);
                 session.PersonalRolesPage = 1;
                 int pages = 0;
@@ -496,6 +568,7 @@ namespace ServerApp.Elements
             else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoToMainMenu"))
             {
                 session.State = 1;
+                session.ChatID = update.Message.Chat.Id;
                 session.ChoosenDocType = null;
                 session.ChoosenRole = null;
                 session.CloseSession();
@@ -519,6 +592,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack"))
             {
                 session.State = 5;
+                session.ChatID = update.Message.Chat.Id;
                 session.PersonalRolesPage = 1;
                 session.CloseSession();
                 EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_ChoseGoingVariant"));
@@ -530,6 +604,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == "-->")
             {
                 session.State = 6;
+                session.ChatID = update.Message.Chat.Id;
                 session.PersonalRolesPage++;
                 var keyboard = Menu.PersRolesKeyBoard(ref session.PersonalRolesPage, ref pages, session.ChoosenRole.Value);
                 session.CloseSession();
@@ -542,6 +617,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == "<--")
             {
                 session.State = 6;
+                session.ChatID = update.Message.Chat.Id;
                 session.PersonalRolesPage--;
                 var keyboard = Menu.PersRolesKeyBoard(ref session.PersonalRolesPage, ref pages, session.ChoosenRole.Value);
                 session.CloseSession();
@@ -552,9 +628,10 @@ namespace ServerApp.Elements
             }
             else
             {
-                if (EnvironmentHelper.FindRoleByLatAndFirstName(update.Message.Text, out Guid role))
+                if (EnvironmentHelper.FindRoleByLastAndFirstName(update.Message.Text, out Guid role))
                 {
                     session.State = 7;
+                    session.ChatID = update.Message.Chat.Id;
                     session.ChoosenRole = role;
                     session.PersonalRolesPage = 1;
                     session.CloseSession();
@@ -576,6 +653,7 @@ namespace ServerApp.Elements
         private async void ResolveStateSeven(Update update, CurrentSession session)
         {
             session.State = 8;
+            session.ChatID = update.Message.Chat.Id;
             session.Commentary = update.Message.Text;
             session.CloseSession();
             string msg = EnvironmentHelper.PrepareMessageNewTask(session);
@@ -592,6 +670,7 @@ namespace ServerApp.Elements
             {
                 string taskNumber = session.FormAndSendTask();
                 session.State = 1;
+                session.ChatID = update.Message.Chat.Id;
                 session.ChoosenDocType = null;
                 session.ChoosenRole = null;
                 session.Commentary = "";
@@ -604,6 +683,7 @@ namespace ServerApp.Elements
             else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_DontSendTask"))
             {
                 session.State = 1;
+                session.ChatID = update.Message.Chat.Id;
                 session.ChoosenDocType = null;
                 session.ChoosenRole = null;
                 session.Commentary = "";
@@ -628,6 +708,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack"))
             {
                 session.State = 1;
+                session.ChatID = update.Message.Chat.Id;
                 session.CurrentTasksPage = 1;
                 session.CloseSession();
                 EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MainMenu"));
@@ -639,6 +720,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == "-->")
             {
                 session.State = 9;
+                session.ChatID = update.Message.Chat.Id;
                 session.CurrentTasksPage++;
                 var keyboard = Menu.CurrentTasksKeyBoard(ref session.CurrentTasksPage, ref pages, session.ID.Value);
                 session.CloseSession();
@@ -651,6 +733,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == "<--")
             {
                 session.State = 9;
+                session.ChatID = update.Message.Chat.Id;
                 session.CurrentTasksPage--;
                 var keyboard = Menu.CurrentTasksKeyBoard(ref session.CurrentTasksPage, ref pages, session.ID.Value);
                 session.CloseSession();
@@ -664,6 +747,7 @@ namespace ServerApp.Elements
                 if (EnvironmentHelper.FindInfoTask(update.Message.Text, out string infomsg))
                 {
                     session.State = 9;
+                    session.ChatID = update.Message.Chat.Id;
                     var keyboard = Menu.CurrentTasksKeyBoard(ref session.CurrentTasksPage, ref pages, session.ID.Value);
                     session.CloseSession();
                     EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + infomsg);
@@ -688,6 +772,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack"))
             {
                 session.State = 1;
+                session.ChatID = update.Message.Chat.Id;
                 session.HistoryPage = 1;
                 session.CloseSession();
                 EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MainMenu"));
@@ -699,6 +784,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == "-->")
             {
                 session.State = 10;
+                session.ChatID = update.Message.Chat.Id;
                 session.HistoryPage++;
                 var keyboard = Menu.HistoryKeyBoard(ref session.HistoryPage, ref pages, session.ID.Value);
                 session.CloseSession();
@@ -711,6 +797,7 @@ namespace ServerApp.Elements
             if (update.Message.Text == "<--")
             {
                 session.State = 10;
+                session.ChatID = update.Message.Chat.Id;
                 session.HistoryPage--;
                 var keyboard = Menu.HistoryKeyBoard(ref session.HistoryPage, ref pages, session.ID.Value);
                 session.CloseSession();
@@ -721,9 +808,10 @@ namespace ServerApp.Elements
             }
             else
             {
-                if (EnvironmentHelper.FindResultTask(update.Message.Text, out string infomsg, out Dictionary<Guid, string> files))
+                if (EnvironmentHelper.FindResultTask(update.Message.Text, out string infomsg, out Dictionary<Guid, string> files, out string docNumber))
                 {
                     session.State = 10;
+                    session.ChatID = update.Message.Chat.Id;
                     var keyboard = Menu.HistoryKeyBoard(ref session.HistoryPage, ref pages, session.ID.Value);
                     session.CloseSession();
                     EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + infomsg);
@@ -735,7 +823,7 @@ namespace ServerApp.Elements
                             if(new System.IO.FileInfo(SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value).Length>50000000)//На всякий случай возьмем 47 Мб
                             {
                                 EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + item.Value + " " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MoreThan50"));
-                                await Bot.SendTextMessageAsync(update.Message.Chat.Id, item.Value + " " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MoreThan50"));
+                                await Bot.SendTextMessageAsync(update.Message.Chat.Id, docNumber+" "+ item.Value + " " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MoreThan50"));
                             }
                             else
                             {
@@ -745,7 +833,7 @@ namespace ServerApp.Elements
                                     await Bot.SendDocumentAsync(update.Message.Chat.Id,
                                         new FileToSend(
                                             SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value,
-                                            fileStream));
+                                            fileStream), docNumber);
                                 }
                             }
                         }

@@ -343,7 +343,7 @@ namespace ServerApp.SupportClasses
             return roleid;
         }
 
-        public static bool FindRoleByLatAndFirstName(string messageText, out Guid guid)
+        public static bool FindRoleByLastAndFirstName(string messageText, out Guid guid)
         {
             guid = Guid.Empty;
             try
@@ -351,7 +351,7 @@ namespace ServerApp.SupportClasses
                 using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                 {
                     SystemSingleton.Configuration.SqlConnections.Add(con);
-                    using (var command = new SqlCommand(SqlCommands.FindRoleByLatAndFirstName, con))
+                    using (var command = new SqlCommand(SqlCommands.FindRoleByLastAndFirstName, con))
                     {
                         command.Parameters.Add("@text", SqlDbType.NVarChar);
                         command.Parameters["@text"].Value = messageText;
@@ -525,12 +525,13 @@ namespace ServerApp.SupportClasses
             }
         }
 
-        public static bool FindResultTask(string messageText, out string s, out Dictionary<Guid, string> files)
+        public static bool FindResultTask(string messageText, out string s, out Dictionary<Guid, string> files, out string docNumber)
         {
             bool result = false;
             string torole = "";
             string respond = "";
             string state = "";
+            docNumber = "";
             Guid TaskID = Guid.Empty;
             files = new Dictionary<Guid, string>();
             try
@@ -589,7 +590,150 @@ namespace ServerApp.SupportClasses
                       (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_HistoryPart3") + " " + state + " ";
             if (respond != "") msg += (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentPart4") + " " + respond;
             s = msg;
+            docNumber = messageText;
             return result;
+        }
+
+        public static bool FindResultTask(Guid taskID, out string s, out Dictionary<Guid, string> files, out long ChatID, out string docNumber)
+        {
+            bool result = false;
+            string torole = "";
+            string respond = "";
+            string state = "";
+            string messageText = "";
+            docNumber = "";
+            Guid fromrole = Guid.Empty;
+            files = new Dictionary<Guid, string>();
+            ChatID = 0;
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.FindHistoryInfoAboutTaskByTaskID, con))
+                    {
+                        command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@TaskID"].Value = taskID;
+                        SendLogSQL(command.CommandText);
+                        con.Open();
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                torole = reader.GetString(0);
+                                Guid tempState = reader.GetGuid(1);
+                                state = tempState == new Guid("3e65b0c5-f533-4e31-956d-c2073df3e58a")
+                                    ? (string)SystemSingleton.Configuration.Window.FindResource("Cancelled")
+                                    : (string)SystemSingleton.Configuration.Window.FindResource("Completed");
+                                respond = reader.IsDBNull(2) ? "" : reader.GetString(2);
+                                messageText = reader.GetString(3);
+                                fromrole = reader.GetGuid(4);
+                            }
+                        }
+                        con.Close();
+                    }
+                    using (var command = new SqlCommand(SqlCommands.FindFiles, con))
+                    {
+                        command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@TaskID"].Value = taskID;
+                        SendLogSQL(command.CommandText);
+                        con.Open();
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                files.Add(reader.GetGuid(0), reader.GetString(1));
+                            }
+                        }
+                        con.Close();
+                    }
+                    using (var command = new SqlCommand(SqlCommands.FindChatID, con))
+                    {
+                        command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@ID"].Value = fromrole;
+                        SendLogSQL(command.CommandText);
+                        con.Open();
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                ChatID = reader.GetInt64(0);
+                                result = true;
+                            }
+                        }
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+            }
+
+            var msg = (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentPart1") + " " +
+                      messageText + "\n" +
+                      (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentPart2") + " " + torole +
+                      "\n" +
+                      (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_HistoryPart3") + " " + state + " ";
+            if (respond != "") msg += (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentPart4") + " " + respond;
+            s = msg;
+            docNumber = messageText;
+            return result;
+        }
+
+        public static List<Guid> GetCompletedID()
+        {
+            List<Guid> IDs = new List<Guid>();
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.SelectTaskIDsFromQueue, con))
+                    {
+                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                        con.Open();
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                IDs.Add(reader.GetGuid(0));
+                            }
+                        }
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+            }
+
+            return IDs;
+        }
+
+        public static void DeleteCompletedID(Guid task)
+        {
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.DeleTaskFromQueue, con))
+                    {
+                        command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@ID"].Value = task;
+                        EnvironmentHelper.SendLogSQL(command.CommandText);
+                        con.Open();
+                        command.ExecuteNonQuery();
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+            }
         }
     }
 }

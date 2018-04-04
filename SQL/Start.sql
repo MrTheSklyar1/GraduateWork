@@ -156,6 +156,7 @@ ALTER TABLE CompleteQueue ADD FOREIGN KEY(TaskID) REFERENCES Tasks(ID);
 create table BotStat
 (
 	ID uniqueidentifier NOT NULL,
+	ChatID bigint NULL,
 	State int NOT NULL,
 	ChoosenDocType uniqueidentifier  NULL,
 	DocumentTypesPage int NOT NULL,
@@ -169,5 +170,5 @@ CREATE INDEX ix_BotStatID ON BotStat(ID);
 ALTER TABLE BotStat ADD FOREIGN KEY(ID) REFERENCES Roles(ID);
 ALTER TABLE BotStat ADD FOREIGN KEY(ChoosenDocType) REFERENCES DocTypes(ID);
 ALTER TABLE BotStat ADD FOREIGN KEY(ChoosenRole) REFERENCES Roles(ID);
-insert into BotStat values (@AdminID, 0, null, 1, null, 1, 1, 1, null);
+insert into BotStat values (@AdminID, null, 0, null, 1, null, 1, 1, 1, null);
 use master;

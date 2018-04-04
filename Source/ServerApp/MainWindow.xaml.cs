@@ -47,7 +47,7 @@ namespace ServerApp
         private static readonly BackgroundWorker workerConnectionToBase = new BackgroundWorker();
         private static readonly BackgroundWorker workerBot = new BackgroundWorker();
 
-        private async void WorkerConnectionToBaseOnDoWork(object sender, DoWorkEventArgs e)
+        private void WorkerConnectionToBaseOnDoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace ServerApp
                 EnvironmentHelper.SendFatalLog(ex.Message);
             }
         }
-        private async void WorkerBotOnDoWork(object sender, DoWorkEventArgs e)
+        private void WorkerBotOnDoWork(object sender, DoWorkEventArgs e)
         {
             try
             {

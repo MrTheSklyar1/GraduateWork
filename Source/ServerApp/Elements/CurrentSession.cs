@@ -23,8 +23,9 @@ namespace ServerApp.Elements
         public int CurrentTasksPage;
         public int HistoryPage;
         public string Commentary;
+        public long ChatID;
 
-        public CurrentSession(long id)
+        public CurrentSession(long id, long chatid)
         {
             try
             {
@@ -43,14 +44,15 @@ namespace ServerApp.Elements
                             {
                                 TelegramID = id;
                                 ID = reader.GetGuid(0);
-                                State = reader.GetInt32(1);
-                                ChoosenDocType = reader.IsDBNull(2) ? (Guid?)null : reader.GetGuid(2);
-                                DocumentTypesPage = reader.GetInt32(3);
-                                ChoosenRole = reader.IsDBNull(4) ? (Guid?)null : reader.GetGuid(4);
-                                PersonalRolesPage = reader.GetInt32(5);
-                                CurrentTasksPage = reader.GetInt32(6);
-                                HistoryPage = reader.GetInt32(7);
-                                Commentary = reader.IsDBNull(8) ? "" : reader.GetString(8);
+                                ChatID = reader.IsDBNull(1) ? 0 : reader.GetInt64(1);
+                                State = reader.GetInt32(2);
+                                ChoosenDocType = reader.IsDBNull(3) ? (Guid?)null : reader.GetGuid(3);
+                                DocumentTypesPage = reader.GetInt32(4);
+                                ChoosenRole = reader.IsDBNull(5) ? (Guid?)null : reader.GetGuid(5);
+                                PersonalRolesPage = reader.GetInt32(6);
+                                CurrentTasksPage = reader.GetInt32(7);
+                                HistoryPage = reader.GetInt32(8);
+                                Commentary = reader.IsDBNull(9) ? "" : reader.GetString(9);
                                 HasValue = true;
                             }
                             else
@@ -160,6 +162,7 @@ namespace ServerApp.Elements
                     using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
                     {
                         string tempCommand = @"update BotStat set State=" + State + ", ";
+                        tempCommand += "ChatID=" + (ChatID!=0 ? ChatID + "," : "null,");
                         tempCommand += "ChoosenDocType=" + (ChoosenDocType.HasValue ? "'" + ChoosenDocType.Value + "'," : "null,");
                         tempCommand += "DocumentTypesPage=" + DocumentTypesPage + ",";
                         tempCommand += "ChoosenRole=" + (ChoosenRole.HasValue ? "'" + ChoosenRole.Value + "'," : "null,");

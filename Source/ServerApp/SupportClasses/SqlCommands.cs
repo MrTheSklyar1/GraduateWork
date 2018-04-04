@@ -4,7 +4,7 @@
     {
         public const string LoadUserCommand =
             @"select 
-	            bs.ID, bs.State, bs.ChoosenDocType, bs.DocumentTypesPage, bs.ChoosenRole, bs.PersonalRolesPage, bs.CurrentTasksPage, bs.HistoryPage, bs.Commentary 
+	            bs.ID, bs.ChatID, bs.State, bs.ChoosenDocType, bs.DocumentTypesPage, bs.ChoosenRole, bs.PersonalRolesPage, bs.CurrentTasksPage, bs.HistoryPage, bs.Commentary 
             from 
 	            BotStat bs with(nolock) 
 	            inner join PersonalRoles pr with(nolock) on pr.ID=bs.ID
@@ -63,7 +63,7 @@
                 from PersonalRoles pr with(nolock) 
                 inner join RoleUsers ru with(nolock) 
                 on pr.ID=ru.PersonID
-	            where ru.RoleID=@ID and pr.WorkingTypeID='6a52791d-7e42-42d6-a521-4252f276bb6c'
+	            where ru.RoleID=@ID and pr.WorkingTypeID='642faf68-37f3-4fd6-a97d-7abfe5a9a921'
             ) 
             select * from OrderedRecords where RowNumber between @PageStart and @PageEnd";
 
@@ -79,12 +79,12 @@
         public const string CountPersonalRolesFromStatic =
             @"select count(*) from RoleUsers ru with(nolock) 
             inner join PersonalRoles pr with(nolock) on ru.PersonID=pr.ID 
-            where RoleID=@ID and pr.WorkingTypeID='6a52791d-7e42-42d6-a521-4252f276bb6c'";
+            where RoleID=@ID and pr.WorkingTypeID='642faf68-37f3-4fd6-a97d-7abfe5a9a921'";
 
         public const string GetRoleFromDocType =
             @"select RoleTypeID from DocTypes  with(nolock) where ID=@ID";
 
-        public const string FindRoleByLatAndFirstName =
+        public const string FindRoleByLastAndFirstName =
             @"select ID from PersonalRoles with(nolock) where LastName + ' ' + FirstName=@text";
 
         public const string FindNamesForRoleDoc =
@@ -111,7 +111,19 @@
         public const string FindHistoryInfoAboutTask =
             @"select ID, ToRoleName, StateID, Respond from Tasks with(nolock) where Number=@Number";
 
+        public const string FindHistoryInfoAboutTaskByTaskID =
+            @"select ToRoleName, StateID, Respond, Number,FromPersonalID  from Tasks with(nolock) where ID=@TaskID";
+
         public const string FindFiles =
             @"select FileID, Name from Files where ID=@TaskID";
+
+        public const string SelectTaskIDsFromQueue =
+            @"select TaskID from CompleteQueue with(nolock)";
+
+        public const string DeleTaskFromQueue =
+            @"delete from CompleteQueue where TaskID=@ID";
+
+        public const string FindChatID =
+            @"select ChatID from BotStat with(nolock) where ID=@ID";
     }
 }
