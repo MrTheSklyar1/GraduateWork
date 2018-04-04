@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -34,6 +35,10 @@ namespace ServerApp.Elements
             int offset = 0;
             while (true)
             {
+                System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+                dispatcherTimer.Tick += new EventHandler(CheckCompletedTasks);
+                dispatcherTimer.Interval = new TimeSpan(0, 5, 0);
+                dispatcherTimer.Start();
                 Update[] updates;
                 decimal conAttempts = 1;
                 decimal allwaitingseconds = 0;
@@ -58,6 +63,12 @@ namespace ServerApp.Elements
                     offset = update.Id + 1;
                 }
             }
+        }
+
+        private async void CheckCompletedTasks(object sender, EventArgs e)
+        {
+            //TODO: отправлять сообщения по готовности
+            
         }
 
         private async void ResolveUpdate(Update update)
@@ -229,21 +240,25 @@ namespace ServerApp.Elements
             {
                 session.State = 10;
                 session.HistoryPage = 1;
+                int pages = 0;
+                var keyboard = Menu.HistoryKeyBoard(ref session.HistoryPage, ref pages, session.ID.Value);
                 session.CloseSession();
                 EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_HistoryChoose"));
                 await Bot.SendTextMessageAsync(update.Message.Chat.Id,
                     (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_HistoryChoose"),
-                    ParseMode.Default, false, false, 0, Menu.HistoryKeyBoard(session.HistoryPage));
+                    ParseMode.Default, false, false, 0, keyboard);
             }
             else if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_CurrentTasks"))
             {
                 session.State = 9;
                 session.CurrentTasksPage = 1;
+                int pages = 0;
+                var keyboard = Menu.CurrentTasksKeyBoard(ref session.CurrentTasksPage, ref pages, session.ID.Value);
                 session.CloseSession();
                 EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentTasksChoose"));
                 await Bot.SendTextMessageAsync(update.Message.Chat.Id,
                     (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentTasksChoose"),
-                    ParseMode.Default, false, false, 0, Menu.CurrentTasksKeyBoard(session.CurrentTasksPage));
+                    ParseMode.Default, false, false, 0, keyboard);
             }
             else
             {
@@ -609,12 +624,146 @@ namespace ServerApp.Elements
 
         private async void ResolveStateNine(Update update, CurrentSession session)
         {
-            throw new NotImplementedException();
+            int pages = 0;
+            if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack"))
+            {
+                session.State = 1;
+                session.CurrentTasksPage = 1;
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MainMenu"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MainMenu"),
+                    ParseMode.Default, false, false, 0, Menu.MainMenuKeyBoard());
+            }
+            else
+            if (update.Message.Text == "-->")
+            {
+                session.State = 9;
+                session.CurrentTasksPage++;
+                var keyboard = Menu.CurrentTasksKeyBoard(ref session.CurrentTasksPage, ref pages, session.ID.Value);
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.CurrentTasksPage + "/" + pages);
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.CurrentTasksPage + "/" + pages,
+                    ParseMode.Default, false, false, 0, keyboard);
+            }
+            else
+            if (update.Message.Text == "<--")
+            {
+                session.State = 9;
+                session.CurrentTasksPage--;
+                var keyboard = Menu.CurrentTasksKeyBoard(ref session.CurrentTasksPage, ref pages, session.ID.Value);
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.CurrentTasksPage + "/" + pages);
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.CurrentTasksPage + "/" + pages,
+                    ParseMode.Default, false, false, 0, keyboard);
+            }
+            else
+            {
+                if (EnvironmentHelper.FindInfoTask(update.Message.Text, out string infomsg))
+                {
+                    session.State = 9;
+                    var keyboard = Menu.CurrentTasksKeyBoard(ref session.CurrentTasksPage, ref pages, session.ID.Value);
+                    session.CloseSession();
+                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + infomsg);
+                    await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                        infomsg,
+                        ParseMode.Default, false, false, 0, keyboard);
+                }
+                else
+                {
+                    var keyboard = Menu.CurrentTasksKeyBoard(ref session.CurrentTasksPage, ref pages, session.ID.Value);
+                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_TaskNotFound"));
+                    await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                        (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_TaskNotFound"),
+                        ParseMode.Default, false, false, 0, keyboard);
+                }
+            }
         }
 
         private async void ResolveStateTen(Update update, CurrentSession session)
         {
-            throw new NotImplementedException();
+            int pages = 0;
+            if (update.Message.Text == (string)SystemSingleton.Configuration.Window.FindResource("m_BotB_GoBack"))
+            {
+                session.State = 1;
+                session.HistoryPage = 1;
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MainMenu"));
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MainMenu"),
+                    ParseMode.Default, false, false, 0, Menu.MainMenuKeyBoard());
+            }
+            else
+            if (update.Message.Text == "-->")
+            {
+                session.State = 10;
+                session.HistoryPage++;
+                var keyboard = Menu.HistoryKeyBoard(ref session.HistoryPage, ref pages, session.ID.Value);
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.HistoryPage + "/" + pages);
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.HistoryPage + "/" + pages,
+                    ParseMode.Default, false, false, 0, keyboard);
+            }
+            else
+            if (update.Message.Text == "<--")
+            {
+                session.State = 10;
+                session.HistoryPage--;
+                var keyboard = Menu.HistoryKeyBoard(ref session.HistoryPage, ref pages, session.ID.Value);
+                session.CloseSession();
+                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.HistoryPage + "/" + pages);
+                await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                    (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_Page") + " " + session.HistoryPage + "/" + pages,
+                    ParseMode.Default, false, false, 0, keyboard);
+            }
+            else
+            {
+                if (EnvironmentHelper.FindResultTask(update.Message.Text, out string infomsg, out Dictionary<Guid, string> files))
+                {
+                    session.State = 10;
+                    var keyboard = Menu.HistoryKeyBoard(ref session.HistoryPage, ref pages, session.ID.Value);
+                    session.CloseSession();
+                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + infomsg);
+                    await Bot.SendTextMessageAsync(update.Message.Chat.Id,infomsg,ParseMode.Default, false, false, 0, keyboard);
+                    foreach (var item in files)
+                    {
+                        if (System.IO.File.Exists(SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value))
+                        {
+                            if(new System.IO.FileInfo(SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value).Length>50000000)//На всякий случай возьмем 47 Мб
+                            {
+                                EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + item.Value + " " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MoreThan50"));
+                                await Bot.SendTextMessageAsync(update.Message.Chat.Id, item.Value + " " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_MoreThan50"));
+                            }
+                            else
+                            {
+                                using (var fileStream = new FileStream(SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value, FileMode.Open, FileAccess.Read, FileShare.Read))
+                                {
+                                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + item.Value + " sended");
+                                    await Bot.SendDocumentAsync(update.Message.Chat.Id,
+                                        new FileToSend(
+                                            SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value,
+                                            fileStream));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            EnvironmentHelper.SendLog(item.Key + "\\" + item.Value + " --- not found!" );
+                        }
+                    }
+                }
+                else
+                {
+                    var keyboard = Menu.HistoryKeyBoard(ref session.HistoryPage, ref pages, session.ID.Value);
+                    EnvironmentHelper.SendLog("to -- " + update.Message.From.Id + " -- " + (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_TaskNotFound"));
+                    await Bot.SendTextMessageAsync(update.Message.Chat.Id,
+                        (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_TaskNotFound"),
+                        ParseMode.Default, false, false, 0, keyboard);
+                }
+            }
         }
 
         private async void Login(Update update, CurrentSession Session, Waiter waiter)

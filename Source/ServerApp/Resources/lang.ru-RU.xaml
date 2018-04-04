@@ -49,4 +49,14 @@
     <v:String x:Key="m_BotM_ReadyPart3">по документу типа: </v:String>
     <v:String x:Key="m_BotM_ReadyPart4">с комментарием:</v:String>
     <v:String x:Key="m_BotM_Sended">Отправлен</v:String>
+    <v:String x:Key="m_BotM_TaskNotFound">Задача не найдена</v:String>
+    <v:String x:Key="m_BotM_CurrentPart1">Задача</v:String>
+    <v:String x:Key="m_BotM_CurrentPart2">для</v:String>
+    <v:String x:Key="m_BotM_CurrentPart3">находится в работе</v:String>
+    <v:String x:Key="m_BotM_HistoryPart3">в состоянии</v:String>
+    <v:String x:Key="m_BotM_CurrentPart4">, комментарий исполнителя:</v:String>
+    <v:String x:Key="m_BotM_MoreThan50">Данный файл более 50Мб, пожалуйста запросите его получение не через Телеграм-бота</v:String>
+    <v:String x:Key="Completed">Выполнено</v:String>
+    <v:String x:Key="Cancelled">Отменено</v:String>
+    <v:String x:Key="Work">В работе</v:String>
 </ResourceDictionary>

@@ -47,4 +47,14 @@
     <v:String x:Key="m_BotM_ReadyPart3">document type: </v:String>
     <v:String x:Key="m_BotM_ReadyPart4">commentary: </v:String>
     <v:String x:Key="m_BotM_Sended">Sended</v:String>
+    <v:String x:Key="m_BotM_TaskNotFound">Task not found</v:String>
+    <v:String x:Key="m_BotM_CurrentPart1">Task</v:String>
+    <v:String x:Key="m_BotM_CurrentPart2">for</v:String>
+    <v:String x:Key="m_BotM_CurrentPart3">in work</v:String>
+    <v:String x:Key="m_BotM_HistoryPart3">has state</v:String>
+    <v:String x:Key="m_BotM_CurrentPart4">, comment from performer:</v:String>
+    <v:String x:Key="m_BotM_MoreThan50">This file more than 50Mb, please request it from your company to send not over Telegram</v:String>
+    <v:String x:Key="Completed">Completed</v:String>
+    <v:String x:Key="Cancelled">Cancelled</v:String>
+    <v:String x:Key="Work">Work</v:String>
 </ResourceDictionary>

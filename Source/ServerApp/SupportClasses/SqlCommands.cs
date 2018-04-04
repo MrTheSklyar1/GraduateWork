@@ -35,6 +35,26 @@
             ) 
             select * from OrderedRecords where RowNumber between @PageStart and @PageEnd";
 
+        public const string SelectThreeCurrentTasksByPage =
+            @"with OrderedRecords as
+            (
+                select Number, 
+                row_number() over (order by Number) as 'RowNumber'
+                from Tasks with(nolock)
+                where StateID='6A52791D-7E42-42D6-A521-4252F276BB6C' and FromPersonalID=@ID
+            ) 
+            select * from OrderedRecords where RowNumber between @PageStart and @PageEnd";
+
+        public const string SelectThreeHistoryTasksByPage =
+            @"with OrderedRecords as
+            (
+                select Number, 
+                row_number() over (order by Number) as 'RowNumber'
+                from Tasks with(nolock)
+                where StateID!='6A52791D-7E42-42D6-A521-4252F276BB6C' and FromPersonalID=@ID
+            ) 
+            select * from OrderedRecords where RowNumber between @PageStart and @PageEnd";
+        
         public const string SelectThreePersRolesByPage =
             @"with OrderedRecords as
             (
@@ -43,15 +63,23 @@
                 from PersonalRoles pr with(nolock) 
                 inner join RoleUsers ru with(nolock) 
                 on pr.ID=ru.PersonID
-	            where ru.RoleID=@ID
+	            where ru.RoleID=@ID and pr.WorkingTypeID='6a52791d-7e42-42d6-a521-4252f276bb6c'
             ) 
             select * from OrderedRecords where RowNumber between @PageStart and @PageEnd";
 
         public const string CountDocTypes =
             @"select count(*) from DocTypes with(nolock)";
 
+        public const string CountCurrentTasks =
+            @"select count(*) from Tasks with(nolock) where StateID='6A52791D-7E42-42D6-A521-4252F276BB6C' and FromPersonalID=@ID";
+
+        public const string CountHistoryTasks =
+            @"select count(*) from Tasks with(nolock) where StateID!='6A52791D-7E42-42D6-A521-4252F276BB6C' and FromPersonalID=@ID";
+
         public const string CountPersonalRolesFromStatic =
-            @"select count(*) from RoleUsers with(nolock) where RoleID=@ID";
+            @"select count(*) from RoleUsers ru with(nolock) 
+            inner join PersonalRoles pr with(nolock) on ru.PersonID=pr.ID 
+            where RoleID=@ID and pr.WorkingTypeID='6a52791d-7e42-42d6-a521-4252f276bb6c'";
 
         public const string GetRoleFromDocType =
             @"select RoleTypeID from DocTypes  with(nolock) where ID=@ID";
@@ -75,6 +103,15 @@
             @"select top 1 Number from Tasks order by MainNumber desc";
 
         public const string InsertTask =
-            @"insert into Tasks values (NEWID(), @StringNumber, @FromID, @FromName, @ToRoleID, @TORoleCaption, SYSDATETIME(), @DocTypeID, '6a52791d-7e42-42d6-a521-4252f276bb6c',@Commentary, NULL, NULL, NULL, 0);";
+            @"insert into Tasks values (NEWID(), @StringNumber, @FromID, @FromName, @ToRoleID, @TORoleCaption, SYSDATETIME(), @DocTypeID, '6a52791d-7e42-42d6-a521-4252f276bb6c',@Commentary, NULL, NULL, NULL, 0)";
+
+        public const string FindInfoAboutTask =
+            @"select ToRoleName, Respond from Tasks with(nolock) where Number=@Number";
+
+        public const string FindHistoryInfoAboutTask =
+            @"select ID, ToRoleName, StateID, Respond from Tasks with(nolock) where Number=@Number";
+
+        public const string FindFiles =
+            @"select FileID, Name from Files where ID=@TaskID";
     }
 }

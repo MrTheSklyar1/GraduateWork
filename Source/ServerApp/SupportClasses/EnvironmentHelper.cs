@@ -193,6 +193,67 @@ namespace ServerApp.SupportClasses
                 return null;
             }
         }
+        
+        public static List<string> ThreeCurrentTasksByPage(ref int page, ref int pages, Guid from)
+        {
+            int rows = 0;
+            List<string> Page = new List<string>();
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.CountCurrentTasks, con))
+                    {
+                        command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@ID"].Value = from;
+                        SendLogSQL(command.CommandText);
+                        con.Open();
+                        rows = Convert.ToInt32(command.ExecuteScalar());
+                        con.Close();
+                    }
+                    pages = (double)rows / 3 > rows / 3 ? rows / 3 + 1 : rows / 3;
+                    if (page == 0)
+                    {
+                        page = pages;
+                    }
+                    else if (pages < page)
+                    {
+                        page = 1;
+                    }
+
+                    var start = (page - 1) * 3 + 1;
+                    if (rows > 0)
+                    {
+                        using (var command = new SqlCommand(SqlCommands.SelectThreeCurrentTasksByPage, con))
+                        {
+                            command.Parameters.Add("@PageStart", SqlDbType.Int);
+                            command.Parameters["@PageStart"].Value = start;
+                            command.Parameters.Add("@PageEnd", SqlDbType.Int);
+                            command.Parameters["@PageEnd"].Value = start + 2;
+                            command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                            command.Parameters["@ID"].Value = from;
+                            SendLogSQL(command.CommandText);
+                            con.Open();
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Page.Add(reader.GetString(0));
+                                }
+                            }
+                            con.Close();
+                        }
+                    }
+                    return Page;
+                }
+            }
+            catch (Exception ex)
+            {
+                SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+                return null;
+            }
+        }
 
         public static List<string> ThreeDocTypesByPage(ref int page, ref int pages)
         {
@@ -350,13 +411,185 @@ namespace ServerApp.SupportClasses
             }
             catch (Exception ex)
             {
-                EnvironmentHelper.SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+                SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
             }
             msg += (string) SystemSingleton.Configuration.Window.FindResource("m_BotM_ReadyPart1")+" " + from + "\n" +
                    (string) SystemSingleton.Configuration.Window.FindResource("m_BotM_ReadyPart2") + " " + role + "\n" +
                    (string) SystemSingleton.Configuration.Window.FindResource("m_BotM_ReadyPart3") + " " + doc + "\n" +
                    (string) SystemSingleton.Configuration.Window.FindResource("m_BotM_ReadyPart4") + " " + session.Commentary;
             return msg;
+        }
+
+        public static bool FindInfoTask(string messageText, out string s)
+        {
+            bool result = false;
+            string torole = "";
+            string respond = "";
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.FindInfoAboutTask, con))
+                    {
+                        command.Parameters.Add("@Number", SqlDbType.NVarChar);
+                        command.Parameters["@Number"].Value = messageText;
+                        SendLogSQL(command.CommandText);
+                        con.Open();
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                torole = reader.GetString(0);
+                                respond = reader.IsDBNull(1)? "": reader.GetString(1);
+                                result = true;
+                            }
+                        }
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+            }
+
+            var msg = (string) SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentPart1") + " " +
+                      messageText + "\n" +
+                      (string) SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentPart2") + " " + torole +
+                      "\n" +
+                      (string) SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentPart3") + " ";
+            if(respond!="") msg += (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentPart4") + " " + respond;
+            s = msg;
+            return result;
+        }
+
+        public static List<string> ThreeHistoryTasksByPage(ref int page, ref int pages, Guid from)
+        {
+            int rows = 0;
+            List<string> Page = new List<string>();
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.CountHistoryTasks, con))
+                    {
+                        command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@ID"].Value = from;
+                        SendLogSQL(command.CommandText);
+                        con.Open();
+                        rows = Convert.ToInt32(command.ExecuteScalar());
+                        con.Close();
+                    }
+                    pages = (double)rows / 3 > rows / 3 ? rows / 3 + 1 : rows / 3;
+                    if (page == 0)
+                    {
+                        page = pages;
+                    }
+                    else if (pages < page)
+                    {
+                        page = 1;
+                    }
+
+                    var start = (page - 1) * 3 + 1;
+                    if (rows > 0)
+                    {
+                        using (var command = new SqlCommand(SqlCommands.SelectThreeHistoryTasksByPage, con))
+                        {
+                            command.Parameters.Add("@PageStart", SqlDbType.Int);
+                            command.Parameters["@PageStart"].Value = start;
+                            command.Parameters.Add("@PageEnd", SqlDbType.Int);
+                            command.Parameters["@PageEnd"].Value = start + 2;
+                            command.Parameters.Add("@ID", SqlDbType.UniqueIdentifier);
+                            command.Parameters["@ID"].Value = from;
+                            SendLogSQL(command.CommandText);
+                            con.Open();
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Page.Add(reader.GetString(0));
+                                }
+                            }
+                            con.Close();
+                        }
+                    }
+                    return Page;
+                }
+            }
+            catch (Exception ex)
+            {
+                SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+                return null;
+            }
+        }
+
+        public static bool FindResultTask(string messageText, out string s, out Dictionary<Guid, string> files)
+        {
+            bool result = false;
+            string torole = "";
+            string respond = "";
+            string state = "";
+            Guid TaskID = Guid.Empty;
+            files = new Dictionary<Guid, string>();
+            try
+            {
+                using (var con = new SqlConnection(SystemSingleton.Configuration.ConnectionString))
+                {
+                    SystemSingleton.Configuration.SqlConnections.Add(con);
+                    using (var command = new SqlCommand(SqlCommands.FindHistoryInfoAboutTask, con))
+                    {
+                        command.Parameters.Add("@Number", SqlDbType.NVarChar);
+                        command.Parameters["@Number"].Value = messageText;
+                        SendLogSQL(command.CommandText);
+                        con.Open();
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                TaskID = reader.GetGuid(0);
+                                torole = reader.GetString(1);
+                                Guid tempState = reader.GetGuid(2);
+                                state = tempState == new Guid("3e65b0c5-f533-4e31-956d-c2073df3e58a")
+                                    ? (string) SystemSingleton.Configuration.Window.FindResource("Cancelled")
+                                    : (string) SystemSingleton.Configuration.Window.FindResource("Completed");
+                                respond = reader.IsDBNull(3) ? "" : reader.GetString(3);
+                                result = true;
+                            }
+                        }
+                        con.Close();
+                    }
+                    using (var command = new SqlCommand(SqlCommands.FindFiles, con))
+                    {
+                        command.Parameters.Add("@TaskID", SqlDbType.UniqueIdentifier);
+                        command.Parameters["@TaskID"].Value = TaskID;
+                        SendLogSQL(command.CommandText);
+                        con.Open();
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                files.Add(reader.GetGuid(0), reader.GetString(1));
+                            }
+                        }
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                SendFatalLog(ex.Message + "\n\n" + ex.StackTrace);
+            }
+
+            var msg = (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentPart1") + " " +
+                      messageText + "\n" +
+                      (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentPart2") + " " + torole +
+                      "\n" +
+                      (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_HistoryPart3") + " " + state + " ";
+            if (respond != "") msg += (string)SystemSingleton.Configuration.Window.FindResource("m_BotM_CurrentPart4") + " " + respond;
+            s = msg;
+            return result;
         }
     }
 }
