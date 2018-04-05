@@ -224,46 +224,56 @@ namespace ServerApp.Elements
                         con.Close();
                     }
 
-                    string[] parsedNum = number.Split('-');
-                    if (Convert.ToInt32(parsedNum[0]) == DateTime.Now.Year)
+                    if (number == "")
                     {
-                        if (Convert.ToInt32(parsedNum[1]) == DateTime.Now.Month)
+                        var month = DateTime.Now.Month.ToString().Length == 1
+                            ? "0" + DateTime.Now.Month
+                            : DateTime.Now.Month.ToString();
+                        number = DateTime.Now.Year + "-" + month + "-00001";
+                    }
+                    else
+                    {
+                        string[] parsedNum = number.Split('-');
+                        if (Convert.ToInt32(parsedNum[0]) == DateTime.Now.Year)
                         {
-                            var temp = Convert.ToInt32(parsedNum[2]);
-                            temp++;
-                            if(temp>99999)
+                            if (Convert.ToInt32(parsedNum[1]) == DateTime.Now.Month)
                             {
-                                parsedNum[1] = DateTime.Now.AddMonths(1).Month.ToString().Length == 1
-                                    ? "0" + DateTime.Now.AddMonths(1).Month
-                                    : DateTime.Now.AddMonths(1).Month.ToString();
-                                number = DateTime.Now.AddMonths(1).Year + "-" + parsedNum[1] + "-00001";
+                                var temp = Convert.ToInt32(parsedNum[2]);
+                                temp++;
+                                if (temp > 99999)
+                                {
+                                    parsedNum[1] = DateTime.Now.AddMonths(1).Month.ToString().Length == 1
+                                        ? "0" + DateTime.Now.AddMonths(1).Month
+                                        : DateTime.Now.AddMonths(1).Month.ToString();
+                                    number = DateTime.Now.AddMonths(1).Year + "-" + parsedNum[1] + "-00001";
+                                }
+                                else if (temp < 10)
+                                    parsedNum[2] = "0000" + temp;
+                                else if (temp < 100)
+                                    parsedNum[2] = "000" + temp;
+                                else if (temp < 1000)
+                                    parsedNum[2] = "00" + temp;
+                                else if (temp < 10000)
+                                    parsedNum[2] = "0" + temp;
+                                else
+                                    parsedNum[2] = temp.ToString();
+                                number = parsedNum[0] + "-" + parsedNum[1] + "-" + parsedNum[2];
                             }
-                            else if (temp < 10)
-                                parsedNum[2] = "0000" + temp;
-                            else if (temp < 100)
-                                parsedNum[2] = "000" + temp;
-                            else if (temp < 1000)
-                                parsedNum[2] = "00" + temp;
-                            else if (temp < 10000)
-                                parsedNum[2] = "0" + temp;
                             else
-                                parsedNum[2] = temp.ToString();
-                            number = parsedNum[0] + "-" + parsedNum[1] + "-" + parsedNum[2];
+                            {
+                                parsedNum[1] = DateTime.Now.Month.ToString().Length == 1
+                                    ? "0" + DateTime.Now.Month
+                                    : DateTime.Now.Month.ToString();
+                                number = parsedNum[0] + "-" + parsedNum[1] + "-00001";
+                            }
                         }
                         else
                         {
                             parsedNum[1] = DateTime.Now.Month.ToString().Length == 1
                                 ? "0" + DateTime.Now.Month
                                 : DateTime.Now.Month.ToString();
-                            number = parsedNum[0] + "-" + parsedNum[1] + "-00001";
+                            number = DateTime.Now.Year + "-" + parsedNum[1] + "-00001";
                         }
-                    }
-                    else
-                    {
-                        parsedNum[1] = DateTime.Now.Month.ToString().Length == 1
-                            ? "0" + DateTime.Now.Month
-                            : DateTime.Now.Month.ToString();
-                        number = DateTime.Now.Year + "-"+ parsedNum[1] + "-00001";
                     }
 
                     using (var command = new SqlCommand(SqlCommands.InsertTask, con))
