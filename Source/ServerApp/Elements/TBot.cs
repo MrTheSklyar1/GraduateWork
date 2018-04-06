@@ -94,7 +94,15 @@ namespace ServerApp.Elements
                 if (EnvironmentHelper.FindResultTask(task, out string infomsg, out Dictionary<Guid, string> files, out long ChatID, out string docNumber))
                 {
                     EnvironmentHelper.SendLog("to chat id -- " + ChatID + " -- " + infomsg);
-                    await Bot.SendTextMessageAsync(ChatID, infomsg);
+                    if (ChatID == 0)
+                    {
+                        EnvironmentHelper.SendLog("Chat id " + ChatID + " not found, can't send result of task!");
+                        continue;
+                    }
+                    else
+                    {
+                        await Bot.SendTextMessageAsync(ChatID, infomsg);
+                    }
                     foreach (var item in files)
                     {
                         if (System.IO.File.Exists(SystemSingleton.Configuration.FilesPath + item.Key + "\\" + item.Value))

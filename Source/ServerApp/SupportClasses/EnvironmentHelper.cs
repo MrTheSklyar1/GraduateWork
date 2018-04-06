@@ -657,7 +657,7 @@ namespace ServerApp.SupportClasses
                         {
                             if (reader.Read())
                             {
-                                ChatID = reader.GetInt64(0);
+                                ChatID = reader.IsDBNull(0) ? 0 : reader.GetInt64(0);
                                 result = true;
                             }
                         }
